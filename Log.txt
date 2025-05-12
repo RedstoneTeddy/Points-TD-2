@@ -1,0 +1,7 @@
+2025-05-12 21:49:32,975 - INFO - main.py - Logging started
+2025-05-12 21:49:33,758 - INFO - main.py - Pygame initialized
+2025-05-12 21:49:33,793 - INFO - main.py - Data initialized
+2025-05-12 21:49:33,870 - INFO - data_class.py - HUD zoom changed to 3
+2025-05-12 21:49:35,399 - INFO - transition.py - Transitioned to game
+2025-05-12 21:49:36,412 - INFO - main.py - Received Quit Event
+2025-05-12 21:49:36,412 - INFO - main.py - Programm closed

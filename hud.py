@@ -16,7 +16,8 @@ class Hud:
             "wave_button1": pg.image.load("images/hud/wave_button1.png").convert_alpha(),
             "wave_button2": pg.image.load("images/hud/wave_button2.png").convert_alpha(),
             "wave_button3": pg.image.load("images/hud/wave_button3.png").convert_alpha(),
-            "wave_hover": pg.image.load("images/hud/wave_hover.png").convert_alpha()
+            "wave_hover": pg.image.load("images/hud/wave_hover.png").convert_alpha(),
+            "text_box": pg.image.load("images/hud/text_box.png").convert_alpha()
         }
 
         self.hud_images: dict[str, pg.Surface] = {}
@@ -38,6 +39,7 @@ class Hud:
         
         left_right_offset: int = (self.data.screen_size[0] - (32*8*self.data.tile_zoom)) // 2
 
+        # Wave button
         if not self.data.running_wave:
             pos: tuple[int, int] = (26, 15)
             self.data.screen.blit(self.hud_images["wave_button0"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
@@ -79,3 +81,18 @@ class Hud:
         else:
             self.wave_button_pressed = False
 
+        # Health
+        pos: tuple[int, int] = (1, 0)
+        self.data.screen.blit(self.hud_images["text_box"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
+        self.data.Draw_text("Health", 5*self.data.tile_zoom, (255,0,0), (int((pos[0]+0.3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.25)*self.data.tile_zoom*8)))
+        self.data.Draw_text(f"{self.data.health}", 6*self.data.tile_zoom, (255,0,0), (int((pos[0]+3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))
+
+        # Money
+        pos: tuple[int, int] = (14, 0)
+        self.data.screen.blit(self.hud_images["text_box"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
+        self.data.Draw_text(f"$ {self.data.money}", 6*self.data.tile_zoom, (255,255,50), (int((pos[0]+0.3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))
+
+        # Wave
+        pos: tuple[int, int] = (26, 0)
+        self.data.screen.blit(self.hud_images["text_box"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
+        self.data.Draw_text(f"Wave {self.data.wave}", 6*self.data.tile_zoom, (0,0,0), (int((pos[0]+0.3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))

@@ -35,7 +35,8 @@ class Data_class:
         # extreme: projectiles will never render
         # extreme: towers will never turn towards the target
         # extreme: wave_button is not responsive
-        # default & extreme: during the game, the whole screen won't be filled with the background color each tick
+        # default: during the game, the whole screen will only be filled with the background color each 60 frames (1 second)
+        # extreme: tile_map will only be (re-)drawn every 2 frames
 
 
         self.transition_to: str = ""
@@ -61,6 +62,7 @@ class Data_class:
         self.auto_wave: bool = False
         self.new_wave: bool = False
         self.wave: int = 0
+        self.money: int = 0
 
 
         self.difficulty: Literal["", "easy", "medium", "hard", "hacker"] = ""

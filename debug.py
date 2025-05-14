@@ -16,7 +16,7 @@ class Debug:
 
     
     def Fps_render(self, zoom: int, mspf: list[float], mspf_raw: list[float]) -> None:
-        rect_surface = pg.Surface((55 * zoom, 28 * zoom), pg.SRCALPHA)
+        rect_surface = pg.Surface((60 * zoom, 39 * zoom), pg.SRCALPHA)
         rect_surface.fill((0, 0, 0, 150))  # Adding alpha for transparency
         self.data.screen.blit(rect_surface, (0, 0))
 
@@ -24,6 +24,8 @@ class Debug:
         self.data.Draw_text(f"FPS 90%: {round(1//(round(data_class.Avg_worst_10_percent(mspf),1)/1000),1)}", 6*zoom, (255,255,255), (1*zoom, 7*zoom))
         self.data.Draw_text(f"MSPF:    {round(data_class.Avg(mspf),1)}", 6*zoom, (255,255,255), (1*zoom, 13*zoom))
         self.data.Draw_text(f"MSPF_r:  {round(data_class.Avg(mspf_raw),1)}", 6*zoom, (255,255,255), (1*zoom, 19*zoom))
+        self.data.Draw_text(f"Perf:    {self.data.performance_saving_setting}", 6*zoom, (255,255,255), (1*zoom, 25*zoom))
+        self.data.Draw_text(f"Enemies: {len(self.data.enemies)}", 6*zoom, (255,255,255), (1*zoom, 31*zoom))
 
         pg.draw.line(self.data.screen, (0,0,0), (self.data.screen_size[0]//2,0), (self.data.screen_size[0]//2,self.data.screen_size[1]), self.data.hud_zoom)
         pg.draw.line(self.data.screen, (0,0,0), (0,self.data.screen_size[1]//2), (self.data.screen_size[0],self.data.screen_size[1]//2), self.data.hud_zoom)

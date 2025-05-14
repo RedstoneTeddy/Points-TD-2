@@ -1,7 +1,9 @@
-2025-05-14 21:09:56,069 - INFO - main.py - Logging started
-2025-05-14 21:09:56,842 - INFO - main.py - Pygame initialized
-2025-05-14 21:09:56,880 - INFO - main.py - Data initialized
-2025-05-14 21:09:56,971 - INFO - data_class.py - HUD zoom changed to 3
-2025-05-14 21:09:56,971 - INFO - data_class.py - Tile zoom changed to 4
-2025-05-14 21:09:57,969 - INFO - main.py - Received Quit Event
-2025-05-14 21:09:57,969 - INFO - main.py - Programm closed
+2025-05-14 22:17:57,994 - INFO - main.py - Logging started
+2025-05-14 22:17:58,750 - INFO - main.py - Pygame initialized
+2025-05-14 22:17:58,782 - INFO - main.py - Data initialized
+2025-05-14 22:17:58,875 - INFO - data_class.py - HUD zoom changed to 3
+2025-05-14 22:17:58,875 - INFO - data_class.py - Tile zoom changed to 4
+2025-05-14 22:17:59,866 - INFO - transition.py - Transitioned to game
+2025-05-14 22:17:59,881 - INFO - tile_map.py - Map successfully loaded from 'maps/grass_fields.pkl'
+2025-05-14 22:18:14,090 - INFO - main.py - Received Quit Event
+2025-05-14 22:18:14,090 - INFO - main.py - Programm closed

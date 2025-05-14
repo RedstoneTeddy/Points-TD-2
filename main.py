@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     tower_handler.towers.append(towers.ninja.Ninja(data, tile_map_obj, (10, 1)))
 
-
+    performance_background_timer: int = 0
 
 
     pg.display.set_caption("Points TD 2")
@@ -118,7 +118,12 @@ if __name__ == "__main__":
 
             if data.is_in_game:
                 # Fill the background
+                if data.performance_saving_setting == "default":
+                    performance_background_timer += 1
                 if data.performance_saving_setting == "none":
+                    performance_background_timer += 30
+                if performance_background_timer >= 60:
+                    performance_background_timer = 0
                     data.screen.fill((100,180,255))
 
                 if data.load_game:
@@ -143,7 +148,7 @@ if __name__ == "__main__":
 
             # Allways run these after everything else
             transition_obj.Render()
-            debug_obj.Debug_main(3, mspf, mspf_raw)
+            debug_obj.Debug_main(data.hud_zoom, mspf, mspf_raw)
             if debug_obj.map_debug_open and data.is_in_game:
                 tile_map_obj.Show_grid()
                 tile_map_obj.Show_enemy_path()

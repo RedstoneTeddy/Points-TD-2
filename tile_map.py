@@ -8,6 +8,8 @@ class Tile_map:
         self.map: list[list[int]] = []
         self.map_file_name: str = ""
         self.enemy_path: list[tuple[float, float]] = []
+
+        self.__performance_update_timer: int = 0
         
         self.current_tile_zoom: int = 1
 
@@ -70,18 +72,25 @@ class Tile_map:
         """
         Draws the map on the screen
         """
-        self.Scale_tiles()
-        for y in range(18):
-            for x in range(32):
-                if y == 0 or x >= 24:
-                    pass # Handled by self.Show_hud_background()
-                else:
-                    try:
-                        self.data.screen.blit(self.tile_images[self.map[y-1][x]], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
-                    except IndexError:
-                        logging.error(f"IndexError in Map: {y}, {x}")
-                    except KeyError:
-                        logging.error(f"KeyError in Map: {y}, {x} -> Tile_ID: {self.map[y][x]}")
+        if self.data.performance_saving_setting in ["none", "default"]:
+            self.__performance_update_timer += 5
+        self.__performance_update_timer += 5
+
+
+        if self.__performance_update_timer >= 10:
+            self.__performance_update_timer = 0
+            self.Scale_tiles()
+            for y in range(18):
+                for x in range(32):
+                    if y == 0 or x >= 24:
+                        pass # Handled by self.Show_hud_background()
+                    else:
+                        try:
+                            self.data.screen.blit(self.tile_images[self.map[y-1][x]], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+                        except IndexError:
+                            logging.error(f"IndexError in Map: {y}, {x}")
+                        except KeyError:
+                            logging.error(f"KeyError in Map: {y}, {x} -> Tile_ID: {self.map[y][x]}")
                         
 
 
@@ -202,13 +211,14 @@ class Tile_map:
             pg.draw.circle(self.data.screen, path_pos_colors[i], (int(path_pos[0]*self.data.tile_zoom*8) + self.Get_left_right_empty_screen(), int((path_pos[1]+1)*self.data.tile_zoom*8)), int(self.data.tile_zoom/2+0.5))
 
     def Render_empty_screen_overlay(self) -> None:
-        used_screen: tuple[int, int] = (32*8*self.data.tile_zoom, 18*8*self.data.tile_zoom)
-        # Left
-        pg.draw.rect(self.data.screen, (100,180,255), (0, 0, self.Get_left_right_empty_screen(), self.data.screen_size[1]))
-        # Right
-        pg.draw.rect(self.data.screen, (100,180,255), (self.data.screen_size[0] - self.Get_left_right_empty_screen(), 0, self.Get_left_right_empty_screen()+1, self.data.screen_size[1]))
-        # Bottom
-        pg.draw.rect(self.data.screen, (100,180,255), (0, used_screen[1], self.data.screen_size[0], self.data.screen_size[1] - used_screen[1]))
+        if self.__performance_update_timer == 0:
+            used_screen: tuple[int, int] = (32*8*self.data.tile_zoom, 18*8*self.data.tile_zoom)
+            # Left
+            pg.draw.rect(self.data.screen, (100,180,255), (0, 0, self.Get_left_right_empty_screen(), self.data.screen_size[1]))
+            # Right
+            pg.draw.rect(self.data.screen, (100,180,255), (self.data.screen_size[0] - self.Get_left_right_empty_screen(), 0, self.Get_left_right_empty_screen()+1, self.data.screen_size[1]))
+            # Bottom
+            pg.draw.rect(self.data.screen, (100,180,255), (0, used_screen[1], self.data.screen_size[0], self.data.screen_size[1] - used_screen[1]))
 
 
     def Get_left_right_empty_screen(self) -> int:
@@ -222,21 +232,22 @@ class Tile_map:
         """
         Shows the shop background
         """
-        self.Scale_tiles()
-        for y in range(18):
-            for x in range(32):
-                if y == 0:
-                    self.data.screen.blit(self.tile_images[101], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
-                elif x >= 24:
-                    self.data.screen.blit(self.tile_images[105], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+        if self.__performance_update_timer == 0:
+            self.Scale_tiles()
+            for y in range(18):
+                for x in range(32):
+                    if y == 0:
+                        self.data.screen.blit(self.tile_images[101], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+                    elif x >= 24:
+                        self.data.screen.blit(self.tile_images[105], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
 
-        # Background "Nails"
-        self.data.screen.blit(self.tile_images[102], (0*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 0*self.data.tile_zoom*8))
-        self.data.screen.blit(self.tile_images[103], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 0*self.data.tile_zoom*8))
+            # Background "Nails"
+            self.data.screen.blit(self.tile_images[102], (0*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 0*self.data.tile_zoom*8))
+            self.data.screen.blit(self.tile_images[103], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 0*self.data.tile_zoom*8))
 
-        self.data.screen.blit(self.tile_images[106], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
-        self.data.screen.blit(self.tile_images[107], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
-        self.data.screen.blit(self.tile_images[108], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
-        self.data.screen.blit(self.tile_images[109], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
+            self.data.screen.blit(self.tile_images[106], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
+            self.data.screen.blit(self.tile_images[107], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
+            self.data.screen.blit(self.tile_images[108], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
+            self.data.screen.blit(self.tile_images[109], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
 
 

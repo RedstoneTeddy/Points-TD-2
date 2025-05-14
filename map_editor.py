@@ -113,7 +113,7 @@ if __name__ == "__main__":
             if pg.key.get_pressed()[pg.K_0]:
                 if pg.key.get_pressed()[pg.K_LSHIFT] and len(enemy_path_nodes) > 0:
                     tile_map_obj.Calculate_enemy_path(enemy_path_nodes)
-                current_placer = 100
+                current_placer = 1000
                 enemy_path_nodes = []
             
             if pg.mouse.get_pressed()[0]:
@@ -123,13 +123,15 @@ if __name__ == "__main__":
                     tile_map_obj.map[tile_pos[1]][tile_pos[0]] = random.randint(1, 6)
                 if current_placer == 11:
                     tile_map_obj.map[tile_pos[1]][tile_pos[0]] = random.randint(11, 15)
-                if current_placer == 100: # Enemy
+                if current_placer == 1000: # Enemy
                     if pg.key.get_pressed()[pg.K_LEFT]: tile_pos = (tile_pos[0]-1, tile_pos[1])
                     if pg.key.get_pressed()[pg.K_RIGHT]: tile_pos = (tile_pos[0]+1, tile_pos[1])
                     if pg.key.get_pressed()[pg.K_UP]: tile_pos = (tile_pos[0], tile_pos[1]-1)
                     if pg.key.get_pressed()[pg.K_DOWN]: tile_pos = (tile_pos[0], tile_pos[1]+1)
                     if tile_pos not in enemy_path_nodes:
                         enemy_path_nodes.append(tile_pos)
+
+                    
 
             tile_map_obj.Show_map()
 

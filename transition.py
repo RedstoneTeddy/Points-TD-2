@@ -66,7 +66,7 @@ class Transition:
                 self.black_window_timer += 1
 
             # End transition
-            if self.black_window_timer == 38:
+            if self.black_window_timer == 39:
                 self.black_window_timer = 0
                 self.data.transition_to = ""   
                 self.data.ongoing_transition = False        
@@ -86,7 +86,8 @@ class Transition:
                         logging.error(f"Unknown transition to {self.transition_to}")
 
                 logging.info(f"Transitioned to {self.transition_to}")
-            self.data.screen.blit(self.img["black_window"][img_to_blit], (0, 0))
+            if self.black_window_timer <= 37 and self.black_window_timer >= 1:
+                self.data.screen.blit(self.img["black_window"][img_to_blit], (0, 0))
 
             
 

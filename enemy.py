@@ -2,6 +2,7 @@ import data_class
 import pygame as pg
 import logging
 import tile_map
+import random
 
 class Enemy:
     def __init__(self, data: data_class.Data_class, tile_map_obj: tile_map.Tile_map) -> None:
@@ -9,9 +10,11 @@ class Enemy:
         self.tile_map_obj: tile_map.Tile_map = tile_map_obj
         self.current_tile_zoom: int = 1
 
+        self.__enemy_spawn_clock: int = 0
+
         self.__enemy_tick_clock: int = 0
 
-        self.enemies: list[data_class.Enemy_data] = []
+        self.__wave_enemies: list[data_class.Wave_enemy] = []
 
         self.original_enemy_images: dict[int, pg.Surface] = {
             1: pg.image.load("images/enemies/1.png").convert_alpha(),
@@ -46,7 +49,7 @@ class Enemy:
 
     def Show_enemies(self) -> None:
         self.Scale_enemy_images()
-        for enemy in self.enemies:
+        for enemy in self.data.enemies.values():
 
             # Get the enemy type => enemy img
             enemy_type: int = 0
@@ -97,17 +100,31 @@ class Enemy:
         """
         Moves the enemies one tile forward
         """
-        self.__enemy_tick_clock += 1
-        if self.__enemy_tick_clock >= 2:
-            self.__enemy_tick_clock = 0
-            for enemy in self.enemies:
-                enemy["pos_i"] += 1
-                if enemy["pos_i"] < len(self.tile_map_obj.enemy_path):
-                    enemy["pos"] = self.tile_map_obj.enemy_path[enemy["pos_i"]]
-                else:
-                    logging.error(f"Enemy {enemy} reached the end of the path")
+        enemies_at_end: list[str] = []
+        for uuid, enemy in self.data.enemies.items():
+            enemy["pos_i"] += 1
+            if enemy["pos_i"] < len(self.tile_map_obj.enemy_path):
+                enemy["pos"] = self.tile_map_obj.enemy_path[enemy["pos_i"]]
+            else:
+                enemies_at_end.append(uuid)
+
+        # Remove enemies that reached the end
+        for kill_enemy in enemies_at_end:
+            self.data.health -= self.data.enemies[kill_enemy]["health"]
+            if self.data.health <= 0:
+                logging.info("Game Over")
+                raise ValueError("Game Over")
+            del self.data.enemies[kill_enemy]
+        
+        # Check for enemies that should be dead
+        dead_enemies: list[str] = []
+        for uuid, enemy in self.data.enemies.items():
+            if enemy["health"] <= 0:
+                dead_enemies.append(uuid)
+        for dead_uuid in dead_enemies:
+            del self.data.enemies[dead_uuid]
             
-    def Add_enemy(self, health: int) -> None:
+    def Add_enemy(self, health: int, special: str) -> None:
         """
         Adds an enemy to the list
         """
@@ -118,7 +135,77 @@ class Enemy:
 
         enemy: data_class.Enemy_data = {
             "health": health,
-            "pos": (0.0, 0.0),
-            "pos_i": 0
+            "pos": (-10.0, -10.0),
+            "pos_i": 0,
+            "special": special
         }
-        self.enemies.append(enemy)
+        new_uuid: str = str(self.data.wave*1_000_000_000 + self.__enemy_spawn_clock*1_000 + random.randint(0, 999))
+        self.data.enemies[new_uuid] = enemy
+
+    
+
+    def Main(self) -> None:
+        """
+        Main function for the enemy class
+        """
+
+
+        # Enemy tick (walk)
+        if self.data.fast_forward:
+            self.__enemy_tick_clock += 2
+        else:
+            self.__enemy_tick_clock += 1
+        if self.__enemy_tick_clock >= 2:
+            self.__enemy_tick_clock = 0
+            self.__enemy_spawn_clock += 1
+            self.Tick_enemy_walk()
+
+            
+        # Enemy spawner
+        wave_enemies_to_delete: list[int] = []
+        for i, new_enemy in enumerate(self.__wave_enemies):
+            if self.__enemy_spawn_clock >= new_enemy["spawn_time"]:
+                self.Add_enemy(new_enemy["health"], new_enemy["special"])
+                wave_enemies_to_delete.append(i)
+        
+        for j in range(len(wave_enemies_to_delete)-1, -1, -1):
+            del self.__wave_enemies[wave_enemies_to_delete[j]]
+
+            
+        # New Wave
+        if self.data.new_wave:
+            self.__enemy_spawn_clock = 0
+            self.__enemy_tick_clock = 0
+
+            # Load the new wave out of the file            
+            if self.data.wave <= 0:
+                logging.error(f"Invalid wave number: {self.data.wave}")
+                return
+            try:
+                import pickle
+                with open(f"waves/normal{self.data.wave}.pkl", "rb") as file:
+                    file_contents = pickle.load(file)
+                    self.__wave_enemies = file_contents
+            except Exception as load_error:
+                logging.error(f"Failed to load the wave {self.data.wave}: {load_error}")
+
+
+        self.Show_enemies()
+
+        if len(self.data.enemies) == 0 and len(self.__wave_enemies) == 0 and self.data.running_wave:
+            self.data.Wave_finished()
+            
+
+
+
+    def Save_wave_enemies(self, wave_num: int, enemies: list[data_class.Wave_enemy]) -> None:
+        """
+        Saves the wave enemies to a file
+        """
+        try:
+            import pickle
+            with open(f"waves/normal{wave_num}.pkl", "wb") as file:
+                pickle.dump(enemies, file)
+                logging.info(f"Wave {wave_num} successfully saved to 'waves/normal{wave_num}.pkl'")
+        except Exception as save_error:
+            logging.error(f"Failed to save the wave {wave_num}: {save_error}")

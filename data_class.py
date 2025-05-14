@@ -6,21 +6,37 @@ import pickle
 
 class Enemy_data(TypedDict):
     health: int
+    special: str
     pos_i: int
-    pos: tuple[float, float]
+    pos: tuple[float, float] # This is the center of the tile
+
+class Wave_enemy(TypedDict):
+    health: int
+    spawn_time: int
+    special: str
 
 
 class Data_class:
     def __init__(self):
 
-        self.screen: pg.Surface = pg.display.set_mode((800,600), pg.RESIZABLE|pg.SHOWN|pg.DOUBLEBUF)
+        self.screen: pg.Surface = pg.display.set_mode((1050, 600), pg.RESIZABLE|pg.SHOWN|pg.DOUBLEBUF)
         self.clock: pg.time.Clock = pg.time.Clock()
         self.run: bool = True
-        self.screen_size: tuple[int, int] = (800, 600)
+        self.screen_size: tuple[int, int] = (1050, 600)
         self.resize: bool = False
         self.fullscreen: bool = False
         self.mouse_wheel: Literal["up", "down", ""] = ""
         self.__font_objects: dict[str, pg.font.Font] = {}
+
+        self.performance_saving_setting: Literal["none", "default", "extreme"] = "default"
+        #### Affected by this:
+        # default: a shoot-ready tower with no target in range will wait 3 ticks before checking again
+        # extreme: a shoot-ready tower with no target in range will wait 5 ticks before checking again
+        # extreme: projectiles will never render
+        # extreme: towers will never turn towards the target
+        # extreme: wave_button is not responsive
+        # default & extreme: during the game, the whole screen won't be filled with the background color each tick
+
 
         self.transition_to: str = ""
         self.start_black_window: bool = False
@@ -39,10 +55,27 @@ class Data_class:
 
         # Game Variables
         self.running_wave: bool = False
+        self.health: int = 0
+        self.enemies: dict[str, Enemy_data] = {} # UUID: Enemy_data
+        self.fast_forward: bool = False
+        self.auto_wave: bool = False
+        self.new_wave: bool = False
+        self.wave: int = 0
 
 
         self.difficulty: Literal["", "easy", "medium", "hard", "hacker"] = ""
         self.cost_multiplier: float = 1.0 # Gets set, when the game starts, reads the data.difficulty variable
+
+        # Tower images
+        self.original_tower_images: dict[str, dict[str, pg.Surface]] = {
+            "ninja" : {
+                "up": pg.image.load("images/towers/ninja/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/ninja/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/ninja/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/ninja/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/ninja/projectile.png").convert_alpha()
+            }
+        }
 
         
     def Get_font(self, size: int) -> pg.font.Font:
@@ -106,28 +139,53 @@ class Data_class:
 
     def Start_new_game(self, map_file_name: str = "") -> None:
         if self.difficulty == "":
-            logging.warning("Difficulty not set")
+            logging.error("Difficulty not set")
             return
 
         # Difficulty settings
         match self.difficulty:
             case "easy":
                 self.cost_multiplier = 0.8
+                self.health = 200
             case "medium":
                 self.cost_multiplier = 1.0
+                self.health = 150
             case "hard":
                 self.cost_multiplier = 1.2
+                self.health = 100
             case "hacker":
                 self.cost_multiplier = 1.5
+                self.health = 1
             case _:
                 logging.error("Difficulty setting invalid")
                 return
             
         self.map_file_name = map_file_name
         self.load_game = True
+
             
         # Start the game
         self.Transition_black_window("game")
+
+    def Next_wave(self) -> None:
+        """
+        Starts the next wave
+        """
+        self.wave += 1
+        self.running_wave = True
+        self.new_wave = True
+        self.enemies = {}
+        logging.info(f"Wave {self.wave} started")
+
+    def Wave_finished(self) -> None:
+        """
+        Called when the wave is finished
+        """
+        self.running_wave = False
+        logging.info(f"Wave {self.wave} finished")
+
+        if self.auto_wave:
+            self.Next_wave()
 
 
 def Avg(elements: list[float]) -> float:

@@ -26,7 +26,17 @@ class Tile_map:
             12: pg.image.load("images/tiles/path2.png").convert_alpha(),
             13: pg.image.load("images/tiles/path3.png").convert_alpha(),
             14: pg.image.load("images/tiles/path4.png").convert_alpha(),
-            15: pg.image.load("images/tiles/path5.png").convert_alpha()           
+            15: pg.image.load("images/tiles/path5.png").convert_alpha(),
+
+            101: pg.image.load("images/tiles/shop1.png").convert_alpha(),
+            102: pg.image.load("images/tiles/shop2.png").convert_alpha(),
+            103: pg.image.load("images/tiles/shop3.png").convert_alpha(),
+
+            105: pg.image.load("images/tiles/shop5.png").convert_alpha(),
+            106: pg.image.load("images/tiles/shop6.png").convert_alpha(),
+            107: pg.image.load("images/tiles/shop7.png").convert_alpha(),
+            108: pg.image.load("images/tiles/shop8.png").convert_alpha(),
+            109: pg.image.load("images/tiles/shop9.png").convert_alpha()    
         }
 
         self.tile_images: dict[int, pg.Surface] = {}
@@ -64,7 +74,7 @@ class Tile_map:
         for y in range(18):
             for x in range(32):
                 if y == 0 or x >= 24:
-                    pass # Tile-map doesn't draw the HUD
+                    pass # Handled by self.Show_hud_background()
                 else:
                     try:
                         self.data.screen.blit(self.tile_images[self.map[y-1][x]], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
@@ -189,16 +199,16 @@ class Tile_map:
             path_pos_colors.append(interpolated_color)
 
         for i, path_pos in enumerate(self.enemy_path):
-            pg.draw.circle(self.data.screen, path_pos_colors[i], (int(path_pos[0]*self.data.tile_zoom*8) + self.Get_left_right_empty_screen(), int((path_pos[1]+1)*self.data.tile_zoom*8)), self.data.tile_zoom)
+            pg.draw.circle(self.data.screen, path_pos_colors[i], (int(path_pos[0]*self.data.tile_zoom*8) + self.Get_left_right_empty_screen(), int((path_pos[1]+1)*self.data.tile_zoom*8)), int(self.data.tile_zoom/2+0.5))
 
     def Render_empty_screen_overlay(self) -> None:
         used_screen: tuple[int, int] = (32*8*self.data.tile_zoom, 18*8*self.data.tile_zoom)
         # Left
-        pg.draw.rect(self.data.screen, (62, 35, 21), (0, 0, self.Get_left_right_empty_screen(), self.data.screen_size[1]))
+        pg.draw.rect(self.data.screen, (100,180,255), (0, 0, self.Get_left_right_empty_screen(), self.data.screen_size[1]))
         # Right
-        pg.draw.rect(self.data.screen, (62, 35, 21), (self.data.screen_size[0] - self.Get_left_right_empty_screen(), 0, self.Get_left_right_empty_screen()+1, self.data.screen_size[1]))
+        pg.draw.rect(self.data.screen, (100,180,255), (self.data.screen_size[0] - self.Get_left_right_empty_screen(), 0, self.Get_left_right_empty_screen()+1, self.data.screen_size[1]))
         # Bottom
-        pg.draw.rect(self.data.screen, (62, 35, 21), (0, used_screen[1], self.data.screen_size[0], self.data.screen_size[1] - used_screen[1]))
+        pg.draw.rect(self.data.screen, (100,180,255), (0, used_screen[1], self.data.screen_size[0], self.data.screen_size[1] - used_screen[1]))
 
 
     def Get_left_right_empty_screen(self) -> int:
@@ -206,3 +216,27 @@ class Tile_map:
         Returns the left and right empty screen size
         """
         return (self.data.screen_size[0] - (32*8*self.data.tile_zoom)) // 2
+    
+
+    def Show_hud_background(self) -> None:
+        """
+        Shows the shop background
+        """
+        self.Scale_tiles()
+        for y in range(18):
+            for x in range(32):
+                if y == 0:
+                    self.data.screen.blit(self.tile_images[101], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+                elif x >= 24:
+                    self.data.screen.blit(self.tile_images[105], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+
+        # Background "Nails"
+        self.data.screen.blit(self.tile_images[102], (0*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 0*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[103], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 0*self.data.tile_zoom*8))
+
+        self.data.screen.blit(self.tile_images[106], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[107], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[108], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[109], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
+
+

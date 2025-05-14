@@ -59,6 +59,15 @@ if __name__ == "__main__":
     import enemy
     enemy_obj: enemy.Enemy = enemy.Enemy(data, tile_map_obj)
 
+    import hud
+    hud_obj: hud.Hud = hud.Hud(data, tile_map_obj)
+
+    import towers.base_tower
+    import towers.ninja
+    tower_handler: towers.base_tower.Tower_handler = towers.base_tower.Tower_handler(data, tile_map_obj)
+
+    tower_handler.towers.append(towers.ninja.Ninja(data, tile_map_obj, (10, 1)))
+
 
 
 
@@ -94,8 +103,6 @@ if __name__ == "__main__":
                     data.resize = True
             else:
                 fullscreen_pressed = False
-            # Fill the background
-            data.screen.fill((100,180,255))
 
 
             # Allways run these first after everything else
@@ -105,26 +112,33 @@ if __name__ == "__main__":
 
             # Show current game state / menu
             if data.is_in_main_menu:
+                # Fill the background
+                data.screen.fill((100,180,255))
                 main_menu_obj.Render_main()
 
             if data.is_in_game:
+                # Fill the background
+                if data.performance_saving_setting == "none":
+                    data.screen.fill((100,180,255))
+
                 if data.load_game:
                     data.map_file_name = "grass_fields"
                     tile_map_obj.Load_map_file(data.map_file_name)
                     data.load_game = False
                 tile_map_obj.Show_map()
+                tile_map_obj.Show_hud_background()
 
-                enemy_obj.Tick_enemy_walk()
-                if pg.key.get_pressed()[pg.K_LSHIFT]:
-                    enemy_obj.Tick_enemy_walk()
-                enemy_obj.Show_enemies()
+                enemy_obj.Main()
+                tower_handler.Main()
 
                 tile_map_obj.Render_empty_screen_overlay()
 
+                
+                if data.new_wave:
+                    data.new_wave = False
+                hud_obj.Show_hud()
 
-            # Temp
-            if pg.key.get_pressed()[pg.K_SPACE]:
-                enemy_obj.Add_enemy(1)
+
 
 
             # Allways run these after everything else
@@ -133,6 +147,7 @@ if __name__ == "__main__":
             if debug_obj.map_debug_open and data.is_in_game:
                 tile_map_obj.Show_grid()
                 tile_map_obj.Show_enemy_path()
+
 
 
             

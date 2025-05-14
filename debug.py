@@ -12,6 +12,8 @@ class Debug:
         self.map_debug_open: bool = False
         self.debug_button_clicked: bool = False
 
+        self.any_debug_active: bool = False
+
     
     def Fps_render(self, zoom: int, mspf: list[float], mspf_raw: list[float]) -> None:
         rect_surface = pg.Surface((55 * zoom, 28 * zoom), pg.SRCALPHA)
@@ -42,6 +44,11 @@ class Debug:
                     self.debug_button_clicked = True
             else:        
                 self.debug_button_clicked = False
+
+
+        self.any_debug_active = False
+        if self.fps_debug_open or self.map_debug_open:
+            self.any_debug_active = True
 
 
 

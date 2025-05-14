@@ -9,6 +9,7 @@ class Debug:
     def __init__(self, data: data_class.Data_class) -> None:
         self.data: data_class.Data_class = data
         self.fps_debug_open: bool = False
+        self.map_debug_open: bool = False
         self.debug_button_clicked: bool = False
 
     
@@ -35,7 +36,12 @@ class Debug:
                 self.fps_debug_open = not self.fps_debug_open
                 self.debug_button_clicked = True
         else:        
-            self.debug_button_clicked = False
+            if pg.key.get_pressed()[pg.K_F2]:
+                if not self.debug_button_clicked:
+                    self.map_debug_open = not self.map_debug_open
+                    self.debug_button_clicked = True
+            else:        
+                self.debug_button_clicked = False
 
 
 

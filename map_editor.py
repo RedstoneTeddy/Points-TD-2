@@ -5,10 +5,6 @@ directory = os_path.dirname(os_path.abspath(__file__))
 os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't correct
 
 
-#### Ideas ####
-# Each tower is an Object. With a base class "Tower" and subclasses for each type of tower.
-
-
 if __name__ == "__main__":
     import logging
 
@@ -43,24 +39,28 @@ if __name__ == "__main__":
     data: data_class.Data_class = data_class.Data_class()
     logging.info("Data initialized")
 
-    # Import all other classes
-    import transition
-    transition_obj: transition.Transition = transition.Transition(data)
+    import random
+    import pickle
 
-    import main_menu
-    main_menu_obj: main_menu.Main_menu = main_menu.Main_menu(data)
-    
     import debug
     debug_obj: debug.Debug = debug.Debug(data)
-    
+
     import tile_map
     tile_map_obj: tile_map.Tile_map = tile_map.Tile_map(data)
 
-    import enemy
-    enemy_obj: enemy.Enemy = enemy.Enemy(data, tile_map_obj)
 
 
+    # Map-editor specific 
+    current_placer: int = 1
+    tile_map_obj.map = [[1 for _ in range(24)] for _ in range(17)]
+    import easygui # type: ignore
+    tile_map_obj.map_file_name = easygui.enterbox("Enter the name of the map file (without .pkl)", "Map Editor", "")
+    tile_map_obj.Load_map_file()
+    autosave_timer: int = 0
+    enemy_path_nodes: list[tuple[int, int]] = []
 
+
+    logging.info("Imported all game-classes")
 
     pg.display.set_caption("Points TD 2")
     # display_icon = pg.image.load("images/xyz.png").convert_alpha()
@@ -70,7 +70,6 @@ if __name__ == "__main__":
     mspf_raw: list[float] = []
     fullscreen_pressed: bool = False
 
-    import easygui # type: ignore
     try:
         while data.run:
             # Resize the screen
@@ -103,36 +102,55 @@ if __name__ == "__main__":
 
 
 
-            # Show current game state / menu
-            if data.is_in_main_menu:
-                main_menu_obj.Render_main()
 
-            if data.is_in_game:
-                if data.load_game:
-                    data.map_file_name = "grass_fields"
-                    tile_map_obj.Load_map_file(data.map_file_name)
-                    data.load_game = False
-                tile_map_obj.Show_map()
+            # Map Editor Code
+            if pg.key.get_pressed()[pg.K_1]:
+                current_placer = 1
+            if pg.key.get_pressed()[pg.K_2]:
+                current_placer = 11
 
-                enemy_obj.Tick_enemy_walk()
-                if pg.key.get_pressed()[pg.K_LSHIFT]:
-                    enemy_obj.Tick_enemy_walk()
-                enemy_obj.Show_enemies()
+            # Enemy path
+            if pg.key.get_pressed()[pg.K_0]:
+                if pg.key.get_pressed()[pg.K_LSHIFT] and len(enemy_path_nodes) > 0:
+                    tile_map_obj.Calculate_enemy_path(enemy_path_nodes)
+                current_placer = 100
+                enemy_path_nodes = []
+            
+            if pg.mouse.get_pressed()[0]:
+                mouse_pos: tuple[int, int] = pg.mouse.get_pos()
+                tile_pos: tuple[int, int] = tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=True)
+                if current_placer == 1:
+                    tile_map_obj.map[tile_pos[1]][tile_pos[0]] = random.randint(1, 6)
+                if current_placer == 11:
+                    tile_map_obj.map[tile_pos[1]][tile_pos[0]] = random.randint(11, 15)
+                if current_placer == 100: # Enemy
+                    if pg.key.get_pressed()[pg.K_LEFT]: tile_pos = (tile_pos[0]-1, tile_pos[1])
+                    if pg.key.get_pressed()[pg.K_RIGHT]: tile_pos = (tile_pos[0]+1, tile_pos[1])
+                    if pg.key.get_pressed()[pg.K_UP]: tile_pos = (tile_pos[0], tile_pos[1]-1)
+                    if pg.key.get_pressed()[pg.K_DOWN]: tile_pos = (tile_pos[0], tile_pos[1]+1)
+                    if tile_pos not in enemy_path_nodes:
+                        enemy_path_nodes.append(tile_pos)
 
-                tile_map_obj.Render_empty_screen_overlay()
+            tile_map_obj.Show_map()
+
+            if pg.key.get_pressed()[pg.K_q]:
+                tile_map_obj.Show_grid()
+                tile_map_obj.Show_enemy_path()
 
 
-            # Temp
-            if pg.key.get_pressed()[pg.K_SPACE]:
-                enemy_obj.Add_enemy(1)
+            autosave_timer += 1
+            if autosave_timer >= 60*60:
+                tile_map_obj.Save_map_file()
+                autosave_timer = 0
+                logging.info("Autosaved map file")
+
+
+
+
 
 
             # Allways run these after everything else
-            transition_obj.Render()
             debug_obj.Debug_main(3, mspf, mspf_raw)
-            if debug_obj.map_debug_open and data.is_in_game:
-                tile_map_obj.Show_grid()
-                tile_map_obj.Show_enemy_path()
 
 
             
@@ -165,5 +183,6 @@ if __name__ == "__main__":
         data.run = False
 
     finally:
+        tile_map_obj.Save_map_file()
         logging.info("Programm closed")
         pg.quit()

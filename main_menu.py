@@ -26,7 +26,7 @@ class Main_menu:
             if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
                 self.button_pressed = True
                 self.data.difficulty = "easy"
-                self.data.Start_new_game()
+                self.data.Start_new_game("grass_fields")
         else:
             self.data.Draw_text("Easy", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 55*self.data.hud_zoom))
                 
@@ -40,7 +40,7 @@ class Main_menu:
             if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
                 self.button_pressed = True
                 self.data.difficulty = "medium"
-                self.data.Start_new_game()
+                self.data.Start_new_game("grass_fields")
         else:
             self.data.Draw_text("Medium", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 80*self.data.hud_zoom))
 
@@ -54,7 +54,7 @@ class Main_menu:
             if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
                 self.button_pressed = True
                 self.data.difficulty = "hard"
-                self.data.Start_new_game()
+                self.data.Start_new_game("grass_fields")
         else:
             self.data.Draw_text("Hard", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 105*self.data.hud_zoom))
 
@@ -68,7 +68,7 @@ class Main_menu:
             if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
                 self.button_pressed = True
                 self.data.difficulty = "hacker"
-                self.data.Start_new_game()
+                self.data.Start_new_game("grass_fields")
         else:
             self.data.Draw_text("Hacker", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 130*self.data.hud_zoom))
         

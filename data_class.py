@@ -4,6 +4,12 @@ import logging
 import pickle
 
 
+class Enemy_data(TypedDict):
+    health: int
+    pos_i: int
+    pos: tuple[float, float]
+
+
 class Data_class:
     def __init__(self):
 
@@ -24,7 +30,16 @@ class Data_class:
         self.is_in_main_menu: bool = True
         self.is_in_game: bool = False
 
+        # For (initially) loading the game
+        self.load_game: bool = False
+        self.map_file_name: str = ""
+
         self.hud_zoom: int = 1
+        self.tile_zoom: int = 2
+
+        # Game Variables
+        self.running_wave: bool = False
+
 
         self.difficulty: Literal["", "easy", "medium", "hard", "hacker"] = ""
         self.cost_multiplier: float = 1.0 # Gets set, when the game starts, reads the data.difficulty variable
@@ -66,12 +81,30 @@ class Data_class:
             new_zoom = 4
         else:
             new_zoom = 5
-            
+
         if self.hud_zoom != new_zoom:
             self.hud_zoom = new_zoom
             logging.info(f"HUD zoom changed to {self.hud_zoom}")
 
-    def Start_new_game(self):
+        # Check for the tile-map to change
+        # 18x32 ratio for everything.
+        # on right side -> 8 for the shop
+        # 1 on the top -> header / HUD
+        # tile_map: 17x24
+        new_tile_zoom: int
+        tile_screen: tuple[int, int] = (self.screen_size[0]//8, self.screen_size[1]//8)
+        for i in range(10, 0, -1):
+            if tile_screen[0] >= 32*i and tile_screen[1] >= 18*i:
+                new_tile_zoom = i
+                break
+
+        
+        if self.tile_zoom != new_tile_zoom:
+            self.tile_zoom = new_tile_zoom
+            logging.info(f"Tile zoom changed to {self.tile_zoom}")
+            
+
+    def Start_new_game(self, map_file_name: str = "") -> None:
         if self.difficulty == "":
             logging.warning("Difficulty not set")
             return
@@ -89,6 +122,9 @@ class Data_class:
             case _:
                 logging.error("Difficulty setting invalid")
                 return
+            
+        self.map_file_name = map_file_name
+        self.load_game = True
             
         # Start the game
         self.Transition_black_window("game")

@@ -14,6 +14,7 @@ class Base_tower:
 
         self.projectile_pos: tuple[int, int] = (0, 0)
         self.projectile_timer: int = 0
+        self.bought_upgrades: list[str] = []
 
         self.turn_state: data_class.Literal["up", "right", "down", "left"] = "up"
 
@@ -32,6 +33,7 @@ class Base_tower:
         self.shooting_speed: int = 0
         self.projectile_speed: float = 0 # ideally: self.range/4
         self.projectile_damage: int = 0
+        self.possible_upgrades: list[data_class.Upgrade_data] = []
 
         self.__projectile_pos: tuple[float, float] = (-1, -1)
         self.__projectile_angle: float = 0.0
@@ -52,6 +54,9 @@ class Base_tower:
             self.current_tile_zoom = self.data.tile_zoom
             projectile_size: tuple[int, int] = self.original_projectile_image.get_size()
             self.projectile_image = pg.transform.scale(self.original_projectile_image, (self.data.tile_zoom*projectile_size[0], self.data.tile_zoom*projectile_size[1]))
+            for upgrade_key in self.possible_upgrades:
+                if upgrade_key["original_img"] != None:
+                    upgrade_key["img"] = pg.transform.scale(upgrade_key["original_img"], (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
 
 
     def Show_tower(self) -> bool: # Return if it got selected
@@ -77,6 +82,8 @@ class Base_tower:
                 self.selected = True
                 got_selected = True
             else:
+                if self.selected:
+                    self.data.tower_selected = -1
                 self.selected = False
         elif not pg.mouse.get_pressed()[0]:
             self.mouse_pressed = False
@@ -92,8 +99,21 @@ class Base_tower:
                 else:
                     self.turn_state = "left"
 
+        if self.selected:
+            self.Show_upgrades()
+
 
         return got_selected
+    
+
+    def Show_upgrades(self) -> None:
+        """
+        Shows the upgrades for the tower
+        """
+        title_pos: tuple[int, int] = (int(25.6*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8)
+        self.data.Draw_text("Upgrades", 8*self.data.tile_zoom, (255, 255, 255), title_pos)
+        self.data.Draw_text(self.tower_name.capitalize(), 6*self.data.tile_zoom, (255, 255, 255), (title_pos[0] - self.data.tile_zoom*8, title_pos[1] + self.data.tile_zoom*8))
+        
     
     def Show_projectile(self) -> None:
         # Render shot
@@ -294,6 +314,7 @@ class Tower_handler:
         for i, tower in enumerate(self.towers):
 
             if tower.Show_tower(): # If the tower got selected
+                self.data.tower_selected = i
                 for j, tower2 in enumerate(self.towers):
                     if i != j and tower2.selected:
                         tower2.selected = False

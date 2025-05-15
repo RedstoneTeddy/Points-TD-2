@@ -69,8 +69,8 @@ if __name__ == "__main__":
     import towers.build_hologram
     build_hologram_obj: towers.build_hologram.Build_hologram = towers.build_hologram.Build_hologram(data, tile_map_obj, tower_handler)
 
-    tower_handler.towers.append(towers.ninja.Ninja(data, tile_map_obj, (10, 1)))
-    data.currently_building = "ninja"
+    import shop
+    shop_obj: shop.Shop = shop.Shop(data, tile_map_obj, build_hologram_obj)
 
     performance_background_timer: int = 0
 
@@ -140,6 +140,7 @@ if __name__ == "__main__":
                 enemy_obj.Main()
                 tower_handler.Main()
                 build_hologram_obj.Main()
+                shop_obj.Main()
 
                 tile_map_obj.Render_empty_screen_overlay()
 

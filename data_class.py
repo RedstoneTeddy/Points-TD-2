@@ -15,6 +15,16 @@ class Wave_enemy(TypedDict):
     spawn_time: int
     special: str
 
+class Upgrade_data(TypedDict):
+    name: str
+    cost: int
+    description: list[str]
+    original_img: pg.Surface
+    img: pg.Surface
+    y_pos: Literal[0,1,2]
+    requirement: str
+
+
 Buildable_tiles: List[int] = [1,2,3,4,5,6]
 
 class Data_class:
@@ -66,6 +76,7 @@ class Data_class:
         self.money: int = 0
 
         self.currently_building: str = ""
+        self.tower_selected: int = -1
 
 
         self.difficulty: Literal["", "easy", "medium", "hard", "hacker"] = ""
@@ -73,12 +84,44 @@ class Data_class:
 
         # Tower images
         self.original_tower_images: dict[str, dict[str, pg.Surface]] = {
+            "upgrades": {
+                "big_range": pg.image.load("images/towers/upgrades/big_range.png").convert_alpha(),
+                "double_kill": pg.image.load("images/towers/upgrades/double_kill.png").convert_alpha(),
+                "fast_machine": pg.image.load("images/towers/upgrades/fast_machine.png").convert_alpha(),
+                "faster_shooting": pg.image.load("images/towers/upgrades/faster_shooting.png").convert_alpha(),
+                "more_range": pg.image.load("images/towers/upgrades/more_range.png").convert_alpha(),
+                "sharper": pg.image.load("images/towers/upgrades/sharper.png").convert_alpha(),
+                "sharper_shuriken": pg.image.load("images/towers/upgrades/sharper_shuriken.png").convert_alpha(),
+                "shorter_cooldown": pg.image.load("images/towers/upgrades/shorter_cooldown.png").convert_alpha()
+            },
+            
             "ninja" : {
                 "up": pg.image.load("images/towers/ninja/normal.png").convert_alpha(),
                 "left": pg.transform.rotate(pg.image.load("images/towers/ninja/normal.png").convert_alpha(), 90),
                 "down": pg.transform.rotate(pg.image.load("images/towers/ninja/normal.png").convert_alpha(), 180),
                 "right": pg.transform.rotate(pg.image.load("images/towers/ninja/normal.png").convert_alpha(), 270),
                 "projectile": pg.image.load("images/towers/ninja/projectile.png").convert_alpha()
+            },
+            "sniper" : {
+                "up": pg.image.load("images/towers/sniper/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/sniper/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/sniper/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/sniper/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/sniper/projectile.png").convert_alpha()
+            },
+            "machine_gunner": {
+                "up": pg.image.load("images/towers/machine_gunner/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/machine_gunner/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/machine_gunner/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/machine_gunner/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/machine_gunner/projectile.png").convert_alpha()
+            },
+            "bomber": {
+                "up": pg.image.load("images/towers/bomber/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/bomber/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/bomber/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/bomber/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/bomber/projectile.png").convert_alpha()
             }
         }
 
@@ -152,19 +195,25 @@ class Data_class:
             case "easy":
                 self.cost_multiplier = 0.8
                 self.health = 200
+                self.money = 800
             case "medium":
                 self.cost_multiplier = 1.0
                 self.health = 150
+                self.money = 600
             case "hard":
                 self.cost_multiplier = 1.2
                 self.health = 100
+                self.money = 500
             case "hacker":
                 self.cost_multiplier = 1.5
                 self.health = 1
+                self.money = 500
             case _:
                 logging.error("Difficulty setting invalid")
                 return
             
+        self.tower_selected = -1
+        self.currently_building = ""
         self.map_file_name = map_file_name
         self.load_game = True
 

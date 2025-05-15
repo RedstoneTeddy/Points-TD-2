@@ -15,6 +15,7 @@ class Wave_enemy(TypedDict):
     spawn_time: int
     special: str
 
+Buildable_tiles: List[int] = [1,2,3,4,5,6]
 
 class Data_class:
     def __init__(self):
@@ -63,6 +64,8 @@ class Data_class:
         self.new_wave: bool = False
         self.wave: int = 0
         self.money: int = 0
+
+        self.currently_building: str = ""
 
 
         self.difficulty: Literal["", "easy", "medium", "hard", "hacker"] = ""
@@ -184,6 +187,7 @@ class Data_class:
         Called when the wave is finished
         """
         self.running_wave = False
+        self.money += 100
         logging.info(f"Wave {self.wave} finished")
 
         if self.auto_wave:

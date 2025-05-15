@@ -76,6 +76,8 @@ class Base_tower:
             if tower_pos[0] < mouse_pos[0] < tower_pos[0] + size_px and tower_pos[1] < mouse_pos[1] < tower_pos[1] + size_px:
                 self.selected = True
                 got_selected = True
+            else:
+                self.selected = False
         elif not pg.mouse.get_pressed()[0]:
             self.mouse_pressed = False
 
@@ -136,10 +138,7 @@ class Base_tower:
                 if self.data.enemies[self.__targeted_uuid]["health"] > 0:
                     distance: float = self.Get_distance(self.__projectile_pos, (self.data.enemies[self.__targeted_uuid]["pos"][0], self.data.enemies[self.__targeted_uuid]["pos"][1]))
                     if distance <= (self.projectile_speed+0.1):
-                        self.data.enemies[self.__targeted_uuid]["health"] -= self.projectile_damage
-                        if self.data.enemies[self.__targeted_uuid]["health"] <= 0:
-                            print("kill")
-                            del self.data.enemies[self.__targeted_uuid]
+                        self.Damage_enemy(self.__targeted_uuid)
                         self.__projectile_pos = (-1, -1)
                         self.__targeted_uuid = ""
                 if self.__projectile_pos != (-1, -1):
@@ -152,9 +151,9 @@ class Base_tower:
                 nearest: tuple[str, float] = self.Nearest_enemy(self.__projectile_pos)
                 if nearest[0] != "":
                     if nearest[1] <= (self.projectile_speed+0.1):
-                        self.data.enemies[self.__targeted_uuid]["health"] -= self.projectile_damage
-                        if self.data.enemies[self.__targeted_uuid]["health"] <= 0:
-                            del self.data.enemies[self.__targeted_uuid]
+                        self.data.enemies[nearest[0]]["health"] -= self.projectile_damage
+                        if self.data.enemies[nearest[0]]["health"] <= 0:
+                            del self.data.enemies[nearest[0]]
                         self.__projectile_pos = (-1, -1)
 
             # Check if the projectile is out of range
@@ -216,6 +215,54 @@ class Base_tower:
         Returns the distance between two points
         """
         return ((a[0] - b[0])**2 + (a[1] - b[1])**2)**0.5
+    
+    def Damage_enemy(self, enemy_uuid: str) -> None:
+        """
+        Damages the enemy and rewards the player with money
+        """
+        health_before: int = self.data.enemies[enemy_uuid]["health"]
+        self.data.enemies[enemy_uuid]["health"] -= self.projectile_damage
+        health_after: int = self.data.enemies[enemy_uuid]["health"]
+        if self.data.enemies[enemy_uuid]["health"] <= 0:
+            health_after = 0
+            del self.data.enemies[enemy_uuid]
+
+        if health_before > 10: health_before = 10 # Points over 10 have a different reward-system
+        
+        self.data.money += int(health_before - health_after) 
+    
+        # Pop ceramic
+        if health_before > 10 and health_after <= 10:
+            self.data.money += 10
+        
+        # Pop 100
+        if health_before > 51 and health_after <= 50:
+            self.data.money += 10
+        # Pop 200
+        if health_before > 101 and health_after <= 100:
+            self.data.money += 10
+        # Pop 300
+        if health_before > 201 and health_after <= 200:
+            self.data.money += 10
+        # Pop 400
+        if health_before > 301 and health_after <= 300:
+            self.data.money += 10
+        # Pop 500
+        if health_before > 401 and health_after <= 400:
+            self.data.money += 10
+        # Pop 1000
+        if health_before > 1001 and health_after <= 1000:
+            self.data.money += 50
+
+    def Wave_finished(self) -> None:
+        """
+        Resets the tower for the next wave
+        """
+        self.__projectile_pos = (-1, -1)
+        self.__targeted_uuid = ""
+        self.projectile_timer = 0
+        self.__shoot_waiting_timer = 0
+    
 
 
 
@@ -243,7 +290,7 @@ class Tower_handler:
             if self.data.fast_forward:
                 self.__tower_clock += 1
 
-
+        # Main Tower Tick
         for i, tower in enumerate(self.towers):
 
             if tower.Show_tower(): # If the tower got selected
@@ -254,6 +301,11 @@ class Tower_handler:
 
             if self.__tower_clock >= 2:
                 tower.Tick()
+
+        # Check for resetting the towers
+        if not self.data.running_wave or self.data.new_wave:
+            for tower in self.towers:
+                tower.Wave_finished()
 
         # Show projectiles
         if self.data.performance_saving_setting != "extreme":

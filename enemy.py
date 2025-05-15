@@ -174,27 +174,32 @@ class Enemy:
             
         # New Wave
         if self.data.new_wave:
-            self.__enemy_spawn_clock = 0
-            self.__enemy_tick_clock = 0
-
-            # Load the new wave out of the file            
-            if self.data.wave <= 0:
-                logging.error(f"Invalid wave number: {self.data.wave}")
-                return
-            try:
-                import pickle
-                with open(f"waves/normal{self.data.wave}.pkl", "rb") as file:
-                    file_contents = pickle.load(file)
-                    self.__wave_enemies = file_contents
-            except Exception as load_error:
-                logging.error(f"Failed to load the wave {self.data.wave}: {load_error}")
+            self.Load_new_wave()
 
 
         self.Show_enemies()
 
         if len(self.data.enemies) == 0 and len(self.__wave_enemies) == 0 and self.data.running_wave:
             self.data.Wave_finished()
+            if self.data.new_wave:
+                self.Load_new_wave()
             
+
+    def Load_new_wave(self):
+        self.__enemy_spawn_clock = 0
+        self.__enemy_tick_clock = 0
+
+        # Load the new wave out of the file            
+        if self.data.wave <= 0:
+            logging.error(f"Invalid wave number: {self.data.wave}")
+            return
+        try:
+            import pickle
+            with open(f"waves/normal{self.data.wave}.pkl", "rb") as file:
+                file_contents = pickle.load(file)
+                self.__wave_enemies = file_contents
+        except Exception as load_error:
+            logging.error(f"Failed to load the wave {self.data.wave}: {load_error}")
 
 
 

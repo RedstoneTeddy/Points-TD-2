@@ -65,7 +65,7 @@ class Hud:
         if pg.mouse.get_pressed()[0]:
             mouse_pos: tuple[int, int] = pg.mouse.get_pos()
             tile_pos: tuple[int, int] = self.tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=False)
-            if tile_pos[0] >= 26 and tile_pos[0] < 30 and tile_pos[1] >= 15 and tile_pos[1] < 17 and not self.wave_button_pressed:
+            if tile_pos[0] >= 26 and tile_pos[0] < 30 and tile_pos[1] >= 15 and tile_pos[1] < 17 and not self.wave_button_pressed and self.data.currently_building == "":
                 self.wave_button_pressed = True
                 if not self.data.running_wave:
                     self.data.Next_wave()
@@ -88,11 +88,11 @@ class Hud:
         self.data.Draw_text(f"{self.data.health}", 6*self.data.tile_zoom, (255,0,0), (int((pos[0]+3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))
 
         # Money
-        pos: tuple[int, int] = (14, 0)
+        pos: tuple[int, int] = (6, 0)
         self.data.screen.blit(self.hud_images["text_box"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
         self.data.Draw_text(f"$ {self.data.money}", 6*self.data.tile_zoom, (255,255,50), (int((pos[0]+0.3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))
 
         # Wave
-        pos: tuple[int, int] = (26, 0)
+        pos: tuple[int, int] = (11, 0)
         self.data.screen.blit(self.hud_images["text_box"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
         self.data.Draw_text(f"Wave {self.data.wave}", 6*self.data.tile_zoom, (0,0,0), (int((pos[0]+0.3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))

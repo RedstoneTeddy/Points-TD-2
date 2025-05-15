@@ -211,14 +211,13 @@ class Tile_map:
             pg.draw.circle(self.data.screen, path_pos_colors[i], (int(path_pos[0]*self.data.tile_zoom*8) + self.Get_left_right_empty_screen(), int((path_pos[1]+1)*self.data.tile_zoom*8)), int(self.data.tile_zoom/2+0.5))
 
     def Render_empty_screen_overlay(self) -> None:
-        if self.__performance_update_timer == 0:
-            used_screen: tuple[int, int] = (32*8*self.data.tile_zoom, 18*8*self.data.tile_zoom)
-            # Left
-            pg.draw.rect(self.data.screen, (100,180,255), (0, 0, self.Get_left_right_empty_screen(), self.data.screen_size[1]))
-            # Right
-            pg.draw.rect(self.data.screen, (100,180,255), (self.data.screen_size[0] - self.Get_left_right_empty_screen(), 0, self.Get_left_right_empty_screen()+1, self.data.screen_size[1]))
-            # Bottom
-            pg.draw.rect(self.data.screen, (100,180,255), (0, used_screen[1], self.data.screen_size[0], self.data.screen_size[1] - used_screen[1]))
+        used_screen: tuple[int, int] = (32*8*self.data.tile_zoom, 18*8*self.data.tile_zoom)
+        # Left
+        pg.draw.rect(self.data.screen, (100,180,255), (0, 0, self.Get_left_right_empty_screen(), self.data.screen_size[1]))
+        # Right
+        pg.draw.rect(self.data.screen, (100,180,255), (self.data.screen_size[0] - self.Get_left_right_empty_screen(), 0, self.Get_left_right_empty_screen()+1, self.data.screen_size[1]))
+        # Bottom
+        pg.draw.rect(self.data.screen, (100,180,255), (0, used_screen[1], self.data.screen_size[0], self.data.screen_size[1] - used_screen[1]))
 
 
     def Get_left_right_empty_screen(self) -> int:

@@ -29,12 +29,12 @@ class Magician(towers.base_tower.Base_tower):
              "description": ["Can damage", "lead points", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
             {"name": "flash_explosion", "cost": 500, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Flash Explosion", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},
-            {"name": "pushback", "cost": 300, "requirement": "", "y_pos": 2, "is_master": False,
-             "description": ["Pushback"], "original_img": data.original_tower_images["upgrades"]["pushback"], "img": pg.Surface((24,24))},
+            {"name": "pushback", "cost": 600, "requirement": "slow_down", "y_pos": 2, "is_master": True,
+             "description": ["Pushback"], "original_img": data.original_tower_images["upgrades"]["pushback+"], "img": pg.Surface((24,24))},
             {"name": "regeneration", "cost": 600, "requirement": "flash_explosion", "y_pos": 1, "is_master": True,
-             "description": ["Regenerate", "1 Health", "per Round"], "original_img": data.original_tower_images["upgrades"]["regenerate"], "img": pg.Surface((24,24))},
-            {"name": "slow_down", "cost": 600, "requirement": "pushback", "y_pos": 2, "is_master": True,
-             "description": ["Slows down Points"], "original_img": data.original_tower_images["upgrades"]["pushback+"], "img": pg.Surface((24,24))},
+             "description": ["Regenerate 1 Health", "per Round", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["regenerate"], "img": pg.Surface((24,24))},
+            {"name": "slow_down", "cost": 400, "requirement": "", "y_pos": 2, "is_master": False,
+             "description": ["Slows down Points", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["pushback"], "img": pg.Surface((24,24))},
 
         ]
 
@@ -49,7 +49,7 @@ class Magician(towers.base_tower.Base_tower):
             case "flash_explosion":
                 self.projectile_damage += 1
                 self.multi_hit_range = 1.5
-                self.multi_hits_max = 3
+                self.multi_hits_max = 2
             case "pushback":
                 pass # Pushback effect is actually handled in the parent-class
             case "regeneration":

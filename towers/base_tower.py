@@ -362,21 +362,22 @@ class Base_tower:
         if self.data.enemies[enemy_uuid]["health"] <= 0:
             health_after = 0
             # Special enemies
-            if self.data.enemies[enemy_uuid]["special"] != "stack":
+            if self.data.enemies[enemy_uuid]["special"] not in ["stack", "stack+"]:
                 del self.data.enemies[enemy_uuid]
-            else:
+            elif self.data.enemies[enemy_uuid]["special"] == "stack":
                 health_after = 10
+            elif self.data.enemies[enemy_uuid]["special"] == "stack+":
+                health_after = 50
         else:
             # Pushback Effect of Magician
             if self.tower_name == "magician" and "pushback" in self.bought_upgrades:
-                self.data.enemies[enemy_uuid]["pos_i"] -= 12
+                self.data.enemies[enemy_uuid]["pos_i"] -= 10
                 if self.data.enemies[enemy_uuid]["pos_i"] < 0:
                     self.data.enemies[enemy_uuid]["pos_i"] = 0
             if self.tower_name == "magician" and "slow_down" in self.bought_upgrades:
-                if self.data.enemies[enemy_uuid]["slow_timer"] < 90:
-                    self.data.enemies[enemy_uuid]["slow_timer"] = 90
+                if self.data.enemies[enemy_uuid]["slow_timer"] < 70:
+                    self.data.enemies[enemy_uuid]["slow_timer"] = 70
 
-        if health_before > 10: health_before = 10 # Points over 10 have a different reward-system
 
 
         # Special enemies
@@ -384,11 +385,14 @@ class Base_tower:
             if self.data.enemies[enemy_uuid]["special"] == "lead":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
-            if self.data.enemies[enemy_uuid]["special"] == "anti_explosion":
+                    self.data.money -= 6
+            elif self.data.enemies[enemy_uuid]["special"] == "anti_explosion":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
-            if self.data.enemies[enemy_uuid]["special"] == "stack":
+                    self.data.money -= 6
+            elif self.data.enemies[enemy_uuid]["special"] == "stack":
                 if health_after <= 10:
+                    self.data.money -= 6
                     spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
                     if spawn_pos_i < 14:
                         spawn_pos_i = 14
@@ -403,16 +407,34 @@ class Base_tower:
                     self.Add_enemy(1, "", spawn_pos_i-14)
                     # Delete stack enemy
                     del self.data.enemies[enemy_uuid]
+            elif self.data.enemies[enemy_uuid]["special"] == "stack+":
+                if health_after <= 10:
+                    spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
+                    if spawn_pos_i < 18:
+                        spawn_pos_i = 18
+                    # Spawn enemies from stack+
+                    self.Add_enemy(50, "", spawn_pos_i)
+                    self.Add_enemy(20, "stack", spawn_pos_i-2)
+                    self.Add_enemy(20, "lead", spawn_pos_i-4)
+                    self.Add_enemy(20, "anti_explosion", spawn_pos_i-6)
+                    self.Add_enemy(10, "", spawn_pos_i-8)
+                    self.Add_enemy(5, "", spawn_pos_i-10)
+                    self.Add_enemy(4, "", spawn_pos_i-12)
+                    self.Add_enemy(3, "", spawn_pos_i-14)
+                    self.Add_enemy(2, "", spawn_pos_i-16)
+                    self.Add_enemy(1, "", spawn_pos_i-18)
+                    # Delete stack+ enemy
+                    del self.data.enemies[enemy_uuid]
 
 
             
 
-        
-        self.data.money += int(health_before - health_after) 
+        if health_before <= 10: 
+            self.data.money += int(health_before - health_after) 
     
         # Pop ceramic
         if health_before > 10 and health_after <= 10:
-            self.data.money += 10
+            self.data.money += 8
         
         # Pop 100
         if health_before > 51 and health_after <= 50:
@@ -430,7 +452,7 @@ class Base_tower:
         if health_before > 401 and health_after <= 400:
             self.data.money += 10
         # Pop 1000
-        if health_before > 1001 and health_after <= 1000:
+        if health_before > 501 and health_after <= 500:
             self.data.money += 50
 
     def Wave_finished(self) -> None:

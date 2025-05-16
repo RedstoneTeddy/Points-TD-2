@@ -32,7 +32,11 @@ class Bomber(towers.base_tower.Base_tower):
             {"name": "blast_radius", "cost": 400, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Bigger Blast Radius"], "original_img": data.original_tower_images["upgrades"]["blast_radius"], "img": pg.Surface((24,24))},
             {"name": "shorter_cooldown", "cost": 200, "requirement": "", "y_pos": 2, "is_master": False,
-             "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))}
+             "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
+            {"name": "bigger_range", "cost": 500, "requirement": "blast_radius", "y_pos": 1, "is_master": True,
+             "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["big_range"], "img": pg.Surface((24,24))},
+            {"name": "atomic_bomb", "cost": 900, "requirement": "bigger_bomb", "y_pos": 0, "is_master": True,
+             "description": ["Nuclear Bomb"], "original_img": data.original_tower_images["upgrades"]["atomic_bomb"], "img": pg.Surface((24,24))},
         ]
 
         self.Scale_tower_images(True)
@@ -47,6 +51,12 @@ class Bomber(towers.base_tower.Base_tower):
                 self.multi_hits_max = 5
             case "shorter_cooldown":
                 self.shooting_speed -= 10
+            case "bigger_range":
+                self.range += 1.2
+            case "atomic_bomb":
+                self.multi_hits_max += 3
+                self.multi_hit_range += 0.2
+                self.projectile_damage += 2
 
 
         

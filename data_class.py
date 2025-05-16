@@ -108,7 +108,8 @@ class Data_class:
                 "flash_explosion": pg.image.load("images/towers/upgrades/flash_explosion.png").convert_alpha(),
                 "pushback": pg.image.load("images/towers/upgrades/pushback.png").convert_alpha(),
                 "pushback+": pg.image.load("images/towers/upgrades/pushback+.png").convert_alpha(),
-                "regenerate": pg.image.load("images/towers/upgrades/regenerate.png").convert_alpha()
+                "regenerate": pg.image.load("images/towers/upgrades/regenerate.png").convert_alpha(),
+                "atomic_bomb": pg.image.load("images/towers/upgrades/atomic_bomb.png").convert_alpha()
             },
             
             "ninja" : {

@@ -1,7 +1,19 @@
-2025-05-16 10:22:11,709 - INFO - wave_converter.py - Logging started
-2025-05-16 10:22:12,416 - INFO - wave_converter.py - Pygame initialized
-2025-05-16 10:22:12,458 - INFO - wave_converter.py - Data initialized
-2025-05-16 10:22:12,466 - INFO - wave_converter.py - Imported all game-classes
-2025-05-16 10:23:17,055 - INFO - enemy.py - Wave 9 successfully saved to 'waves/normal9.pkl'
-2025-05-16 10:23:17,056 - INFO - wave_converter.py - Wave enemies saved
-2025-05-16 10:23:17,056 - INFO - wave_converter.py - Programm closed
+2025-05-16 15:02:46,712 - INFO - main.py - Logging started
+2025-05-16 15:02:48,083 - INFO - main.py - Pygame initialized
+2025-05-16 15:02:48,145 - INFO - main.py - Data initialized
+2025-05-16 15:02:48,312 - INFO - data_class.py - HUD zoom changed to 3
+2025-05-16 15:02:48,312 - INFO - data_class.py - Tile zoom changed to 4
+2025-05-16 15:02:49,239 - INFO - main.py - Screen resized to (1920, 1009)
+2025-05-16 15:02:49,239 - INFO - data_class.py - HUD zoom changed to 4
+2025-05-16 15:02:49,240 - INFO - data_class.py - Tile zoom changed to 7
+2025-05-16 15:02:49,988 - INFO - transition.py - Transitioned to game
+2025-05-16 15:02:50,013 - INFO - tile_map.py - Map successfully loaded from 'maps/grass_fields.pkl'
+2025-05-16 15:03:19,646 - INFO - data_class.py - Wave 1 started
+2025-05-16 15:03:32,961 - INFO - data_class.py - Wave 1 finished
+2025-05-16 15:03:35,951 - INFO - data_class.py - Wave 2 started
+2025-05-16 15:03:50,828 - INFO - data_class.py - Wave 2 finished
+2025-05-16 15:03:51,733 - INFO - data_class.py - Wave 3 started
+2025-05-16 15:03:55,969 - INFO - data_class.py - Wave 3 finished
+2025-05-16 15:03:55,970 - INFO - data_class.py - Wave 4 started
+2025-05-16 15:04:07,401 - INFO - main.py - Received Quit Event
+2025-05-16 15:04:07,414 - INFO - main.py - Programm closed

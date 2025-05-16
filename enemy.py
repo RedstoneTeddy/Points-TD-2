@@ -36,7 +36,8 @@ class Enemy:
             "1000": pg.image.load("images/enemies/1000.png").convert_alpha(),
             "lead": pg.image.load("images/enemies/lead.png").convert_alpha(),
             "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha(),
-            "stack": pg.image.load("images/enemies/stack.png").convert_alpha()
+            "stack": pg.image.load("images/enemies/stack.png").convert_alpha(),
+            "stack+": pg.image.load("images/enemies/stack+.png").convert_alpha()
         }
 
         self.enemy_images: dict[str, pg.Surface] = {}
@@ -63,6 +64,8 @@ class Enemy:
                 enemy_type = "anti_explosion"
             elif enemy["special"] == "stack":
                 enemy_type = "stack"
+            elif enemy["special"] == "stack+":
+                enemy_type = "stack+"
             elif enemy["health"] == 1:
                 enemy_type = "1"
             elif enemy["health"] == 2:
@@ -153,6 +156,8 @@ class Enemy:
             health = 20
         elif special == "stack":
             health = 20
+        elif special == "stack+":
+            health = 70
         
 
         enemy: data_class.Enemy_data = {

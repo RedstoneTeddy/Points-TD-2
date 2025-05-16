@@ -31,6 +31,8 @@ class Ninja(towers.base_tower.Base_tower):
              "description": ["Double Kill Possibility", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
             {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},
+            {"name": "lead_pop", "cost": 150, "requirement": "more_range", "y_pos": 1, "is_master": True,
+             "description": ["Can damage", "lead points"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
             {"name": "shorter_cooldown", "cost": 150, "requirement": "", "y_pos": 2,  "is_master": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))}
         ]
@@ -49,6 +51,8 @@ class Ninja(towers.base_tower.Base_tower):
                 self.range += 1
             case "shorter_cooldown":
                 self.shooting_speed -= 8
+            case "lead_pop":
+                self.can_pop_lead = True
 
 
         

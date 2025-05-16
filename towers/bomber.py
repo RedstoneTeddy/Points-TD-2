@@ -24,6 +24,7 @@ class Bomber(towers.base_tower.Base_tower):
         self.multi_hit_range = 1.4
         self.multi_hits_max = 3
         self.can_pop_lead: bool = True
+        self.can_pop_anti_explosion: bool = False
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
             {"name": "bigger_bomb", "cost": 250, "requirement": "", "y_pos": 0, "is_master": False,

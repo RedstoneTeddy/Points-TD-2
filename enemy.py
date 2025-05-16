@@ -17,26 +17,28 @@ class Enemy:
 
         self.__wave_enemies: list[data_class.Wave_enemy] = []
 
-        self.original_enemy_images: dict[int, pg.Surface] = {
-            1: pg.image.load("images/enemies/1.png").convert_alpha(),
-            2: pg.image.load("images/enemies/2.png").convert_alpha(),
-            3: pg.image.load("images/enemies/3.png").convert_alpha(),
-            4: pg.image.load("images/enemies/4.png").convert_alpha(),
-            5: pg.image.load("images/enemies/5.png").convert_alpha(),
-            10: pg.image.load("images/enemies/10.png").convert_alpha(),
-            20: pg.image.load("images/enemies/20.png").convert_alpha(),
-            30: pg.image.load("images/enemies/30.png").convert_alpha(),
-            40: pg.image.load("images/enemies/40.png").convert_alpha(),
-            50: pg.image.load("images/enemies/50.png").convert_alpha(),
-            100: pg.image.load("images/enemies/100.png").convert_alpha(),
-            200: pg.image.load("images/enemies/200.png").convert_alpha(),
-            300: pg.image.load("images/enemies/300.png").convert_alpha(),
-            400: pg.image.load("images/enemies/400.png").convert_alpha(),
-            500: pg.image.load("images/enemies/500.png").convert_alpha(),
-            1000: pg.image.load("images/enemies/1000.png").convert_alpha()
+        self.original_enemy_images: dict[str, pg.Surface] = {
+            "1": pg.image.load("images/enemies/1.png").convert_alpha(),
+            "2": pg.image.load("images/enemies/2.png").convert_alpha(),
+            "3": pg.image.load("images/enemies/3.png").convert_alpha(),
+            "4": pg.image.load("images/enemies/4.png").convert_alpha(),
+            "5": pg.image.load("images/enemies/5.png").convert_alpha(),
+            "10": pg.image.load("images/enemies/10.png").convert_alpha(),
+            "20": pg.image.load("images/enemies/20.png").convert_alpha(),
+            "30": pg.image.load("images/enemies/30.png").convert_alpha(),
+            "40": pg.image.load("images/enemies/40.png").convert_alpha(),
+            "50": pg.image.load("images/enemies/50.png").convert_alpha(),
+            "100": pg.image.load("images/enemies/100.png").convert_alpha(),
+            "200": pg.image.load("images/enemies/200.png").convert_alpha(),
+            "300": pg.image.load("images/enemies/300.png").convert_alpha(),
+            "400": pg.image.load("images/enemies/400.png").convert_alpha(),
+            "500": pg.image.load("images/enemies/500.png").convert_alpha(),
+            "1000": pg.image.load("images/enemies/1000.png").convert_alpha(),
+            "lead": pg.image.load("images/enemies/lead.png").convert_alpha(),
+            "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha()
         }
 
-        self.enemy_images: dict[int, pg.Surface] = {}
+        self.enemy_images: dict[str, pg.Surface] = {}
         self.Scale_enemy_images(True)
 
     def Scale_enemy_images(self, force_scaling: bool = False) -> None:
@@ -53,42 +55,46 @@ class Enemy:
         for enemy in self.data.enemies.values():
 
             # Get the enemy type => enemy img
-            enemy_type: int = 0
-            if enemy["health"] == 1:
-                enemy_type = 1
+            enemy_type: str
+            if enemy["special"] == "lead":
+                enemy_type = "lead"
+            elif enemy["special"] == "anti_explosion":
+                enemy_type = "anti_explosion"
+            elif enemy["health"] == 1:
+                enemy_type = "1"
             elif enemy["health"] == 2:
-                enemy_type = 2
+                enemy_type = "2"
             elif enemy["health"] == 3:
-                enemy_type = 3
+                enemy_type = "3"
             elif enemy["health"] == 4:
-                enemy_type = 4
+                enemy_type = "4"
             elif enemy["health"] == 5:
-                enemy_type = 5
+                enemy_type = "5"
             elif enemy["health"] > 5 and enemy["health"] <= 10:
-                enemy_type = 10
+                enemy_type = "10"
             elif enemy["health"] > 10 and enemy["health"] <= 20:
-                enemy_type = 20
+                enemy_type = "20"
             elif enemy["health"] > 20 and enemy["health"] <= 30:
-                enemy_type = 30
+                enemy_type = "30"
             elif enemy["health"] > 30 and enemy["health"] <= 40:
-                enemy_type = 40
+                enemy_type = "40"
             elif enemy["health"] > 40 and enemy["health"] <= 50:
-                enemy_type = 50
+                enemy_type = "50"
             elif enemy["health"] > 50 and enemy["health"] <= 100:
-                enemy_type = 100
+                enemy_type = "100"
             elif enemy["health"] > 100 and enemy["health"] <= 200:
-                enemy_type = 200
+                enemy_type = "200"
             elif enemy["health"] > 200 and enemy["health"] <= 300:
-                enemy_type = 300
+                enemy_type = "300"
             elif enemy["health"] > 300 and enemy["health"] <= 400:
-                enemy_type = 400
+                enemy_type = "400"
             elif enemy["health"] > 400 and enemy["health"] <= 500:
-                enemy_type = 500
+                enemy_type = "500"
             elif enemy["health"] > 500 and enemy["health"] <= 1000:
-                enemy_type = 1000
+                enemy_type = "1000"
             else:
                 logging.error(f"Enemy health {enemy['health']} is not valid")
-                enemy_type = 1
+                enemy_type = "1"
 
             # Enemy pixel position
             enemy_pos: tuple[int, int] = (int((enemy["pos"][0]-0.5)*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), int((enemy["pos"][1]-0.5+1)*self.data.tile_zoom*8))
@@ -136,6 +142,12 @@ class Enemy:
         if health <= 0:
             logging.error(f"Enemy health {health} is not valid")
             return
+        
+        # Special Points
+        if special == "lead":
+            health = 20
+        elif special == "anti_explosion":
+            health = 20
         
 
         enemy: data_class.Enemy_data = {

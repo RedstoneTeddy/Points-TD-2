@@ -149,7 +149,8 @@ class Data_class:
                 "left": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 90),
                 "down": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 180),
                 "right": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 270),
-                "projectile": pg.image.load("images/towers/shooter/projectile.png").convert_alpha()
+                "projectile": pg.image.load("images/towers/shooter/projectile.png").convert_alpha(),
+                "shop_img": pg.image.load("images/towers/shooter/shop_img.png").convert_alpha()
             }
         }
 

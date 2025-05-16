@@ -9,6 +9,7 @@ import towers.bomber
 import towers.machine_gunner
 import towers.sniper
 import towers.magician
+import towers.shooter
 
 class Build_hologram:
     def __init__(self, data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, tower_handler: towers.base_tower.Tower_handler) -> None:
@@ -22,7 +23,8 @@ class Build_hologram:
             "bomber" : data.original_tower_images["bomber"]["up"],
             "machine_gunner" : data.original_tower_images["machine_gunner"]["up"],
             "sniper" : data.original_tower_images["sniper"]["up"],
-            "magician" : data.original_tower_images["magician"]["up"]
+            "magician" : data.original_tower_images["magician"]["up"],
+            "shooter" : data.original_tower_images["shooter"]["up"]
         }
 
         self.tower_size: dict[str, int] = {
@@ -30,7 +32,8 @@ class Build_hologram:
             "bomber" : 2,
             "machine_gunner" : 2,
             "sniper" : 2,
-            "magician" : 2
+            "magician" : 2,
+            "shooter" : 1
         }
 
         self.tower_range: dict[str, float] = {
@@ -38,7 +41,8 @@ class Build_hologram:
             "bomber" : 3.3,
             "machine_gunner" : 3.3,
             "sniper" : 8.0,
-            "magician" : 4.0
+            "magician" : 4.0,
+            "shooter" : 2.4
         }
 
 
@@ -141,6 +145,9 @@ class Build_hologram:
                         case "magician":
                             self.tower_handler.towers.append(
                                 towers.magician.Magician(self.data, self.tile_map_obj, tile_pos))
+                        case "shooter":
+                            self.tower_handler.towers.append(
+                                towers.shooter.Shooter(self.data, self.tile_map_obj, tile_pos))
                         case _:
                             logging.error(f"Unknown tower type: {self.data.currently_building}")
                             return

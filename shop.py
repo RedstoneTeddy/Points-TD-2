@@ -19,7 +19,8 @@ class Shop:
             "bomber": 600,
             "machine_gunner": 400,
             "sniper": 500,
-            "magician": 700
+            "magician": 700,
+            "shooter": 300
         }
 
         self.original_shop_images: dict[str, pg.Surface] = {
@@ -27,7 +28,8 @@ class Shop:
             "bomber": data.original_tower_images["bomber"]["up"],
             "machine_gunner": data.original_tower_images["machine_gunner"]["up"],
             "sniper": data.original_tower_images["sniper"]["up"],
-            "magician": data.original_tower_images["magician"]["up"]
+            "magician": data.original_tower_images["magician"]["up"],
+            "shooter": data.original_tower_images["shooter"]["shop_img"]
         }
 
         self.shop_images: dict[str, pg.Surface] = {}
@@ -63,7 +65,8 @@ class Shop:
                 "bomber": (27, 2),
                 "machine_gunner": (29, 2),
                 "sniper": (25, 5),
-                "magician": (27, 5)
+                "magician": (27, 5),
+                "shooter": (29, 5)
             }
 
             for key in tower_tile_pos.keys():

@@ -40,6 +40,7 @@ class Base_tower:
         self.multi_hits_max: int = 1 # How many enemies it can hit at once, needs to be AT LEAST 1!!!
         self.multi_hit_range: float = 0
         self.can_pop_lead: bool = False # If the tower can pop lead
+        self.can_pop_anti_explosion: bool = True # If the tower can pop anti-explosion
 
 
         self.__projectile_pos: tuple[float, float] = (-1, -1)
@@ -120,7 +121,7 @@ class Base_tower:
         """
         title_pos: tuple[int, int] = (int(25.6*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8)
         self.data.Draw_text("Upgrades", 8*self.data.tile_zoom, (255, 255, 255), title_pos)
-        self.data.Draw_text(self.tower_name.capitalize().replace(";", " "), 6*self.data.tile_zoom, (255, 255, 255), (title_pos[0] - self.data.tile_zoom*8, title_pos[1] + self.data.tile_zoom*8))
+        self.data.Draw_text(self.tower_name.capitalize().replace("_", " "), 6*self.data.tile_zoom, (255, 255, 255), (title_pos[0] - self.data.tile_zoom*8, title_pos[1] + self.data.tile_zoom*8))
 
         for upgrade in self.possible_upgrades:
             if upgrade["name"] not in self.bought_upgrades:
@@ -341,6 +342,15 @@ class Base_tower:
         """
         Damages the enemy and rewards the player with money
         """
+        # Special enemies
+        if self.data.enemies[enemy_uuid]["special"] == "lead" and not self.can_pop_lead:
+            # If the tower can't pop lead, don't damage it
+            return
+        if self.data.enemies[enemy_uuid]["special"] == "anti_explosion" and not self.can_pop_anti_explosion:
+            # If the tower can't pop anti-explosion, don't damage it
+            return
+        
+
         if custom_damage != -1:
             damage = custom_damage
         else:
@@ -362,6 +372,17 @@ class Base_tower:
                     self.data.enemies[enemy_uuid]["slow_timer"] = 90
 
         if health_before > 10: health_before = 10 # Points over 10 have a different reward-system
+
+
+        # Special enemies
+        if health_after > 0:
+            if self.data.enemies[enemy_uuid]["special"] == "lead":
+                if health_after <= 10:
+                    self.data.enemies[enemy_uuid]["special"] = ""
+            if self.data.enemies[enemy_uuid]["special"] == "anti_explosion":
+                if health_after <= 10:
+                    self.data.enemies[enemy_uuid]["special"] = ""
+
         
         self.data.money += int(health_before - health_after) 
     

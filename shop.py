@@ -15,11 +15,19 @@ class Shop:
         self.mouse_pressed: bool = False
 
         self.shop_base_price: dict[str, int] = {
-            "ninja": 200
+            "ninja": 250,
+            "bomber": 600,
+            "machine_gunner": 400,
+            "sniper": 500,
+            "magician": 700
         }
 
         self.original_shop_images: dict[str, pg.Surface] = {
-            "ninja": data.original_tower_images["ninja"]["up"]
+            "ninja": data.original_tower_images["ninja"]["up"],
+            "bomber": data.original_tower_images["bomber"]["up"],
+            "machine_gunner": data.original_tower_images["machine_gunner"]["up"],
+            "sniper": data.original_tower_images["sniper"]["up"],
+            "magician": data.original_tower_images["magician"]["up"]
         }
 
         self.shop_images: dict[str, pg.Surface] = {}
@@ -47,11 +55,15 @@ class Shop:
 
             current_prices: dict[str, int] = {}
             for key in self.shop_base_price.keys():
-                current_prices[key] = int(round((self.shop_base_price[key] * self.data.cost_multiplier)/20,0)*20)
+                current_prices[key] = int(round((self.shop_base_price[key] * self.data.cost_multiplier)/10,0)*10)
             
             # Draw the shop
             tower_tile_pos: dict[str, tuple[int, int]] = {
-                "ninja": (25, 2)
+                "ninja": (25, 2),
+                "bomber": (27, 2),
+                "machine_gunner": (29, 2),
+                "sniper": (25, 5),
+                "magician": (27, 5)
             }
 
             for key in tower_tile_pos.keys():

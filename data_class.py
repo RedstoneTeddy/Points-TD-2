@@ -9,6 +9,7 @@ class Enemy_data(TypedDict):
     special: str
     pos_i: int
     pos: tuple[float, float] # This is the center of the tile
+    slow_timer: int
 
 class Wave_enemy(TypedDict):
     health: int
@@ -23,6 +24,7 @@ class Upgrade_data(TypedDict):
     img: pg.Surface
     y_pos: Literal[0,1,2]
     requirement: str
+    is_master: bool
 
 
 Buildable_tiles: List[int] = [1,2,3,4,5,6]
@@ -74,6 +76,7 @@ class Data_class:
         self.new_wave: bool = False
         self.wave: int = 0
         self.money: int = 0
+        self.regeneration: int = 0
 
         self.currently_building: str = ""
         self.tower_selected: int = -1
@@ -85,14 +88,25 @@ class Data_class:
         # Tower images
         self.original_tower_images: dict[str, dict[str, pg.Surface]] = {
             "upgrades": {
+                "hover": pg.image.load("images/towers/upgrades/hover.png").convert_alpha(),
+                "master_upgrade": pg.image.load("images/towers/upgrades/master_upgrade.png").convert_alpha(),
+                "master_blocked": pg.image.load("images/towers/upgrades/master_blocked.png").convert_alpha(),
                 "big_range": pg.image.load("images/towers/upgrades/big_range.png").convert_alpha(),
                 "double_kill": pg.image.load("images/towers/upgrades/double_kill.png").convert_alpha(),
                 "fast_machine": pg.image.load("images/towers/upgrades/fast_machine.png").convert_alpha(),
                 "faster_shooting": pg.image.load("images/towers/upgrades/faster_shooting.png").convert_alpha(),
                 "more_range": pg.image.load("images/towers/upgrades/more_range.png").convert_alpha(),
                 "sharper": pg.image.load("images/towers/upgrades/sharper.png").convert_alpha(),
+                "sharper+": pg.image.load("images/towers/upgrades/sharper+.png").convert_alpha(),
                 "sharper_shuriken": pg.image.load("images/towers/upgrades/sharper_shuriken.png").convert_alpha(),
-                "shorter_cooldown": pg.image.load("images/towers/upgrades/shorter_cooldown.png").convert_alpha()
+                "shorter_cooldown": pg.image.load("images/towers/upgrades/shorter_cooldown.png").convert_alpha(),
+                "bigger_bomb": pg.image.load("images/towers/upgrades/bigger_bomb.png").convert_alpha(),
+                "blast_radius": pg.image.load("images/towers/upgrades/blast_radius.png").convert_alpha(),
+                "lead_shots": pg.image.load("images/towers/upgrades/lead_shots.png").convert_alpha(),
+                "flash_explosion": pg.image.load("images/towers/upgrades/flash_explosion.png").convert_alpha(),
+                "pushback": pg.image.load("images/towers/upgrades/pushback.png").convert_alpha(),
+                "pushback+": pg.image.load("images/towers/upgrades/pushback+.png").convert_alpha(),
+                "regenerate": pg.image.load("images/towers/upgrades/regenerate.png").convert_alpha()
             },
             
             "ninja" : {
@@ -122,6 +136,20 @@ class Data_class:
                 "down": pg.transform.rotate(pg.image.load("images/towers/bomber/normal.png").convert_alpha(), 180),
                 "right": pg.transform.rotate(pg.image.load("images/towers/bomber/normal.png").convert_alpha(), 270),
                 "projectile": pg.image.load("images/towers/bomber/projectile.png").convert_alpha()
+            },
+            "magician": {
+                "up": pg.image.load("images/towers/magician/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/magician/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/magician/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/magician/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/magician/projectile.png").convert_alpha()
+            },
+            "shooter": {
+                "up": pg.image.load("images/towers/shooter/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/shooter/projectile.png").convert_alpha()
             }
         }
 
@@ -195,7 +223,7 @@ class Data_class:
             case "easy":
                 self.cost_multiplier = 0.8
                 self.health = 200
-                self.money = 800
+                self.money = 700
             case "medium":
                 self.cost_multiplier = 1.0
                 self.health = 150
@@ -216,6 +244,7 @@ class Data_class:
         self.currently_building = ""
         self.map_file_name = map_file_name
         self.load_game = True
+        self.regeneration = 0
 
             
         # Start the game
@@ -229,6 +258,7 @@ class Data_class:
         self.running_wave = True
         self.new_wave = True
         self.enemies = {}
+        self.health += self.regeneration # Regeneration from magician towers
         logging.info(f"Wave {self.wave} started")
 
     def Wave_finished(self) -> None:

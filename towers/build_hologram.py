@@ -5,6 +5,10 @@ import tile_map
 
 import towers.base_tower
 import towers.ninja
+import towers.bomber
+import towers.machine_gunner
+import towers.sniper
+import towers.magician
 
 class Build_hologram:
     def __init__(self, data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, tower_handler: towers.base_tower.Tower_handler) -> None:
@@ -14,11 +18,27 @@ class Build_hologram:
         self.current_tile_zoom: int = 1
 
         self.original_tower_images: dict[str, pg.Surface] = {
-            "ninja" : data.original_tower_images["ninja"]["up"]
+            "ninja" : data.original_tower_images["ninja"]["up"],
+            "bomber" : data.original_tower_images["bomber"]["up"],
+            "machine_gunner" : data.original_tower_images["machine_gunner"]["up"],
+            "sniper" : data.original_tower_images["sniper"]["up"],
+            "magician" : data.original_tower_images["magician"]["up"]
         }
 
         self.tower_size: dict[str, int] = {
-            "ninja" : 2
+            "ninja" : 2,
+            "bomber" : 2,
+            "machine_gunner" : 2,
+            "sniper" : 2,
+            "magician" : 2
+        }
+
+        self.tower_range: dict[str, float] = {
+            "ninja" : 4.0,
+            "bomber" : 3.3,
+            "machine_gunner" : 3.3,
+            "sniper" : 8.0,
+            "magician" : 4.0
         }
 
 
@@ -87,6 +107,7 @@ class Build_hologram:
 
             # Draw the hologram
             hologram_pos: tuple[int, int] = (tile_pos[0]*self.data.tile_zoom*8 + self.tile_map_obj.Get_left_right_empty_screen(), (tile_pos[1]+1)*self.data.tile_zoom*8)
+            center_pos: tuple[int, int] = (tile_pos[0]*self.data.tile_zoom*8 + self.tile_map_obj.Get_left_right_empty_screen() + self.tower_size[self.data.currently_building]*4*self.data.tile_zoom, (tile_pos[1]+1)*self.data.tile_zoom*8 + self.tower_size[self.data.currently_building]*4*self.data.tile_zoom)
             self.data.screen.blit(self.tower_images[self.data.currently_building], hologram_pos)
             if tower_can_build:
                 # Draw a green-overlay with alpha 50%
@@ -98,6 +119,7 @@ class Build_hologram:
                 overlay: pg.Surface = pg.Surface((self.data.tile_zoom*8*self.tower_size[self.data.currently_building], self.data.tile_zoom*8*self.tower_size[self.data.currently_building]), pg.SRCALPHA)
                 overlay.fill((255, 0, 0, 50))
                 self.data.screen.blit(overlay, hologram_pos)
+            pg.draw.circle(self.data.screen, (150,150,150), center_pos, int(self.tower_range[self.data.currently_building]*self.data.tile_zoom*8), self.data.tile_zoom)
 
             if tower_can_build:
                 # Check if the mouse is pressed
@@ -107,6 +129,18 @@ class Build_hologram:
                         case "ninja":
                             self.tower_handler.towers.append(
                                 towers.ninja.Ninja(self.data, self.tile_map_obj, tile_pos))
+                        case "bomber":
+                            self.tower_handler.towers.append(
+                                towers.bomber.Bomber(self.data, self.tile_map_obj, tile_pos))
+                        case "machine_gunner":
+                            self.tower_handler.towers.append(
+                                towers.machine_gunner.Machine_gunner(self.data, self.tile_map_obj, tile_pos))
+                        case "sniper":
+                            self.tower_handler.towers.append(
+                                towers.sniper.Sniper(self.data, self.tile_map_obj, tile_pos))
+                        case "magician":
+                            self.tower_handler.towers.append(
+                                towers.magician.Magician(self.data, self.tile_map_obj, tile_pos))
                         case _:
                             logging.error(f"Unknown tower type: {self.data.currently_building}")
                             return

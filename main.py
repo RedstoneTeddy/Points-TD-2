@@ -9,6 +9,7 @@ os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't 
 # Each tower is an Object. With a base class "Tower" and subclasses for each type of tower.
 
 
+
 if __name__ == "__main__":
     import logging
 
@@ -60,10 +61,9 @@ if __name__ == "__main__":
     enemy_obj: enemy.Enemy = enemy.Enemy(data, tile_map_obj)
 
     import hud
-    hud_obj: hud.Hud = hud.Hud(data, tile_map_obj)
+    hud_obj: hud.Hud = hud.Hud(data, tile_map_obj)  
 
     import towers.base_tower
-    import towers.ninja
     tower_handler: towers.base_tower.Tower_handler = towers.base_tower.Tower_handler(data, tile_map_obj)
 
     import towers.build_hologram
@@ -76,8 +76,8 @@ if __name__ == "__main__":
 
 
     pg.display.set_caption("Points TD 2")
-    # display_icon = pg.image.load("images/xyz.png").convert_alpha()
-    # pg.display.set_icon(display_icon)
+    display_icon = pg.image.load("images/towers/upgrades/sharper_shuriken.png").convert_alpha()
+    pg.display.set_icon(display_icon)
     
     mspf: list[float] = []
     mspf_raw: list[float] = []
@@ -178,7 +178,8 @@ if __name__ == "__main__":
                     if event.button == 5:
                         data.mouse_wheel = "down"
             # Update Clock
-            data.clock.tick(60)
+            if not pg.key.get_pressed()[pg.K_F3]:
+                data.clock.tick(60)
             if len(mspf) >= 300:
                 del mspf[0]
                 del mspf_raw[0]

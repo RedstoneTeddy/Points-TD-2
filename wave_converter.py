@@ -57,6 +57,8 @@ if __name__ == "__main__":
     wave_num: int = 3
     wave_enemies: list[data_class.Wave_enemy] = []
     timer: int = 5
+    # 1 Spawn tick => 0.05 tiles
+    # 20 Spawn ticks => 1 tile
 
 
 
@@ -92,7 +94,7 @@ if __name__ == "__main__":
                 }
                 wave_enemies.append(wave_enemy)
                 timer += timer_difference
-            print(f"Added {amount} enemies with {health} health.")
+            print(f"Added {amount} enemies with {health} health. Time Difference: {timer_difference}")
 
 
 

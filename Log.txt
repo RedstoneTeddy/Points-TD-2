@@ -1,9 +1,27 @@
-2025-05-15 10:37:59,451 - INFO - main.py - Logging started
-2025-05-15 10:38:00,139 - INFO - main.py - Pygame initialized
-2025-05-15 10:38:00,194 - INFO - main.py - Data initialized
-2025-05-15 10:38:00,273 - INFO - data_class.py - HUD zoom changed to 3
-2025-05-15 10:38:00,273 - INFO - data_class.py - Tile zoom changed to 4
-2025-05-15 10:38:01,350 - INFO - transition.py - Transitioned to game
-2025-05-15 10:38:01,367 - INFO - tile_map.py - Map successfully loaded from 'maps/grass_fields.pkl'
-2025-05-15 10:38:06,856 - INFO - main.py - Received Quit Event
-2025-05-15 10:38:06,856 - INFO - main.py - Programm closed
+2025-05-16 07:32:08,980 - INFO - main.py - Logging started
+2025-05-16 07:32:10,460 - INFO - main.py - Pygame initialized
+2025-05-16 07:32:10,507 - INFO - main.py - Data initialized
+2025-05-16 07:32:10,633 - INFO - data_class.py - HUD zoom changed to 3
+2025-05-16 07:32:10,633 - INFO - data_class.py - Tile zoom changed to 4
+2025-05-16 07:32:21,517 - INFO - transition.py - Transitioned to game
+2025-05-16 07:32:21,534 - INFO - tile_map.py - Map successfully loaded from 'maps/grass_fields.pkl'
+2025-05-16 07:32:21,997 - INFO - main.py - Screen resized to (1920, 1009)
+2025-05-16 07:32:21,997 - INFO - data_class.py - HUD zoom changed to 4
+2025-05-16 07:32:21,998 - INFO - data_class.py - Tile zoom changed to 7
+2025-05-16 07:32:45,376 - INFO - data_class.py - Wave 1 started
+2025-05-16 07:32:55,719 - INFO - data_class.py - Wave 1 finished
+2025-05-16 07:32:55,719 - INFO - data_class.py - Wave 2 started
+2025-05-16 07:32:58,656 - INFO - data_class.py - Wave 2 finished
+2025-05-16 07:32:58,656 - INFO - data_class.py - Wave 3 started
+2025-05-16 07:33:07,334 - INFO - data_class.py - Wave 3 finished
+2025-05-16 07:33:07,334 - INFO - data_class.py - Wave 4 started
+2025-05-16 07:33:29,795 - INFO - main.py - Screen resized to (1050, 600)
+2025-05-16 07:33:29,795 - INFO - data_class.py - HUD zoom changed to 3
+2025-05-16 07:33:29,795 - INFO - data_class.py - Tile zoom changed to 4
+2025-05-16 07:33:34,444 - INFO - main.py - Screen resized to (1920, 1009)
+2025-05-16 07:33:34,444 - INFO - data_class.py - HUD zoom changed to 4
+2025-05-16 07:33:34,444 - INFO - data_class.py - Tile zoom changed to 7
+2025-05-16 07:33:35,745 - INFO - data_class.py - Wave 4 finished
+2025-05-16 07:33:35,745 - INFO - data_class.py - Wave 5 started
+2025-05-16 07:33:44,142 - INFO - main.py - Received Quit Event
+2025-05-16 07:33:44,150 - INFO - main.py - Programm closed

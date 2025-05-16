@@ -14,6 +14,7 @@ class Enemy:
 
         self.__enemy_tick_clock: int = 0
 
+
         self.__wave_enemies: list[data_class.Wave_enemy] = []
 
         self.original_enemy_images: dict[int, pg.Surface] = {
@@ -102,6 +103,10 @@ class Enemy:
         """
         enemies_at_end: list[str] = []
         for uuid, enemy in self.data.enemies.items():
+            if enemy["slow_timer"] > 0:
+                enemy["slow_timer"] -= 1
+                if self.__enemy_spawn_clock % 3 != 0:
+                    continue
             enemy["pos_i"] += 1
             if enemy["pos_i"] < len(self.tile_map_obj.enemy_path):
                 enemy["pos"] = self.tile_map_obj.enemy_path[enemy["pos_i"]]
@@ -137,7 +142,8 @@ class Enemy:
             "health": health,
             "pos": (-10.0, -10.0),
             "pos_i": 0,
-            "special": special
+            "special": special,
+            "slow_timer": 0
         }
         new_uuid: str = str(self.data.wave*1_000_000_000 + self.__enemy_spawn_clock*1_000 + random.randint(0, 999))
         self.data.enemies[new_uuid] = enemy

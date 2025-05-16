@@ -35,6 +35,9 @@ class Debug:
 
 
     def Debug_main(self, hud_zoom: int, mspf: list[float], mspf_raw: list[float]) -> None:
+        # F1 -> FPS debug
+        # F2 -> Map debug
+        # F3 -> Run Game at max speed
         if pg.key.get_pressed()[pg.K_F1]:
             if not self.debug_button_clicked:
                 self.fps_debug_open = not self.fps_debug_open

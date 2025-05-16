@@ -104,24 +104,29 @@ if __name__ == "__main__":
 
 
             # Map Editor Code
-            if pg.key.get_pressed()[pg.K_1]:
+            if pg.key.get_pressed()[pg.K_1]: # Grass
                 current_placer = 1
-            if pg.key.get_pressed()[pg.K_2]:
+            if pg.key.get_pressed()[pg.K_2]: # Path
                 current_placer = 11
+            if pg.key.get_pressed()[pg.K_3]: # Sea
+                current_placer = 21
 
             # Enemy path
-            if pg.key.get_pressed()[pg.K_0]:
+            if pg.key.get_pressed()[pg.K_0]: # Enemy Path
                 if pg.key.get_pressed()[pg.K_LSHIFT] and len(enemy_path_nodes) > 0:
                     tile_map_obj.Calculate_enemy_path(enemy_path_nodes)
                 current_placer = 1000
                 enemy_path_nodes = []
             
+
+
+
             if pg.mouse.get_pressed()[0]:
                 mouse_pos: tuple[int, int] = pg.mouse.get_pos()
                 tile_pos: tuple[int, int] = tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=True)
-                if current_placer == 1:
+                if current_placer == 1: # Grass
                     tile_map_obj.map[tile_pos[1]][tile_pos[0]] = random.randint(1, 6)
-                if current_placer == 11:
+                if current_placer == 11: # Path
                     tile_map_obj.map[tile_pos[1]][tile_pos[0]] = random.randint(11, 15)
                 if current_placer == 1000: # Enemy
                     if pg.key.get_pressed()[pg.K_LEFT]: tile_pos = (tile_pos[0]-1, tile_pos[1])
@@ -130,6 +135,20 @@ if __name__ == "__main__":
                     if pg.key.get_pressed()[pg.K_DOWN]: tile_pos = (tile_pos[0], tile_pos[1]+1)
                     if tile_pos not in enemy_path_nodes:
                         enemy_path_nodes.append(tile_pos)
+                if current_placer == 21: # Sea
+                    place_tile: int = 41
+                    if pg.key.get_pressed()[pg.K_UP]: place_tile = random.choice([23, 33])
+                    if pg.key.get_pressed()[pg.K_DOWN]: place_tile = random.choice([21, 31])
+                    if pg.key.get_pressed()[pg.K_RIGHT]:
+                        if place_tile in [23, 33]: place_tile = random.choice([26, 36])
+                        elif place_tile in [21, 31]: place_tile = random.choice([25, 35])
+                        else: place_tile = random.choice([22, 32])
+                    if pg.key.get_pressed()[pg.K_LEFT]:
+                        if place_tile in [23, 33]: place_tile = random.choice([27, 37])
+                        elif place_tile in [21, 31]: place_tile = random.choice([28, 38])
+                        else: place_tile = random.choice([24, 34])
+                    if place_tile == 41 and random.randint(1,5)==1: place_tile = random.randint(41, 49)
+                    tile_map_obj.map[tile_pos[1]][tile_pos[0]] = place_tile
 
                     
 

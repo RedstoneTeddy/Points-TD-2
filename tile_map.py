@@ -30,6 +30,33 @@ class Tile_map:
             14: pg.image.load("images/tiles/path4.png").convert_alpha(),
             15: pg.image.load("images/tiles/path5.png").convert_alpha(),
 
+            21: pg.image.load("images/tiles/sea1.png").convert_alpha(),
+            22: pg.transform.rotate(pg.image.load("images/tiles/sea1.png").convert_alpha(), 90),
+            23: pg.transform.rotate(pg.image.load("images/tiles/sea1.png").convert_alpha(), 180),
+            24: pg.transform.rotate(pg.image.load("images/tiles/sea1.png").convert_alpha(), 270),
+            25: pg.image.load("images/tiles/sea3.png").convert_alpha(),
+            26: pg.transform.rotate(pg.image.load("images/tiles/sea3.png").convert_alpha(), 90),
+            27: pg.transform.rotate(pg.image.load("images/tiles/sea3.png").convert_alpha(), 180),
+            28: pg.transform.rotate(pg.image.load("images/tiles/sea3.png").convert_alpha(), 270),
+            31: pg.image.load("images/tiles/sea2.png").convert_alpha(),
+            32: pg.transform.rotate(pg.image.load("images/tiles/sea2.png").convert_alpha(), 90),
+            33: pg.transform.rotate(pg.image.load("images/tiles/sea2.png").convert_alpha(), 180),
+            34: pg.transform.rotate(pg.image.load("images/tiles/sea2.png").convert_alpha(), 270),
+            35: pg.image.load("images/tiles/sea4.png").convert_alpha(),
+            36: pg.transform.rotate(pg.image.load("images/tiles/sea4.png").convert_alpha(), 90),
+            37: pg.transform.rotate(pg.image.load("images/tiles/sea4.png").convert_alpha(), 180),
+            38: pg.transform.rotate(pg.image.load("images/tiles/sea4.png").convert_alpha(), 270),
+            41: pg.image.load("images/tiles/sea5.png").convert_alpha(),
+            42: pg.image.load("images/tiles/sea6.png").convert_alpha(),
+            43: pg.image.load("images/tiles/sea7.png").convert_alpha(),
+            44: pg.image.load("images/tiles/sea8.png").convert_alpha(),
+            45: pg.image.load("images/tiles/sea9.png").convert_alpha(),
+            46: pg.image.load("images/tiles/sea10.png").convert_alpha(),
+            47: pg.image.load("images/tiles/sea11.png").convert_alpha(),
+            48: pg.image.load("images/tiles/sea12.png").convert_alpha(),
+            49: pg.image.load("images/tiles/sea13.png").convert_alpha(),
+
+
             101: pg.image.load("images/tiles/shop1.png").convert_alpha(),
             102: pg.image.load("images/tiles/shop2.png").convert_alpha(),
             103: pg.image.load("images/tiles/shop3.png").convert_alpha(),
@@ -110,8 +137,8 @@ class Tile_map:
                 output = (output[0], 0)
             if output[0] > 23:
                 output = (23, output[1])
-            if output[1] > 17:
-                output = (output[0], 17)
+            if output[1] > 16:
+                output = (output[0], 16)
 
         return output
     

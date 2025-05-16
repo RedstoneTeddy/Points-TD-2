@@ -59,6 +59,7 @@ class Data_class:
         # Current menu / game state
         self.is_in_main_menu: bool = True
         self.is_in_game: bool = False
+        self.is_in_map_select: bool = False
 
         # For (initially) loading the game
         self.load_game: bool = False
@@ -225,7 +226,7 @@ class Data_class:
         # Difficulty settings
         match self.difficulty:
             case "easy":
-                self.cost_multiplier = 0.8
+                self.cost_multiplier = 0.85
                 self.health = 200
                 self.money = 700
             case "medium":
@@ -233,11 +234,11 @@ class Data_class:
                 self.health = 150
                 self.money = 600
             case "hard":
-                self.cost_multiplier = 1.2
+                self.cost_multiplier = 1.15
                 self.health = 100
                 self.money = 500
             case "hacker":
-                self.cost_multiplier = 1.5
+                self.cost_multiplier = 1.3
                 self.health = 1
                 self.money = 500
             case _:
@@ -250,7 +251,6 @@ class Data_class:
         self.load_game = True
         self.regeneration = 0
 
-            
         # Start the game
         self.Transition_black_window("game")
 

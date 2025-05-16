@@ -1,7 +1,1 @@
-2025-05-16 16:12:59,356 - INFO - wave_converter.py - Logging started
-2025-05-16 16:13:00,455 - INFO - wave_converter.py - Pygame initialized
-2025-05-16 16:13:00,524 - INFO - wave_converter.py - Data initialized
-2025-05-16 16:13:00,535 - INFO - wave_converter.py - Imported all game-classes
-2025-05-16 16:13:28,137 - INFO - enemy.py - Wave 60 successfully saved to 'waves/normal60.pkl'
-2025-05-16 16:13:28,138 - INFO - wave_converter.py - Wave enemies saved
-2025-05-16 16:13:28,138 - INFO - wave_converter.py - Programm closed
+2025-05-16 22:06:18,266 - INFO - main.py - Logging started

@@ -75,6 +75,7 @@ class Transition:
                 # Set every other game state to false
                 self.data.is_in_main_menu = False
                 self.data.is_in_game = False
+                self.data.is_in_map_select = False
 
                 # Set the new game state to true
                 match self.transition_to:
@@ -82,6 +83,8 @@ class Transition:
                         self.data.is_in_main_menu = True
                     case "game":
                         self.data.is_in_game = True
+                    case "map_select":
+                        self.data.is_in_map_select = True
                     case "_":
                         logging.error(f"Unknown transition to {self.transition_to}")
 

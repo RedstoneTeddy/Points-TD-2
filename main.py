@@ -5,10 +5,6 @@ directory = os_path.dirname(os_path.abspath(__file__))
 os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't correct
 
 
-#### Ideas ####
-# Each tower is an Object. With a base class "Tower" and subclasses for each type of tower.
-
-
 
 if __name__ == "__main__":
     import logging
@@ -72,6 +68,9 @@ if __name__ == "__main__":
     import shop
     shop_obj: shop.Shop = shop.Shop(data, tile_map_obj, build_hologram_obj)
 
+    import map_select
+    map_select_obj: map_select.Map_select = map_select.Map_select(data)
+
     performance_background_timer: int = 0
 
 
@@ -120,6 +119,11 @@ if __name__ == "__main__":
                 data.screen.fill((100,180,255))
                 main_menu_obj.Render_main()
 
+            if data.is_in_map_select:
+                # Fill the background
+                data.screen.fill((100,180,255))
+                map_select_obj.Render_map_select()
+
             if data.is_in_game:
                 # Fill the background
                 if data.performance_saving_setting == "default":
@@ -131,7 +135,6 @@ if __name__ == "__main__":
                     data.screen.fill((100,180,255))
 
                 if data.load_game:
-                    data.map_file_name = "grass_fields"
                     tile_map_obj.Load_map_file(data.map_file_name)
                     data.load_game = False
                 tile_map_obj.Show_map()

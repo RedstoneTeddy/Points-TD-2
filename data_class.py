@@ -78,6 +78,8 @@ class Data_class:
         self.money: int = 0
         self.regeneration: int = 0
 
+        self.special_enemy_spawn_uuid_counter: int = 0
+
         self.currently_building: str = ""
         self.tower_selected: int = -1
 
@@ -272,6 +274,8 @@ class Data_class:
 
         if self.auto_wave:
             self.Next_wave()
+
+    
 
 
 def Avg(elements: list[float]) -> float:

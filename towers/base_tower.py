@@ -3,6 +3,7 @@ import pygame as pg
 import logging
 import tile_map
 import math
+import random
 
 class Base_tower:
     def __init__(self, data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, tower_name: str, tower_size: int, pos: tuple[int, int]) -> None:
@@ -360,11 +361,15 @@ class Base_tower:
         health_after: int = self.data.enemies[enemy_uuid]["health"]
         if self.data.enemies[enemy_uuid]["health"] <= 0:
             health_after = 0
-            del self.data.enemies[enemy_uuid]
+            # Special enemies
+            if self.data.enemies[enemy_uuid]["special"] != "stack":
+                del self.data.enemies[enemy_uuid]
+            else:
+                health_after = 10
         else:
             # Pushback Effect of Magician
             if self.tower_name == "magician" and "pushback" in self.bought_upgrades:
-                self.data.enemies[enemy_uuid]["pos_i"] -= 15
+                self.data.enemies[enemy_uuid]["pos_i"] -= 12
                 if self.data.enemies[enemy_uuid]["pos_i"] < 0:
                     self.data.enemies[enemy_uuid]["pos_i"] = 0
             if self.tower_name == "magician" and "slow_down" in self.bought_upgrades:
@@ -382,6 +387,25 @@ class Base_tower:
             if self.data.enemies[enemy_uuid]["special"] == "anti_explosion":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
+            if self.data.enemies[enemy_uuid]["special"] == "stack":
+                if health_after <= 10:
+                    spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
+                    if spawn_pos_i < 14:
+                        spawn_pos_i = 14
+                    # Spawn enemies from stack
+                    self.Add_enemy(20, "lead", spawn_pos_i)
+                    self.Add_enemy(20, "anti_explosion", spawn_pos_i-2)
+                    self.Add_enemy(10, "", spawn_pos_i-4)
+                    self.Add_enemy(5, "", spawn_pos_i-6)
+                    self.Add_enemy(4, "", spawn_pos_i-8)
+                    self.Add_enemy(3, "", spawn_pos_i-10)
+                    self.Add_enemy(2, "", spawn_pos_i-12)
+                    self.Add_enemy(1, "", spawn_pos_i-14)
+                    # Delete stack enemy
+                    del self.data.enemies[enemy_uuid]
+
+
+            
 
         
         self.data.money += int(health_before - health_after) 
@@ -417,6 +441,22 @@ class Base_tower:
         self.__targeted_uuid = ""
         self.projectile_timer = 0
         self.__shoot_waiting_timer = 0
+
+
+    def Add_enemy(self, health: int, special: str, pos_i: int) -> None:
+        """
+        Adds an enemy to the list
+        """
+        enemy: data_class.Enemy_data = {
+            "health": health,
+            "pos": self.tile_map_obj.enemy_path[pos_i],
+            "pos_i": pos_i,
+            "special": special,
+            "slow_timer": 0
+        }
+        self.data.special_enemy_spawn_uuid_counter += 1
+        new_uuid: str = "s" + str(self.data.wave*1_000_000_000 + self.data.special_enemy_spawn_uuid_counter*1_000 + random.randint(0, 999))
+        self.data.enemies[new_uuid] = enemy
     
 
 

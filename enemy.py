@@ -35,7 +35,8 @@ class Enemy:
             "500": pg.image.load("images/enemies/500.png").convert_alpha(),
             "1000": pg.image.load("images/enemies/1000.png").convert_alpha(),
             "lead": pg.image.load("images/enemies/lead.png").convert_alpha(),
-            "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha()
+            "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha(),
+            "stack": pg.image.load("images/enemies/stack.png").convert_alpha()
         }
 
         self.enemy_images: dict[str, pg.Surface] = {}
@@ -60,6 +61,8 @@ class Enemy:
                 enemy_type = "lead"
             elif enemy["special"] == "anti_explosion":
                 enemy_type = "anti_explosion"
+            elif enemy["special"] == "stack":
+                enemy_type = "stack"
             elif enemy["health"] == 1:
                 enemy_type = "1"
             elif enemy["health"] == 2:
@@ -111,7 +114,7 @@ class Enemy:
         for uuid, enemy in self.data.enemies.items():
             if enemy["slow_timer"] > 0:
                 enemy["slow_timer"] -= 1
-                if self.__enemy_spawn_clock % 3 != 0:
+                if self.__enemy_spawn_clock % 2 != 0:
                     continue
             enemy["pos_i"] += 1
             if enemy["pos_i"] < len(self.tile_map_obj.enemy_path):
@@ -147,6 +150,8 @@ class Enemy:
         if special == "lead":
             health = 20
         elif special == "anti_explosion":
+            health = 20
+        elif special == "stack":
             health = 20
         
 

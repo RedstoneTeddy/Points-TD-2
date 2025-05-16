@@ -1,7 +1,7 @@
-2025-05-16 08:44:50,709 - INFO - wave_converter.py - Logging started
-2025-05-16 08:44:51,431 - INFO - wave_converter.py - Pygame initialized
-2025-05-16 08:44:51,633 - INFO - wave_converter.py - Data initialized
-2025-05-16 08:44:51,642 - INFO - wave_converter.py - Imported all game-classes
-2025-05-16 08:45:29,325 - INFO - enemy.py - Wave 11 successfully saved to 'waves/normal11.pkl'
-2025-05-16 08:45:29,325 - INFO - wave_converter.py - Wave enemies saved
-2025-05-16 08:45:29,325 - INFO - wave_converter.py - Programm closed
+2025-05-16 10:22:11,709 - INFO - wave_converter.py - Logging started
+2025-05-16 10:22:12,416 - INFO - wave_converter.py - Pygame initialized
+2025-05-16 10:22:12,458 - INFO - wave_converter.py - Data initialized
+2025-05-16 10:22:12,466 - INFO - wave_converter.py - Imported all game-classes
+2025-05-16 10:23:17,055 - INFO - enemy.py - Wave 9 successfully saved to 'waves/normal9.pkl'
+2025-05-16 10:23:17,056 - INFO - wave_converter.py - Wave enemies saved
+2025-05-16 10:23:17,056 - INFO - wave_converter.py - Programm closed

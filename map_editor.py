@@ -97,7 +97,7 @@ if __name__ == "__main__":
             data.screen.fill((100,180,255))
 
 
-            # Allways run these first after everything else
+            # Allways run these first before everything else
             data.Calculate_hud_zoom()
 
 

@@ -392,7 +392,7 @@ class Base_tower:
                     self.data.money -= 4
             elif self.data.enemies[enemy_uuid]["special"] == "stack":
                 if health_after <= 10:
-                    self.data.money -= 4
+                    self.data.money -= 6
                     spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
                     if spawn_pos_i < 4:
                         spawn_pos_i = 4
@@ -404,16 +404,16 @@ class Base_tower:
                     del self.data.enemies[enemy_uuid]
             elif self.data.enemies[enemy_uuid]["special"] == "stack+":
                 if health_after <= 10:
+                    self.data.money -= 6
                     spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
-                    if spawn_pos_i < 10:
+                    if spawn_pos_i < 8:
                         spawn_pos_i = 10
                     # Spawn enemies from stack+
                     self.Add_enemy(50, "", spawn_pos_i)
                     self.Add_enemy(50, "", spawn_pos_i-2)
-                    self.Add_enemy(20, "stack", spawn_pos_i-4)
-                    self.Add_enemy(20, "lead", spawn_pos_i-6)
-                    self.Add_enemy(20, "anti_explosion", spawn_pos_i-8)
-                    self.Add_enemy(10, "", spawn_pos_i-10)
+                    self.Add_enemy(20, "lead", spawn_pos_i-4)
+                    self.Add_enemy(20, "anti_explosion", spawn_pos_i-6)
+                    self.Add_enemy(10, "", spawn_pos_i-8)
                     # Delete stack+ enemy
                     del self.data.enemies[enemy_uuid]
 

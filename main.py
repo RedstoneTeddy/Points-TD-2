@@ -108,7 +108,7 @@ if __name__ == "__main__":
                 fullscreen_pressed = False
 
 
-            # Allways run these first after everything else
+            # Allways run these first before everything else
             data.Calculate_hud_zoom()
 
 

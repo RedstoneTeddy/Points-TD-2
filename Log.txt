@@ -1,1 +1,9 @@
-2025-05-16 22:06:18,266 - INFO - main.py - Logging started
+2025-05-17 19:39:52,527 - INFO - wave_converter.py - Logging started
+2025-05-17 19:39:53,245 - INFO - wave_converter.py - Pygame initialized
+2025-05-17 19:39:53,297 - INFO - wave_converter.py - Data initialized
+2025-05-17 19:39:53,306 - INFO - wave_converter.py - Imported all game-classes
+2025-05-17 19:40:05,800 - INFO - wave_converter.py - Wave file not found: waves/raw_normal20.pkl
+2025-05-17 19:40:05,800 - INFO - data_class.py - HUD zoom changed to 3
+2025-05-17 19:40:05,800 - INFO - data_class.py - Tile zoom changed to 4
+2025-05-17 19:43:35,137 - INFO - wave_converter.py - Received Quit Event
+2025-05-17 19:43:35,139 - INFO - wave_converter.py - Programm closed

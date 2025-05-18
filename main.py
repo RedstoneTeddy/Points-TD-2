@@ -140,8 +140,14 @@ if __name__ == "__main__":
                 tile_map_obj.Show_map()
                 tile_map_obj.Show_hud_background()
 
+                # Tick Game
                 enemy_obj.Main()
                 tower_handler.Main()
+                # Fast forward game
+                if data.fast_forward:
+                    enemy_obj.Tick_only()
+                    tower_handler.Tick_only()
+
                 build_hologram_obj.Main()
                 shop_obj.Main()
 

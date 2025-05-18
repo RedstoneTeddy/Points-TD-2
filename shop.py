@@ -15,12 +15,12 @@ class Shop:
         self.mouse_pressed: bool = False
 
         self.shop_base_price: dict[str, int] = {
-            "ninja": 250,
-            "bomber": 600,
-            "machine_gunner": 400,
-            "sniper": 500,
-            "magician": 700,
-            "shooter": 300
+            "ninja": 320,
+            "bomber": 700,
+            "machine_gunner": 520,
+            "sniper": 550,
+            "magician": 800,
+            "shooter": 350
         }
 
         self.original_shop_images: dict[str, pg.Surface] = {

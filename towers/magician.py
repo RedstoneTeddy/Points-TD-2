@@ -25,15 +25,15 @@ class Magician(towers.base_tower.Base_tower):
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "lead_pop", "cost": 200, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "lead_pop", "cost": 300, "requirement": "", "y_pos": 0, "is_master": False,
              "description": ["Can damage", "lead points", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
-            {"name": "flash_explosion", "cost": 500, "requirement": "", "y_pos": 1, "is_master": False,
+            {"name": "flash_explosion", "cost": 600, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Flash Explosion", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},
-            {"name": "pushback", "cost": 600, "requirement": "slow_down", "y_pos": 2, "is_master": True,
+            {"name": "pushback", "cost": 800, "requirement": "slow_down", "y_pos": 2, "is_master": True,
              "description": ["Pushback"], "original_img": data.original_tower_images["upgrades"]["pushback+"], "img": pg.Surface((24,24))},
             {"name": "regeneration", "cost": 600, "requirement": "flash_explosion", "y_pos": 1, "is_master": True,
              "description": ["Regenerate 1 Health", "per Round", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["regenerate"], "img": pg.Surface((24,24))},
-            {"name": "slow_down", "cost": 400, "requirement": "", "y_pos": 2, "is_master": False,
+            {"name": "slow_down", "cost": 500, "requirement": "", "y_pos": 2, "is_master": False,
              "description": ["Slows down Points", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["pushback"], "img": pg.Surface((24,24))},
 
         ]

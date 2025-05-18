@@ -228,19 +228,19 @@ class Data_class:
             case "easy":
                 self.cost_multiplier = 0.85
                 self.health = 200
-                self.money = 700
+                self.money = 800
             case "medium":
                 self.cost_multiplier = 1.0
                 self.health = 150
-                self.money = 600
+                self.money = 700
             case "hard":
                 self.cost_multiplier = 1.15
                 self.health = 100
-                self.money = 500
+                self.money = 600
             case "hacker":
                 self.cost_multiplier = 1.3
                 self.health = 1
-                self.money = 500
+                self.money = 600
             case _:
                 logging.error("Difficulty setting invalid")
                 return

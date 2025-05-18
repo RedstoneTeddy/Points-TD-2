@@ -39,10 +39,10 @@ class Build_hologram:
         self.tower_range: dict[str, float] = {
             "ninja" : 4.0,
             "bomber" : 3.3,
-            "machine_gunner" : 3.3,
-            "sniper" : 8.0,
+            "machine_gunner" : 3.6,
+            "sniper" : 7.5,
             "magician" : 4.0,
-            "shooter" : 2.4
+            "shooter" : 2.6
         }
 
 

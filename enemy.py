@@ -12,7 +12,6 @@ class Enemy:
 
         self.__enemy_spawn_clock: int = 0
 
-        self.__enemy_tick_clock: int = 0
 
 
         self.__wave_enemies: list[data_class.Wave_enemy] = []
@@ -179,14 +178,8 @@ class Enemy:
 
 
         # Enemy tick (walk)
-        if self.data.fast_forward:
-            self.__enemy_tick_clock += 2
-        else:
-            self.__enemy_tick_clock += 1
-        if self.__enemy_tick_clock >= 2:
-            self.__enemy_tick_clock = 0
-            self.__enemy_spawn_clock += 1
-            self.Tick_enemy_walk()
+        self.__enemy_spawn_clock += 1
+        self.Tick_enemy_walk()
 
             
         # Enemy spawner
@@ -211,11 +204,27 @@ class Enemy:
             self.data.Wave_finished()
             if self.data.new_wave:
                 self.Load_new_wave()
+
+    def Tick_only(self) -> None:
+        self.__enemy_spawn_clock += 1
+        self.Tick_enemy_walk()
+
+        # Enemy spawner
+        wave_enemies_to_delete: list[int] = []
+        for i, new_enemy in enumerate(self.__wave_enemies):
+            if self.__enemy_spawn_clock >= new_enemy["spawn_time"]:
+                self.Add_enemy(new_enemy["health"], new_enemy["special"])
+                wave_enemies_to_delete.append(i)
+        
+        for j in range(len(wave_enemies_to_delete)-1, -1, -1):
+            del self.__wave_enemies[wave_enemies_to_delete[j]]
             
+
+
+
 
     def Load_new_wave(self):
         self.__enemy_spawn_clock = 0
-        self.__enemy_tick_clock = 0
 
         # Load the new wave out of the file            
         if self.data.wave <= 0:

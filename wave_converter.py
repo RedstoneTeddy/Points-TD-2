@@ -74,19 +74,19 @@ if __name__ == "__main__":
         "2": 2,
         "3": 3,
         "4": 4,
-        "5": 5,
-        "10": 10,
-        "50": 10+6,
-        "100": 10+6 +10*1,
-        "200": 10+6 +10*2,
-        "300": 10+6 +10*3,
-        "400": 10+6 +10*4,
-        "500": 10+6 +10*5,
-        "1000": 10+6 +10*10,
-        "lead": 10+6 -4,
-        "anti_explosion": 10+6 -4,
-        "stack": 10 + 12 + 12,
-        "stack+": 10 + 16*2 + 10 + 12 + 12
+        "5": 4,
+        "10": 7,
+        "50": 7+7,
+        "100": 7+7 +10*1,
+        "200": 7+7 +10*2,
+        "300": 7+7 +10*3,
+        "400": 7+7 +10*4,
+        "500": 7+7 +10*5,
+        "1000": 7+7 +10*10,
+        "lead": 7+7 -6,
+        "anti_explosion": 7+7 -6,
+        "stack": 7 + 8 + 8,
+        "stack+": 7+1 + (7+7)*2 + 8*2 + 8
     }
 
     health_per_type: dict[str, int] = {
@@ -174,18 +174,18 @@ if __name__ == "__main__":
             data.Draw_text(f"Wave {wave_num}", 8*data.hud_zoom, (0, 0, 0), (5,5))
 
             # Statistics
-            data.Draw_text("Statistics", 10*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 4*data.hud_zoom))
-            data.Draw_text(f"Time: {needed_time}", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 14*data.hud_zoom))
-            data.Draw_text(f"Money: {money}", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 22*data.hud_zoom))
-            data.Draw_text(f"Health: {health}", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 30*data.hud_zoom))
+            data.Draw_text("Statistics", 10*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 4*data.hud_zoom))
+            data.Draw_text(f"Time: {needed_time}", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 14*data.hud_zoom))
+            data.Draw_text(f"Money: {money}", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 22*data.hud_zoom))
+            data.Draw_text(f"Health: {health}", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 30*data.hud_zoom))
             try:
-                data.Draw_text(f"M/T -> {round(money/needed_time,3)}", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 38*data.hud_zoom))
-                data.Draw_text(f"H/T -> {round(health/needed_time,3)}", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 46*data.hud_zoom))
-                data.Draw_text(f"M/H -> {round(money/health,3)}", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 54*data.hud_zoom))
+                data.Draw_text(f"M/T -> {round(money/needed_time,3)}", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 38*data.hud_zoom))
+                data.Draw_text(f"H/T -> {round(health/needed_time,3)}", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 46*data.hud_zoom))
+                data.Draw_text(f"M/H -> {round(money/health,3)}", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 54*data.hud_zoom))
             except ZeroDivisionError:
-                data.Draw_text("M/T -> 0", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 38*data.hud_zoom))
-                data.Draw_text("H/T -> 0", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 46*data.hud_zoom))
-                data.Draw_text("M/H -> 0", 7*data.hud_zoom, (0, 0, 0), (250*data.hud_zoom, 54*data.hud_zoom))
+                data.Draw_text("M/T -> 0", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 38*data.hud_zoom))
+                data.Draw_text("H/T -> 0", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 46*data.hud_zoom))
+                data.Draw_text("M/H -> 0", 7*data.hud_zoom, (0, 0, 0), (280*data.hud_zoom, 54*data.hud_zoom))
 
 
 
@@ -219,8 +219,8 @@ if __name__ == "__main__":
 
             # Display current commands
             # Define column headers and positions
-            headers = ["Health", "Special", "Timer", "Amount", "Change"]
-            col_widths = [40, 80, 40, 40, 20]
+            headers = ["Health", "Special", "Timer", "Amount", "Change", "H/T"]
+            col_widths = [40, 80, 40, 40, 30, 20]
             x_start = 5
             y_start = 10
             row_height = 12
@@ -244,9 +244,9 @@ if __name__ == "__main__":
                 pg.draw.line(data.screen, (0, 0, 0), (x_start*data.hud_zoom, (y-1)*data.hud_zoom), ((x_start + sum(col_widths))*data.hud_zoom, (y-1)*data.hud_zoom), data.hud_zoom)
 
                 # Draw the change button
-                change_button_rect = pg.Rect((x_start + sum(col_widths) - col_widths[-1]+1)*data.hud_zoom, (y)*data.hud_zoom, col_widths[-1]*data.hud_zoom, (row_height-2)*data.hud_zoom)
+                change_button_rect = pg.Rect((x_start + sum(col_widths) - col_widths[-1]- col_widths[-2]+1)*data.hud_zoom, (y)*data.hud_zoom, (col_widths[-2]-4)*data.hud_zoom, (row_height-2)*data.hud_zoom)
                 pg.draw.rect(data.screen, (100, 100, 100), change_button_rect)
-                data.Draw_text("C", 7 * data.hud_zoom, (255, 255, 255), ((x_start + sum(col_widths) - col_widths[-1]+8)*data.hud_zoom, (y+1)*data.hud_zoom))
+                data.Draw_text("C", 7 * data.hud_zoom, (255, 255, 255), ((x_start + sum(col_widths) - col_widths[-1]- col_widths[-2]+8)*data.hud_zoom, (y+1)*data.hud_zoom))
                 # Check for mouse click on the change button
                 if pg.mouse.get_pressed()[0]:
                     mouse_pos = pg.mouse.get_pos()
@@ -267,6 +267,19 @@ if __name__ == "__main__":
                         else:
                             del wave_enemy_commands[row_idx]
                             break
+
+                # Calc H/T & display
+                try:
+                    if command["special"] == "":
+                        enemy_type = str(command["health"])
+                    else:
+                        enemy_type = command["special"]
+                    health_item: int = health_per_type[enemy_type]* command["amount"]
+                    needed_time_item = command["timer_difference"]* command["amount"]
+                    h_t = round(health_item/needed_time_item, 3)
+                except KeyError:
+                    h_t = round(0.0, 3)
+                data.Draw_text(str(h_t), 7 * data.hud_zoom, (0, 0, 0), ((x_start + sum(col_widths) - col_widths[-1]+1)*data.hud_zoom, (y+1)*data.hud_zoom))
 
 
 

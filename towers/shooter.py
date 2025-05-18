@@ -17,7 +17,7 @@ class Shooter(towers.base_tower.Base_tower):
         self.original_projectile_image: pg.Surface = self.data.original_tower_images["shooter"]["projectile"]
 
         # Tower stats
-        self.range: float = 2.4
+        self.range: float = 2.6
         self.shooting_speed: int = 30
         self.projectile_speed: float = 0.4
         self.projectile_damage: int = 1
@@ -26,9 +26,9 @@ class Shooter(towers.base_tower.Base_tower):
         self.can_pop_lead: bool = False
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "shorter_cooldown", "cost": 150, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "shorter_cooldown", "cost": 200, "requirement": "", "y_pos": 0, "is_master": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
-            {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "more_range", "cost": 150, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))}
         ]
 

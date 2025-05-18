@@ -385,11 +385,11 @@ class Base_tower:
             if self.data.enemies[enemy_uuid]["special"] == "lead":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
-                    self.data.money -= 4
+                    self.data.money -= 6
             elif self.data.enemies[enemy_uuid]["special"] == "anti_explosion":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
-                    self.data.money -= 4
+                    self.data.money -= 6
             elif self.data.enemies[enemy_uuid]["special"] == "stack":
                 if health_after <= 10:
                     self.data.money -= 6
@@ -416,6 +416,13 @@ class Base_tower:
                     self.Add_enemy(10, "", spawn_pos_i-8)
                     # Delete stack+ enemy
                     del self.data.enemies[enemy_uuid]
+            elif self.data.enemies[enemy_uuid]["special"] == "":
+                if health_before > 10 and health_after <= 10: # Too much money in early game
+                    self.data.money -= 1    
+                if health_before > 9 and health_after <= 9: # Too much money in early game
+                    self.data.money -= 1    
+                if health_before > 5 and health_after <= 5: # Too much money in early game
+                    self.data.money -= 1    
 
 
             
@@ -425,7 +432,7 @@ class Base_tower:
     
         # Pop ceramic
         if health_before > 10 and health_after <= 10:
-            self.data.money += 6
+            self.data.money += 7
         
         # Pop 100
         if health_before > 51 and health_after <= 50:
@@ -484,7 +491,6 @@ class Tower_handler:
         self.data: data_class.Data_class = data
         self.tile_map_obj: tile_map.Tile_map = tile_map_obj
 
-        self.__tower_clock: int = 0
         
         self.towers: list[Base_tower] = []
 
@@ -493,10 +499,6 @@ class Tower_handler:
         """
         Main function for the tower handler
         """
-        if self.data.running_wave:
-            self.__tower_clock += 1
-            if self.data.fast_forward:
-                self.__tower_clock += 1
 
         # Main Tower Tick
         for i, tower in enumerate(self.towers):
@@ -508,7 +510,7 @@ class Tower_handler:
                         tower2.selected = False
                         break
 
-            if self.__tower_clock >= 2:
+            if self.data.running_wave:
                 tower.Tick()
 
         # Check for resetting the towers
@@ -523,7 +525,13 @@ class Tower_handler:
                     tower.Show_projectile()
 
 
-        if self.__tower_clock >= 2:
-            self.__tower_clock = 0
 
+
+    def Tick_only(self) -> None:
+        """
+        Only ticks the towers, no rendering
+        """
+        if self.data.running_wave:
+            for tower in self.towers:
+                tower.Tick()
 

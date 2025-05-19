@@ -25,7 +25,7 @@ class Magician(towers.base_tower.Base_tower):
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "lead_pop", "cost": 300, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "lead_pop", "cost": 400, "requirement": "", "y_pos": 0, "is_master": False,
              "description": ["Can damage", "lead points", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
             {"name": "flash_explosion", "cost": 600, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Flash Explosion", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},

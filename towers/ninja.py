@@ -25,15 +25,15 @@ class Ninja(towers.base_tower.Base_tower):
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "sharper_shuriken", "cost": 280, "requirement": "", "y_pos": 0,  "is_master": False,
+            {"name": "sharper_shuriken", "cost": 230, "requirement": "", "y_pos": 0,  "is_master": False,
              "description": ["Sharper Shurikens"], "original_img": data.original_tower_images["upgrades"]["sharper_shuriken"], "img": pg.Surface((24,24))},
-            {"name": "double_kill", "cost": 800, "requirement": "sharper_shuriken", "y_pos": 0,  "is_master": True,
-             "description": ["Double Kill Possibility", "+1 Damage", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
-            {"name": "more_range", "cost": 130, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "double_kill", "cost": 710, "requirement": "sharper_shuriken", "y_pos": 0,  "is_master": True,
+             "description": ["Double Kills", " +1 Damage", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
+            {"name": "more_range", "cost": 120, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},
-            {"name": "lead_pop", "cost": 650, "requirement": "more_range", "y_pos": 1, "is_master": True,
+            {"name": "lead_pop", "cost": 610, "requirement": "more_range", "y_pos": 1, "is_master": True,
              "description": ["Can damage lead points", "+2 Damage", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
-            {"name": "shorter_cooldown", "cost": 200, "requirement": "", "y_pos": 2,  "is_master": False,
+            {"name": "shorter_cooldown", "cost": 190, "requirement": "", "y_pos": 2,  "is_master": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))}
         ]
 

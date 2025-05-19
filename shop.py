@@ -15,9 +15,9 @@ class Shop:
         self.mouse_pressed: bool = False
 
         self.shop_base_price: dict[str, int] = {
-            "ninja": 320,
-            "bomber": 700,
-            "machine_gunner": 520,
+            "ninja": 280,
+            "bomber": 680,
+            "machine_gunner": 480,
             "sniper": 550,
             "magician": 800,
             "shooter": 350

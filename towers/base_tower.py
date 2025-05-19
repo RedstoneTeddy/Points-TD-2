@@ -43,6 +43,7 @@ class Base_tower:
         self.can_pop_lead: bool = False # If the tower can pop lead
         self.can_pop_anti_explosion: bool = True # If the tower can pop anti-explosion
 
+        self.__shoot_priority: data_class.Literal["near", "first", "strong"] = "first"
 
         self.__projectile_pos: tuple[float, float] = (-1, -1)
         self.__projectile_angle: float = 0.0
@@ -55,6 +56,18 @@ class Base_tower:
         self.__master_upgrade_image: pg.Surface = pg.Surface((0, 0))
         self.__original_master_blocked_image: pg.Surface = self.data.original_tower_images["upgrades"]["master_blocked"]
         self.__master_blocked_image: pg.Surface = pg.Surface((0, 0))
+
+        self.__original_target_prio_image: pg.Surface = self.data.original_tower_images["tower_hud"]["target_prio"]
+        self.__target_prio_image: pg.Surface = pg.Surface((0, 0))
+        self.__original_target_prio_hover_image: pg.Surface = self.data.original_tower_images["tower_hud"]["target_prio_hover"]
+        self.__target_prio_hover_image: pg.Surface = pg.Surface((0, 0))
+        self.__original_target_prio_selected_image: pg.Surface = self.data.original_tower_images["tower_hud"]["target_prio_selected"]
+        self.__target_prio_selected_image: pg.Surface = pg.Surface((0, 0))
+        self.__original_close_image: pg.Surface = self.data.original_tower_images["tower_hud"]["close_button"]
+        self.__close_image: pg.Surface = pg.Surface((0, 0))
+        self.__original_close_hover_image: pg.Surface = self.data.original_tower_images["tower_hud"]["close_button_hover"]
+        self.__close_hover_image: pg.Surface = pg.Surface((0, 0))
+
 
         self.tower_images: dict[str, pg.Surface] = {}
         self.projectile_image: pg.Surface = pg.Surface((0, 0))
@@ -76,6 +89,12 @@ class Base_tower:
             self.__upgrade_hover_image = pg.transform.scale(self.__original_upgrade_hover_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
             self.__master_upgrade_image = pg.transform.scale(self.__original_master_upgrade_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
             self.__master_blocked_image = pg.transform.scale(self.__original_master_blocked_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
+
+            self.__target_prio_image = pg.transform.scale(self.__original_target_prio_image, (self.data.tile_zoom*8*2, self.data.tile_zoom*8*1))
+            self.__target_prio_hover_image = pg.transform.scale(self.__original_target_prio_hover_image, (self.data.tile_zoom*8*2, self.data.tile_zoom*8*1))
+            self.__target_prio_selected_image = pg.transform.scale(self.__original_target_prio_selected_image, (self.data.tile_zoom*8*2, self.data.tile_zoom*8*1))
+            self.__close_image = pg.transform.scale(self.__original_close_image, (self.data.tile_zoom*8*1, self.data.tile_zoom*8*1))
+            self.__close_hover_image = pg.transform.scale(self.__original_close_hover_image, (self.data.tile_zoom*8*1, self.data.tile_zoom*8*1))
 
 
     def Show_tower(self) -> bool: # Return if it got selected
@@ -165,6 +184,62 @@ class Base_tower:
                 else: # Not selected
                     self.data.Draw_text(str(upgarde_cost) + "$", 6*self.data.tile_zoom, (255, 255, 255), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
 
+        # Target priority
+        prio_first_tile_pos: tuple[int, int] = (25, 17)
+        prio_near_tile_pos: tuple[int, int] = (27, 17)
+        prio_strong_tile_pos: tuple[int, int] = (29, 17)
+        close_tile_pos: tuple[int, int] = (31, 17)
+        prio_first_pos: tuple[int, int] = (int(prio_first_tile_pos[0]*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), int((prio_first_tile_pos[1])*self.data.tile_zoom*8))
+        prio_near_pos: tuple[int, int] = (int(prio_near_tile_pos[0]*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), int((prio_near_tile_pos[1])*self.data.tile_zoom*8))
+        prio_strong_pos: tuple[int, int] = (int(prio_strong_tile_pos[0]*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), int((prio_strong_tile_pos[1])*self.data.tile_zoom*8))
+        close_pos: tuple[int, int] = (int(close_tile_pos[0]*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), int((close_tile_pos[1])*self.data.tile_zoom*8))
+        mouse_tile_pos: tuple[int, int] = self.tile_map_obj.Calculate_tile_pos_from_px_pos(pg.mouse.get_pos())
+
+        if mouse_tile_pos[0] >= prio_first_tile_pos[0] and mouse_tile_pos[0] < prio_first_tile_pos[0] + 2 and mouse_tile_pos[1] == 17:
+            self.data.screen.blit(self.__target_prio_hover_image, prio_first_pos)
+            if pg.mouse.get_pressed()[0]:
+                self.__shoot_priority = "first"
+        else:
+            if self.__shoot_priority == "first":
+                self.data.screen.blit(self.__target_prio_selected_image, prio_first_pos)
+            else:
+                self.data.screen.blit(self.__target_prio_image, prio_first_pos)
+        self.data.Draw_text("First", 4*self.data.tile_zoom, (255, 255, 255), (prio_first_pos[0] + self.data.tile_zoom*2, prio_first_pos[1] + self.data.tile_zoom*2))
+
+        if mouse_tile_pos[0] >= prio_near_tile_pos[0] and mouse_tile_pos[0] < prio_near_tile_pos[0] + 2 and mouse_tile_pos[1] == 17:
+            self.data.screen.blit(self.__target_prio_hover_image, prio_near_pos)
+            if pg.mouse.get_pressed()[0]:
+                self.__shoot_priority = "near"
+        else:
+            if self.__shoot_priority == "near":
+                self.data.screen.blit(self.__target_prio_selected_image, prio_near_pos)
+            else:
+                self.data.screen.blit(self.__target_prio_image, prio_near_pos)
+        self.data.Draw_text("Near", 4*self.data.tile_zoom, (255, 255, 255), (prio_near_pos[0] + self.data.tile_zoom*3, prio_near_pos[1] + self.data.tile_zoom*2))
+
+        if mouse_tile_pos[0] >= prio_strong_tile_pos[0] and mouse_tile_pos[0] < prio_strong_tile_pos[0] + 2 and mouse_tile_pos[1] == 17:
+            self.data.screen.blit(self.__target_prio_hover_image, prio_strong_pos)
+            if pg.mouse.get_pressed()[0]:
+                self.__shoot_priority = "strong"
+        else:
+            if self.__shoot_priority == "strong":
+                self.data.screen.blit(self.__target_prio_selected_image, prio_strong_pos)
+            else:
+                self.data.screen.blit(self.__target_prio_image, prio_strong_pos)
+        self.data.Draw_text("Strong", 4*self.data.tile_zoom, (255, 255, 255), (prio_strong_pos[0] + self.data.tile_zoom*1, prio_strong_pos[1] + self.data.tile_zoom*2))
+
+        if mouse_tile_pos[0] >= close_tile_pos[0] and mouse_tile_pos[0] < close_tile_pos[0] + 1 and mouse_tile_pos[1] == 17:
+            self.data.screen.blit(self.__close_hover_image, close_pos)
+            if pg.mouse.get_pressed()[0]:
+                self.selected = False
+                self.data.tower_selected = -1
+        else:
+            self.data.screen.blit(self.__close_image, close_pos)
+            
+
+        
+        
+
 
 
     def Give_upgrade_effect(self, upgrade_name: str) -> None:
@@ -192,30 +267,28 @@ class Base_tower:
                 self.__shoot_waiting_timer -= 1
             else:
                 # nearest: tuple[str, float] = self.Nearest_enemy() # This algorithm is for the nearest enemy
-                nearest: tuple[str, float] = self.Last_reachable_enemy() # This algorithm is for the last reachable enemy
+                nearest: tuple[str, float]
+                if self.__shoot_priority == "first":
+                    nearest = self.Last_reachable_enemy() # This algorithm is for the last reachable enemy
+                elif self.__shoot_priority == "strong":
+                    nearest = self.Strongest_reachable_enemy()
+                else:
+                    nearest = self.Nearest_enemy()
                 if nearest[0] != "" and nearest[1] <= self.range:  
                         self.projectile_timer = self.shooting_speed
                         self.Shoot(nearest[0])
                 else:
                     if self.data.performance_saving_setting == "extreme":
-                        self.__shoot_waiting_timer = 5
+                        self.__shoot_waiting_timer = 2
                     elif self.data.performance_saving_setting == "default":
-                        self.__shoot_waiting_timer = 3
+                        self.__shoot_waiting_timer = 1
                     else:
+                        self.__shoot_waiting_timer = 0
+                    if self.tower_name == "machine_gunner":
                         self.__shoot_waiting_timer = 0
 
         # Projectile movement
         if self.__projectile_pos != (-1, -1):
-            # Rotate the tower to the enemy
-            if self.data.performance_saving_setting != "extreme":
-                if self.__projectile_angle > 0.785 and self.__projectile_angle <= 2.356:
-                    self.turn_state = "up"
-                elif self.__projectile_angle > -0.785 and self.__projectile_angle <= 0.785:
-                    self.turn_state = "right"
-                elif self.__projectile_angle > -2.356 and self.__projectile_angle <= -0.785:
-                    self.turn_state = "down"
-                else:
-                    self.turn_state = "left"
 
             # Move the projectile
             self.__projectile_pos = (
@@ -295,6 +368,17 @@ class Base_tower:
         tower_pos: tuple[float, float] = (self.center_pos[0], self.center_pos[1])
         enemy_pos: tuple[float, float] = (self.data.enemies[enemy_uuid]["pos"][0], self.data.enemies[enemy_uuid]["pos"][1])
         self.__projectile_angle: float = math.atan2(-(enemy_pos[1] - tower_pos[1]), enemy_pos[0] - tower_pos[0])
+        
+        # Rotate the tower to the enemy
+        if self.data.performance_saving_setting != "extreme":
+            if self.__projectile_angle > 0.785 and self.__projectile_angle <= 2.356:
+                self.turn_state = "up"
+            elif self.__projectile_angle > -0.785 and self.__projectile_angle <= 0.785:
+                self.turn_state = "right"
+            elif self.__projectile_angle > -2.356 and self.__projectile_angle <= -0.785:
+                self.turn_state = "down"
+            else:
+                self.turn_state = "left"
 
 
     def Nearest_enemy(self, start_pos: tuple[float, float] = (-1, -1), ignore_uuids: list[str] = []) -> tuple[str, float]: # [UUID of the nearest enemy, distance in tiles]
@@ -325,13 +409,36 @@ class Base_tower:
         for enemy_uuid, enemy in self.data.enemies.items():
             if enemy["health"] > 0:
                 distance: float = ((self.center_pos[0] - enemy["pos"][0])**2 + (self.center_pos[1] - enemy["pos"][1])**2)
-                if distance > output[1] and distance <= max_distance:
+                if distance <= max_distance:
                     if enemy["pos_i"] > enemy_pos_i:
                         output = (enemy_uuid, distance)
                         enemy_pos_i = enemy["pos_i"]
         if output[0] != "":
             output = (output[0], output[1]**0.5)
         return output
+    
+    def Strongest_reachable_enemy(self) -> tuple[str, float]: # [UUID of the strongest reachable enemy, distance in tiles]
+        """
+        Returns the UUID of the strongest reachable enemy and the distance to it (in tiles)
+        """
+        max_distance: float = self.range**2
+        output: tuple[str, float] = ("", 0.0)
+        for enemy_uuid, enemy in self.data.enemies.items():
+            if enemy["health"] > 0:
+                distance: float = ((self.center_pos[0] - enemy["pos"][0])**2 + (self.center_pos[1] - enemy["pos"][1])**2)
+                if distance <= max_distance:
+                    if output[0] == "":
+                        output = (enemy_uuid, distance)
+                    else:    
+                        if enemy["health"] > self.data.enemies[output[0]]["health"]:
+                            output = (enemy_uuid, distance)
+        if output[0] != "":
+            output = (output[0], output[1]**0.5)
+        return output
+
+
+
+
     
     def Get_distance(self, a: tuple[float, float], b: tuple[float, float]) -> float:
         """
@@ -385,14 +492,14 @@ class Base_tower:
             if self.data.enemies[enemy_uuid]["special"] == "lead":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
-                    self.data.money -= 6
+                    self.data.money -= 4
             elif self.data.enemies[enemy_uuid]["special"] == "anti_explosion":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
-                    self.data.money -= 6
+                    self.data.money -= 4
             elif self.data.enemies[enemy_uuid]["special"] == "stack":
                 if health_after <= 10:
-                    self.data.money -= 6
+                    self.data.money -= 4
                     spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
                     if spawn_pos_i < 4:
                         spawn_pos_i = 4
@@ -421,7 +528,7 @@ class Base_tower:
                     self.data.money -= 1    
                 if health_before > 9 and health_after <= 9: # Too much money in early game
                     self.data.money -= 1    
-                if health_before > 5 and health_after <= 5: # Too much money in early game
+                if health_before > 8 and health_after <= 8: # Too much money in early game
                     self.data.money -= 1    
 
 
@@ -432,7 +539,7 @@ class Base_tower:
     
         # Pop ceramic
         if health_before > 10 and health_after <= 10:
-            self.data.money += 7
+            self.data.money += 8
         
         # Pop 100
         if health_before > 51 and health_after <= 50:

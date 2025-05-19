@@ -145,7 +145,7 @@ if __name__ == "__main__":
                 tower_handler.Main()
                 # Fast forward game
                 if data.fast_forward:
-                    enemy_obj.Tick_only()
+                    enemy_obj.Tick_only()   
                     tower_handler.Tick_only()
 
                 build_hologram_obj.Main()

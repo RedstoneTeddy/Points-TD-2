@@ -25,12 +25,17 @@ class Machine_gunner(towers.base_tower.Base_tower):
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "fast_machine", "cost": 300, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "fast_machine", "cost": 220, "requirement": "", "y_pos": 0, "is_master": False,
              "description": ["Faster shooting"], "original_img": data.original_tower_images["upgrades"]["fast_machine"], "img": pg.Surface((24,24))},
-            {"name": "more_range", "cost": 140, "requirement": "", "y_pos": 1, "is_master": False,
+            {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},
-            {"name": "sharper", "cost": 450, "requirement": "", "y_pos": 2, "is_master": False,
+            {"name": "sharper", "cost": 400, "requirement": "", "y_pos": 2, "is_master": False,
              "description": ["Sharper Shots"], "original_img": data.original_tower_images["upgrades"]["sharper"], "img": pg.Surface((24,24))},
+            {"name": "ray_of_shots", "cost": 900, "requirement": "fast_machine", "y_pos": 0, "is_master": True,
+             "description": ["Ray of Shots", "FAAAST", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["faster_shooting"], "img": pg.Surface((24,24))},
+            {"name": "hot_shots", "cost": 800, "requirement": "sharper", "y_pos": 2, "is_master": True,
+             "description": ["Hot (deadly) Shots", "Can damage lead points", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
+
             
 
         ]
@@ -46,6 +51,13 @@ class Machine_gunner(towers.base_tower.Base_tower):
                 self.range += 0.8
             case "sharper":
                 self.projectile_damage += 1
+            case "ray_of_shots":
+                self.projectile_speed = 1.1
+                self.shooting_speed = 6
+            case "hot_shots":
+                self.projectile_damage += 2
+                self.shooting_speed += 2
+                self.can_pop_lead = True
 
 
         

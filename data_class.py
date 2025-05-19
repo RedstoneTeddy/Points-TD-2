@@ -43,8 +43,8 @@ class Data_class:
 
         self.performance_saving_setting: Literal["none", "default", "extreme"] = "default"
         #### Affected by this:
-        # default: a shoot-ready tower with no target in range will wait 3 ticks before checking again
-        # extreme: a shoot-ready tower with no target in range will wait 5 ticks before checking again
+        # default: a shoot-ready tower with no target in range will wait +1 tick  before checking again
+        # extreme: a shoot-ready tower with no target in range will wait +2 ticks before checking again
         # extreme: projectiles will never render
         # extreme: towers will never turn towards the target
         # extreme: wave_button is not responsive
@@ -155,6 +155,14 @@ class Data_class:
                 "right": pg.transform.rotate(pg.image.load("images/towers/shooter/normal.png").convert_alpha(), 270),
                 "projectile": pg.image.load("images/towers/shooter/projectile.png").convert_alpha(),
                 "shop_img": pg.image.load("images/towers/shooter/shop_img.png").convert_alpha()
+            },
+
+            "tower_hud": {
+                "target_prio": pg.image.load("images/hud/target_prio.png").convert_alpha(),
+                "target_prio_hover": pg.image.load("images/hud/target_prio_hover.png").convert_alpha(),
+                "target_prio_selected": pg.image.load("images/hud/target_prio_selected.png").convert_alpha(),
+                "close_button": pg.image.load("images/hud/close_button.png").convert_alpha(),
+                "close_button_hover": pg.image.load("images/hud/close_button_hover.png").convert_alpha()
             }
         }
 

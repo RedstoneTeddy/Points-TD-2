@@ -18,7 +18,7 @@ class Machine_gunner(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 3.6
-        self.shooting_speed: int = 12
+        self.shooting_speed: int = 14
         self.projectile_speed: float = 0.7
         self.projectile_damage: int = 1
         self.multi_hit_range = 1

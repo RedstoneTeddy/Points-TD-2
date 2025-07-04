@@ -33,7 +33,7 @@ class Base_tower:
         self.original_tower_images: dict[str, pg.Surface] = {}
         self.original_projectile_image: pg.Surface = pg.Surface((0, 0))
         self.range: float = 0
-        self.shooting_speed: int = 0
+        self.shooting_speed: int = -1 # -1 disables shooting
         self.projectile_speed: float = 0 # ideally: self.range/4
         self.projectile_damage: int = 0
         self.possible_upgrades: list[data_class.Upgrade_data] = []
@@ -109,7 +109,7 @@ class Base_tower:
         size_px: int = int(self.data.tile_zoom*8*self.tower_size)
         self.data.screen.blit(self.tower_images[self.turn_state], tower_pos)
 
-        if self.selected:
+        if self.selected and self.range > 0:
             pg.draw.circle(self.data.screen, (255,255,255), center_pos, int(self.range*self.data.tile_zoom*8), self.data.tile_zoom)
 
         # Check if the tower gets selected
@@ -183,7 +183,11 @@ class Base_tower:
                         self.data.Draw_text(str(upgarde_cost) + "$", 6*self.data.tile_zoom, (255, 50, 50), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
                 else: # Not selected
                     self.data.Draw_text(str(upgarde_cost) + "$", 6*self.data.tile_zoom, (255, 255, 255), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
+        
+        self.Show_target_priority()
 
+
+    def Show_target_priority(self) -> None:
         # Target priority
         prio_first_tile_pos: tuple[int, int] = (25, 17)
         prio_near_tile_pos: tuple[int, int] = (27, 17)
@@ -262,7 +266,8 @@ class Base_tower:
         """
         if self.projectile_timer > 0:
             self.projectile_timer -= 1
-        elif self.__projectile_pos == (-1, -1): # Shoot
+        elif self.__projectile_pos == (-1, -1) and self.shooting_speed != -1: # Shoot
+            
             if self.__shoot_waiting_timer > 0:
                 self.__shoot_waiting_timer -= 1
             else:
@@ -590,6 +595,9 @@ class Base_tower:
 
 
 
+import towers.spikes
+
+
 
 
 
@@ -600,6 +608,7 @@ class Tower_handler:
 
         
         self.towers: list[Base_tower] = []
+        self.spikes: list[towers.spikes.Spikes] = []
 
 
     def Main(self) -> None:
@@ -621,7 +630,7 @@ class Tower_handler:
                 tower.Tick()
 
         # Check for resetting the towers
-        if not self.data.running_wave or self.data.new_wave:
+        if self.data.tick_tower_wave_finished:
             for tower in self.towers:
                 tower.Wave_finished()
 
@@ -630,6 +639,28 @@ class Tower_handler:
             for i, tower in enumerate(self.towers):
                 if tower.projectile_pos != (-1, -1):
                     tower.Show_projectile()
+
+
+        #### Spikes ####
+        delete_spikes: list[int] = []
+        for i, spike in enumerate(self.spikes):
+            spike.Show_spike()
+            if self.data.running_wave:
+                if spike.Tick():
+                    delete_spikes.append(i)
+        
+        # Resetting
+        if self.data.tick_tower_wave_finished:
+            self.data.tick_tower_wave_finished = False
+            for spike in self.spikes:
+                if spike.Wave_finished():
+                    delete_spikes.append(i)
+
+        # Delete spikes
+        for i in range(len(delete_spikes)-1, -1, -1):
+            del self.spikes[delete_spikes[i]]
+
+        
 
 
 
@@ -641,4 +672,7 @@ class Tower_handler:
         if self.data.running_wave:
             for tower in self.towers:
                 tower.Tick()
+
+            for spike in self.spikes:
+                spike.Tick()
 

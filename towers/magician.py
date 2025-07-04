@@ -18,7 +18,7 @@ class Magician(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 4.0
-        self.shooting_speed: int = 25
+        self.shooting_speed: int = 26
         self.projectile_speed: float = 0.7
         self.projectile_damage: int = 2
         self.multi_hit_range = 1.5

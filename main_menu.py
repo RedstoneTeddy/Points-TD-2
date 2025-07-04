@@ -1,5 +1,6 @@
 import data_class
 import pygame as pg
+import easygui
 
 
 
@@ -58,19 +59,29 @@ class Main_menu:
         else:
             self.data.Draw_text("Hard", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 105*self.data.hud_zoom))
 
-        # Hacker Button
-        hacker_button = pg.Rect(self.data.screen_size[0]//2 - 25*self.data.hud_zoom, 125*self.data.hud_zoom, 50*self.data.hud_zoom, 20*self.data.hud_zoom)
-        pg.draw.rect(self.data.screen, (100, 100, 100), hacker_button)
-        pg.draw.rect(self.data.screen, (100, 0, 0), hacker_button, 2)
-        if hacker_button.collidepoint(pg.mouse.get_pos()):
-            pg.draw.rect(self.data.screen, (150, 0, 0), hacker_button, 2)
-            self.data.Draw_text("Hacker", 10 * self.data.hud_zoom, (150, 0, 0), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 130*self.data.hud_zoom))
+        # Specials Button
+        specials_button = pg.Rect(self.data.screen_size[0]//2 - 25*self.data.hud_zoom, 125*self.data.hud_zoom, 50*self.data.hud_zoom, 20*self.data.hud_zoom)
+        pg.draw.rect(self.data.screen, (100, 100, 100), specials_button)
+        pg.draw.rect(self.data.screen, (100, 0, 0), specials_button, 2)
+        if specials_button.collidepoint(pg.mouse.get_pos()):
+            pg.draw.rect(self.data.screen, (150, 0, 0), specials_button, 2)
+            self.data.Draw_text("Specials", 10 * self.data.hud_zoom, (150, 0, 0), (self.data.screen_size[0]//2 - 24*self.data.hud_zoom, 130*self.data.hud_zoom))
             if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
                 self.button_pressed = True
-                self.data.difficulty = "hacker"
-                self.data.Transition_black_window("map_select")
+                selected_special = easygui.choicebox("Select a special challenge:", "Specials", ["Back", "Hacker", "Inflation"])
+                if selected_special == "Back":
+                    return
+                elif selected_special == "Hacker":
+                    self.data.difficulty = "hacker"
+                    self.data.Transition_black_window("map_select")
+                elif selected_special == "Inflation":
+                    self.data.difficulty = "inflation"
+                    self.data.Transition_black_window("map_select")
+                else:
+                    return
+                
         else:
-            self.data.Draw_text("Hacker", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 20*self.data.hud_zoom, 130*self.data.hud_zoom))
+            self.data.Draw_text("Specials", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 24*self.data.hud_zoom, 130*self.data.hud_zoom))
         
 
 

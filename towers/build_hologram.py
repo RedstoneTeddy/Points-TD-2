@@ -10,6 +10,8 @@ import towers.machine_gunner
 import towers.sniper
 import towers.magician
 import towers.shooter
+import towers.bank
+import towers.spikes
 
 class Build_hologram:
     def __init__(self, data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, tower_handler: towers.base_tower.Tower_handler) -> None:
@@ -24,7 +26,9 @@ class Build_hologram:
             "machine_gunner" : data.original_tower_images["machine_gunner"]["up"],
             "sniper" : data.original_tower_images["sniper"]["up"],
             "magician" : data.original_tower_images["magician"]["up"],
-            "shooter" : data.original_tower_images["shooter"]["up"]
+            "shooter" : data.original_tower_images["shooter"]["up"],
+            "bank" : data.original_tower_images["bank"]["up"],
+            "spikes" : data.original_tower_images["spikes"]["normal1"]
         }
 
         self.tower_size: dict[str, int] = {
@@ -33,7 +37,9 @@ class Build_hologram:
             "machine_gunner" : 2,
             "sniper" : 2,
             "magician" : 2,
-            "shooter" : 1
+            "shooter" : 1,
+            "bank" : 2,
+            "spikes" : 1
         }
 
         self.tower_range: dict[str, float] = {
@@ -42,7 +48,9 @@ class Build_hologram:
             "machine_gunner" : 3.6,
             "sniper" : 7.5,
             "magician" : 4.0,
-            "shooter" : 2.6
+            "shooter" : 2.6,
+            "bank" : 0.0,
+            "spikes" : 0.0
         }
 
 
@@ -79,35 +87,52 @@ class Build_hologram:
         """
         mouse_pos: tuple[int, int] = pg.mouse.get_pos()
         tile_pos: tuple[int, int] = self.tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=True)
+        spike_pos_i: int = -1
         if (tile_pos[0], tile_pos[1]+1) == self.tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=False):
             # Selected tile is on the map
             tower_can_build: bool = True
-            tower_sub_tiles: list[tuple[int, int]] = []
-
-            for i in range(self.tower_size[self.data.currently_building]):
-                for j in range(self.tower_size[self.data.currently_building]):
-                    tower_sub_tiles.append((tile_pos[0]+i, tile_pos[1]+j))
-
-            for sub_tile in tower_sub_tiles:
-                # Check if map-tile is buildable
-                if sub_tile[0] < 0 or sub_tile[1] < 0 or sub_tile[0] >=  24 or sub_tile[1] >= 17:
+            if self.data.currently_building == "spikes":
+                if tile_pos[0] < 0 or tile_pos[1] < 0 or tile_pos[0] >=  24 or tile_pos[1] >= 17:
                     tower_can_build = False
-                    break
                 else:
-                    if self.tile_map_obj.map[sub_tile[1]][sub_tile[0]] not in data_class.Buildable_tiles:
+                    if self.tile_map_obj.map[tile_pos[1]][tile_pos[0]] not in data_class.Path_tiles:
                         tower_can_build = False
-                        break
-                
+                if tower_can_build:
+                    spike_pos_i = towers.spikes.Convert_pos_to_path_i(self.tile_map_obj, tile_pos)
+                    if spike_pos_i == -1:
+                        tower_can_build = False
+                    else:
+                        for spike in self.tower_handler.spikes:
+                            if spike_pos_i == spike.pos_i:
+                                tower_can_build = False
+                                break
+            else:
+                tower_sub_tiles: list[tuple[int, int]] = []
 
-                # Check if the tile is already occupied by a tower
-                for tower in self.tower_handler.towers:
-                    other_sub_tiles: list[tuple[int, int]] = []
-                    for i in range(self.tower_size[tower.tower_name]):
-                        for j in range(self.tower_size[tower.tower_name]):
-                            other_sub_tiles.append((tower.tower_pos[0]+i, tower.tower_pos[1]+j))
-                    if sub_tile in other_sub_tiles:
+                for i in range(self.tower_size[self.data.currently_building]):
+                    for j in range(self.tower_size[self.data.currently_building]):
+                        tower_sub_tiles.append((tile_pos[0]+i, tile_pos[1]+j))
+
+                for sub_tile in tower_sub_tiles:
+                    # Check if map-tile is buildable
+                    if sub_tile[0] < 0 or sub_tile[1] < 0 or sub_tile[0] >=  24 or sub_tile[1] >= 17:
                         tower_can_build = False
                         break
+                    else:
+                        if self.tile_map_obj.map[sub_tile[1]][sub_tile[0]] not in data_class.Buildable_tiles:
+                            tower_can_build = False
+                            break
+                    
+
+                    # Check if the tile is already occupied by a tower
+                    for tower in self.tower_handler.towers:
+                        other_sub_tiles: list[tuple[int, int]] = []
+                        for i in range(self.tower_size[tower.tower_name]):
+                            for j in range(self.tower_size[tower.tower_name]):
+                                other_sub_tiles.append((tower.tower_pos[0]+i, tower.tower_pos[1]+j))
+                        if sub_tile in other_sub_tiles:
+                            tower_can_build = False
+                            break
 
             # Draw the hologram
             hologram_pos: tuple[int, int] = (tile_pos[0]*self.data.tile_zoom*8 + self.tile_map_obj.Get_left_right_empty_screen(), (tile_pos[1]+1)*self.data.tile_zoom*8)
@@ -123,7 +148,8 @@ class Build_hologram:
                 overlay: pg.Surface = pg.Surface((self.data.tile_zoom*8*self.tower_size[self.data.currently_building], self.data.tile_zoom*8*self.tower_size[self.data.currently_building]), pg.SRCALPHA)
                 overlay.fill((255, 0, 0, 50))
                 self.data.screen.blit(overlay, hologram_pos)
-            pg.draw.circle(self.data.screen, (150,150,150), center_pos, int(self.tower_range[self.data.currently_building]*self.data.tile_zoom*8), self.data.tile_zoom)
+            if self.tower_range[self.data.currently_building] > 0:
+                pg.draw.circle(self.data.screen, (150,150,150), center_pos, int(self.tower_range[self.data.currently_building]*self.data.tile_zoom*8), self.data.tile_zoom)
 
             if tower_can_build:
                 # Check if the mouse is pressed
@@ -148,6 +174,13 @@ class Build_hologram:
                         case "shooter":
                             self.tower_handler.towers.append(
                                 towers.shooter.Shooter(self.data, self.tile_map_obj, tile_pos))
+                        case "bank":
+                            self.tower_handler.towers.append(
+                                towers.bank.Bank(self.data, self.tile_map_obj, tile_pos))
+                        case "spikes":
+                            self.tower_handler.spikes.append(
+                                towers.spikes.New_spike(self.data, self.tile_map_obj, spike_pos_i, 20))
+                            
                         case _:
                             logging.error(f"Unknown tower type: {self.data.currently_building}")
                             return

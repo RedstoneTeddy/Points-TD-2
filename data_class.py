@@ -28,6 +28,7 @@ class Upgrade_data(TypedDict):
 
 
 Buildable_tiles: List[int] = [1,2,3,4,5,6]
+Path_tiles: List[int] = [11,12,13,14,15]
 
 class Data_class:
     def __init__(self):
@@ -70,6 +71,7 @@ class Data_class:
 
         # Game Variables
         self.running_wave: bool = False
+        self.tick_tower_wave_finished: bool = False
         self.health: int = 0
         self.enemies: dict[str, Enemy_data] = {} # UUID: Enemy_data
         self.fast_forward: bool = False
@@ -84,8 +86,9 @@ class Data_class:
         self.currently_building: str = ""
         self.tower_selected: int = -1
 
-
-        self.difficulty: Literal["", "easy", "medium", "hard", "hacker"] = ""
+        # Easy, Medium, Hard are normal difficulties
+        # Hacker, Inflation are challenges
+        self.difficulty: Literal["", "easy", "medium", "hard", "hacker", "inflation"] = ""
         self.cost_multiplier: float = 1.0 # Gets set, when the game starts, reads the data.difficulty variable
 
         # Tower images
@@ -110,7 +113,10 @@ class Data_class:
                 "pushback": pg.image.load("images/towers/upgrades/pushback.png").convert_alpha(),
                 "pushback+": pg.image.load("images/towers/upgrades/pushback+.png").convert_alpha(),
                 "regenerate": pg.image.load("images/towers/upgrades/regenerate.png").convert_alpha(),
-                "atomic_bomb": pg.image.load("images/towers/upgrades/atomic_bomb.png").convert_alpha()
+                "atomic_bomb": pg.image.load("images/towers/upgrades/atomic_bomb.png").convert_alpha(),
+                "money": pg.image.load("images/towers/upgrades/money.png").convert_alpha(),
+                "money+": pg.image.load("images/towers/upgrades/money+.png").convert_alpha(),
+                "percent": pg.image.load("images/towers/upgrades/percent.png").convert_alpha()
             },
             
             "ninja" : {
@@ -163,6 +169,26 @@ class Data_class:
                 "target_prio_selected": pg.image.load("images/hud/target_prio_selected.png").convert_alpha(),
                 "close_button": pg.image.load("images/hud/close_button.png").convert_alpha(),
                 "close_button_hover": pg.image.load("images/hud/close_button_hover.png").convert_alpha()
+            },
+            "bank": {
+                "up": pg.image.load("images/towers/bank/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/bank/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/bank/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/bank/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/bank/projectile.png").convert_alpha()
+            },
+            "spikes": {
+                "normal1": pg.image.load("images/towers/spikes/normal1.png").convert_alpha(),
+                "normal2": pg.image.load("images/towers/spikes/normal2.png").convert_alpha(),
+                "normal3": pg.image.load("images/towers/spikes/normal3.png").convert_alpha(),
+                "normal4": pg.image.load("images/towers/spikes/normal4.png").convert_alpha(),
+                "normal5": pg.image.load("images/towers/spikes/normal5.png").convert_alpha(),
+                "hot1": pg.image.load("images/towers/spikes/hot1.png").convert_alpha(),
+                "hot2": pg.image.load("images/towers/spikes/hot2.png").convert_alpha(),
+                "hot3": pg.image.load("images/towers/spikes/hot3.png").convert_alpha(),
+                "hot4": pg.image.load("images/towers/spikes/hot4.png").convert_alpha(),
+                "hot5": pg.image.load("images/towers/spikes/hot5.png").convert_alpha(),
+                "shop_img": pg.image.load("images/towers/spikes/shop_img.png").convert_alpha()
             }
         }
 
@@ -249,6 +275,11 @@ class Data_class:
                 self.cost_multiplier = 1.3
                 self.health = 1
                 self.money = 600
+                self.wave = 2
+            case "inflation":
+                self.cost_multiplier = 1.0
+                self.health = 100
+                self.money = 700
             case _:
                 logging.error("Difficulty setting invalid")
                 return
@@ -272,6 +303,8 @@ class Data_class:
         self.enemies = {}
         self.health += self.regeneration # Regeneration from magician towers
         logging.info(f"Wave {self.wave} started")
+        if self.difficulty == "inflation":
+            self.cost_multiplier = round(self.cost_multiplier * 1.01, 4) # Increase cost multiplier by 1% each wave
 
     def Wave_finished(self) -> None:
         """
@@ -279,6 +312,7 @@ class Data_class:
         """
         self.running_wave = False
         self.money += 100
+        self.tick_tower_wave_finished = True
         logging.info(f"Wave {self.wave} finished")
 
         if self.auto_wave:

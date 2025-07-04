@@ -18,18 +18,18 @@ class Ninja(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 4
-        self.shooting_speed: int = 20
+        self.shooting_speed: int = 24
         self.projectile_speed: float = 0.5
         self.projectile_damage: int = 1
         self.multi_hit_range = 1.0
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "sharper_shuriken", "cost": 230, "requirement": "", "y_pos": 0,  "is_master": False,
+            {"name": "sharper_shuriken", "cost": 260, "requirement": "", "y_pos": 0,  "is_master": False,
              "description": ["Sharper Shurikens"], "original_img": data.original_tower_images["upgrades"]["sharper_shuriken"], "img": pg.Surface((24,24))},
             {"name": "double_kill", "cost": 710, "requirement": "sharper_shuriken", "y_pos": 0,  "is_master": True,
              "description": ["Double Kills", " +1 Damage", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
-            {"name": "more_range", "cost": 120, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},
             {"name": "lead_pop", "cost": 610, "requirement": "more_range", "y_pos": 1, "is_master": True,
              "description": ["Can damage lead points", "+2 Damage", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
@@ -51,7 +51,7 @@ class Ninja(towers.base_tower.Base_tower):
             case "more_range":
                 self.range += 1
             case "shorter_cooldown":
-                self.shooting_speed -= 8
+                self.shooting_speed -= 10
             case "lead_pop":
                 self.can_pop_lead = True
                 self.projectile_damage += 2

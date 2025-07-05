@@ -17,12 +17,13 @@ class Shop:
         self.shop_base_price: dict[str, int] = {
             "ninja": 280,
             "bomber": 680,
-            "machine_gunner": 480,
+            "machine_gunner": 500,
             "sniper": 550,
             "magician": 800,
             "shooter": 350,
             "bank": 1200,
-            "spikes": 30
+            "spikes": 30,
+            "spike_factory": 800
         }
 
         self.original_shop_images: dict[str, pg.Surface] = {
@@ -33,7 +34,8 @@ class Shop:
             "magician": data.original_tower_images["magician"]["up"],
             "shooter": data.original_tower_images["shooter"]["shop_img"],
             "bank": data.original_tower_images["bank"]["up"],
-            "spikes": data.original_tower_images["spikes"]["shop_img"]
+            "spikes": data.original_tower_images["spikes"]["shop_img"],
+            "spike_factory": data.original_tower_images["spike_factory"]["up"]
         }
 
         self.shop_images: dict[str, pg.Surface] = {}
@@ -72,7 +74,8 @@ class Shop:
                 "magician": (27, 5),
                 "shooter": (29, 5),
                 "bank": (25, 8),
-                "spikes": (27, 8)
+                "spikes": (27, 8),
+                "spike_factory": (29, 8)
             }
 
             for key in tower_tile_pos.keys():

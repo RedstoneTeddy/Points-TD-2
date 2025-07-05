@@ -69,9 +69,7 @@ class Spikes:
                 deletion = True
         if self.health <= 0:
             deletion = True
-        if self.disappear_round != -1:
-            if self.data.wave >= self.disappear_round:
-                deletion = True
+
 
         # Damagaging enemies
         if self.data.performance_saving_setting == "none":
@@ -204,12 +202,12 @@ class Spikes:
         if self.health <= 0:
             deletion = True
         if self.disappear_round != -1:
-            if self.data.wave+1 >= self.disappear_round:
+            if (self.data.wave+1 >= self.disappear_round) or self.disappear_round == 0:
                 deletion = True
         return deletion
     
 
-def New_spike(data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, pos_i: int, health: int, lifetime: int = -1, disappear_round: int = -1) -> Spikes:
+def New_spike(data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, pos_i: int, health: int, lifetime: int = -1, disappear_round: int = -1, is_hot: bool = False) -> Spikes:
     """
     Creates a new spike tower
     """
@@ -219,6 +217,7 @@ def New_spike(data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, pos_
     new_spike.max_health = health
     new_spike.lifetime = lifetime
     new_spike.disappear_round = disappear_round
+    new_spike.is_hot = is_hot
 
     return new_spike
 

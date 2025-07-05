@@ -68,7 +68,7 @@ class Main_menu:
             self.data.Draw_text("Specials", 10 * self.data.hud_zoom, (150, 0, 0), (self.data.screen_size[0]//2 - 24*self.data.hud_zoom, 130*self.data.hud_zoom))
             if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
                 self.button_pressed = True
-                selected_special = easygui.choicebox("Select a special challenge:", "Specials", ["Back", "Hacker", "Inflation"])
+                selected_special = easygui.choicebox("Select a special challenge:", "Specials", ["Back", "Hacker", "Inflation", "Late to the Party"])
                 if selected_special == "Back":
                     return
                 elif selected_special == "Hacker":
@@ -76,6 +76,9 @@ class Main_menu:
                     self.data.Transition_black_window("map_select")
                 elif selected_special == "Inflation":
                     self.data.difficulty = "inflation"
+                    self.data.Transition_black_window("map_select")
+                elif selected_special == "Late to the Party":
+                    self.data.difficulty = "late_to_the_party"
                     self.data.Transition_black_window("map_select")
                 else:
                     return

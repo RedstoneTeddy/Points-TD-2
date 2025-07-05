@@ -12,6 +12,7 @@ import towers.magician
 import towers.shooter
 import towers.bank
 import towers.spikes
+import towers.spike_factory
 
 class Build_hologram:
     def __init__(self, data: data_class.Data_class, tile_map_obj: tile_map.Tile_map, tower_handler: towers.base_tower.Tower_handler) -> None:
@@ -28,7 +29,8 @@ class Build_hologram:
             "magician" : data.original_tower_images["magician"]["up"],
             "shooter" : data.original_tower_images["shooter"]["up"],
             "bank" : data.original_tower_images["bank"]["up"],
-            "spikes" : data.original_tower_images["spikes"]["normal1"]
+            "spikes" : data.original_tower_images["spikes"]["normal1"],
+            "spike_factory" : data.original_tower_images["spike_factory"]["up"]
         }
 
         self.tower_size: dict[str, int] = {
@@ -39,7 +41,8 @@ class Build_hologram:
             "magician" : 2,
             "shooter" : 1,
             "bank" : 2,
-            "spikes" : 1
+            "spikes" : 1,
+            "spike_factory" : 2
         }
 
         self.tower_range: dict[str, float] = {
@@ -50,7 +53,8 @@ class Build_hologram:
             "magician" : 4.0,
             "shooter" : 2.6,
             "bank" : 0.0,
-            "spikes" : 0.0
+            "spikes" : 0.0,
+            "spike_factory" : 3.0
         }
 
 
@@ -180,6 +184,9 @@ class Build_hologram:
                         case "spikes":
                             self.tower_handler.spikes.append(
                                 towers.spikes.New_spike(self.data, self.tile_map_obj, spike_pos_i, 20))
+                        case "spike_factory":
+                            self.tower_handler.towers.append(
+                                towers.spike_factory.Spike_factory(self.data, self.tile_map_obj, tile_pos, []))
                             
                         case _:
                             logging.error(f"Unknown tower type: {self.data.currently_building}")

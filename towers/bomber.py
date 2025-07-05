@@ -18,7 +18,7 @@ class Bomber(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 3.3
-        self.shooting_speed: int = 50
+        self.shooting_speed: int = 46
         self.projectile_speed: float = 0.4
         self.projectile_damage: int = 2
         self.multi_hit_range = 1.3
@@ -31,7 +31,7 @@ class Bomber(towers.base_tower.Base_tower):
              "description": ["Bigger Bomb"], "original_img": data.original_tower_images["upgrades"]["bigger_bomb"], "img": pg.Surface((24,24))},
             {"name": "blast_radius", "cost": 520, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Bigger Blast Radius"], "original_img": data.original_tower_images["upgrades"]["blast_radius"], "img": pg.Surface((24,24))},
-            {"name": "shorter_cooldown", "cost": 230, "requirement": "", "y_pos": 2, "is_master": False,
+            {"name": "shorter_cooldown", "cost": 270, "requirement": "", "y_pos": 2, "is_master": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
             {"name": "bigger_range", "cost": 690, "requirement": "blast_radius", "y_pos": 1, "is_master": True,
              "description": ["Fast Rockets", "+ bigger range", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["big_range"], "img": pg.Surface((24,24))},
@@ -50,7 +50,7 @@ class Bomber(towers.base_tower.Base_tower):
                 self.multi_hit_range = 1.6
                 self.multi_hits_max = 5
             case "shorter_cooldown":
-                self.shooting_speed -= 10
+                self.shooting_speed -= 8
             case "bigger_range":
                 self.range += 1.6
                 self.shooting_speed -= 8

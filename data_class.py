@@ -45,7 +45,7 @@ class Data_class:
         self.performance_saving_setting: Literal["none", "default", "extreme"] = "default"
         #### Affected by this:
         # default: a shoot-ready tower with no target in range will wait +1 tick  before checking again
-        # extreme: a shoot-ready tower with no target in range will wait +2 ticks before checking again
+        # extreme: a shoot-ready tower with no target in range will wait +2 ticks before checking again (for spike factory +4 ticks)
         # extreme: projectiles will never render
         # extreme: towers will never turn towards the target
         # extreme: wave_button is not responsive
@@ -56,6 +56,10 @@ class Data_class:
         self.transition_to: str = ""
         self.start_black_window: bool = False
         self.ongoing_transition: bool = False
+
+        self.keybinds: dict[str, int] = {
+            "wave_button": pg.K_SPACE
+        }
 
         # Current menu / game state
         self.is_in_main_menu: bool = True
@@ -88,7 +92,7 @@ class Data_class:
 
         # Easy, Medium, Hard are normal difficulties
         # Hacker, Inflation are challenges
-        self.difficulty: Literal["", "easy", "medium", "hard", "hacker", "inflation"] = ""
+        self.difficulty: Literal["", "easy", "medium", "hard", "hacker", "inflation", "late_to_the_party"] = ""
         self.cost_multiplier: float = 1.0 # Gets set, when the game starts, reads the data.difficulty variable
 
         # Tower images
@@ -189,6 +193,30 @@ class Data_class:
                 "hot4": pg.image.load("images/towers/spikes/hot4.png").convert_alpha(),
                 "hot5": pg.image.load("images/towers/spikes/hot5.png").convert_alpha(),
                 "shop_img": pg.image.load("images/towers/spikes/shop_img.png").convert_alpha()
+            },
+            "spike_factory": {
+                "up": pg.image.load("images/towers/spike_factory/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/spike_factory/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/spike_factory/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/spike_factory/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/spike_factory/projectile.png").convert_alpha()
+            },
+            "particle_accelerator": {
+                "up": pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(),
+                "left": pg.transform.rotate(pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(), 90),
+                "down": pg.transform.rotate(pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(), 180),
+                "right": pg.transform.rotate(pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(), 270),
+                "projectile": pg.image.load("images/towers/particle_accelerator/projectile.png").convert_alpha()
+            },
+            "accelerator_animation": {
+                "1": pg.image.load("images/towers/particle_accelerator/animated1.png").convert_alpha(),
+                "2": pg.image.load("images/towers/particle_accelerator/animated2.png").convert_alpha(),
+                "3": pg.image.load("images/towers/particle_accelerator/animated3.png").convert_alpha(),
+                "4": pg.image.load("images/towers/particle_accelerator/animated4.png").convert_alpha(),
+                "5": pg.image.load("images/towers/particle_accelerator/animated5.png").convert_alpha(),
+                "6": pg.image.load("images/towers/particle_accelerator/animated6.png").convert_alpha(),
+                "7": pg.image.load("images/towers/particle_accelerator/animated7.png").convert_alpha(),
+                "8": pg.image.load("images/towers/particle_accelerator/animated8.png").convert_alpha()
             }
         }
 
@@ -280,6 +308,11 @@ class Data_class:
                 self.cost_multiplier = 1.0
                 self.health = 100
                 self.money = 700
+            case "late_to_the_party":
+                self.cost_multiplier = 1.0
+                self.health = 150
+                self.money = 20_000
+                self.wave = 40
             case _:
                 logging.error("Difficulty setting invalid")
                 return

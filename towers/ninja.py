@@ -18,7 +18,7 @@ class Ninja(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 4
-        self.shooting_speed: int = 24
+        self.shooting_speed: int = 23
         self.projectile_speed: float = 0.5
         self.projectile_damage: int = 1
         self.multi_hit_range = 1.0
@@ -51,7 +51,7 @@ class Ninja(towers.base_tower.Base_tower):
             case "more_range":
                 self.range += 1
             case "shorter_cooldown":
-                self.shooting_speed -= 10
+                self.shooting_speed -= 9
             case "lead_pop":
                 self.can_pop_lead = True
                 self.projectile_damage += 2

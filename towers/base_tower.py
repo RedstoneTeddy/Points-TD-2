@@ -618,6 +618,8 @@ class Tower_handler:
 
         # Main Tower Tick
         for i, tower in enumerate(self.towers):
+            if tower.tower_name == "spike_factory":
+                tower.spikes_list = self.spikes # Fix against the tower not having the list, when bought. # type: ignore
 
             if tower.Show_tower(): # If the tower got selected
                 self.data.tower_selected = i
@@ -652,11 +654,14 @@ class Tower_handler:
         # Resetting
         if self.data.tick_tower_wave_finished:
             self.data.tick_tower_wave_finished = False
-            for spike in self.spikes:
+            for i, spike in enumerate(self.spikes):
                 if spike.Wave_finished():
-                    delete_spikes.append(i)
+                    if i not in delete_spikes:
+                        delete_spikes.append(i)
 
         # Delete spikes
+        if len(delete_spikes) > 1:
+            delete_spikes.sort(reverse=False)  # Delete from the end to avoid index errors
         for i in range(len(delete_spikes)-1, -1, -1):
             del self.spikes[delete_spikes[i]]
 
@@ -669,10 +674,20 @@ class Tower_handler:
         """
         Only ticks the towers, no rendering
         """
+        delete_spikes: list[int] = []
         if self.data.running_wave:
             for tower in self.towers:
                 tower.Tick()
 
-            for spike in self.spikes:
-                spike.Tick()
+
+            
+            for i, spike in enumerate(self.spikes):
+                if spike.Tick():
+                    delete_spikes.append(i)
+
+        # Delete spikes
+        for i in range(len(delete_spikes)-1, -1, -1):
+            del self.spikes[delete_spikes[i]]
+
+
 

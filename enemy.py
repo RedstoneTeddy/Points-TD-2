@@ -34,6 +34,7 @@ class Enemy:
             "500": pg.image.load("images/enemies/500.png").convert_alpha(),
             "1000": pg.image.load("images/enemies/1000.png").convert_alpha(),
             "lead": pg.image.load("images/enemies/lead.png").convert_alpha(),
+            "lead+": pg.image.load("images/enemies/lead+.png").convert_alpha(),
             "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha(),
             "stack": pg.image.load("images/enemies/stack.png").convert_alpha(),
             "stack+": pg.image.load("images/enemies/stack+.png").convert_alpha()
@@ -58,7 +59,10 @@ class Enemy:
             # Get the enemy type => enemy img
             enemy_type: str
             if enemy["special"] == "lead":
-                enemy_type = "lead"
+                if enemy["health"] > 20:
+                    enemy_type = "lead+"
+                else:
+                    enemy_type = "lead"
             elif enemy["special"] == "anti_explosion":
                 enemy_type = "anti_explosion"
             elif enemy["special"] == "stack":
@@ -150,7 +154,8 @@ class Enemy:
         
         # Special Points
         if special == "lead":
-            health = 20
+            if health not in [20, 50]:
+                health = 20
         elif special == "anti_explosion":
             health = 20
         elif special == "stack":

@@ -18,14 +18,14 @@ class Machine_gunner(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 3.6
-        self.shooting_speed: int = 12
+        self.shooting_speed: int = 13
         self.projectile_speed: float = 0.7
         self.projectile_damage: int = 1
         self.multi_hit_range = 1
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "fast_machine", "cost": 220, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "fast_machine", "cost": 240, "requirement": "", "y_pos": 0, "is_master": False,
              "description": ["Faster shooting"], "original_img": data.original_tower_images["upgrades"]["fast_machine"], "img": pg.Surface((24,24))},
             {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 1, "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},

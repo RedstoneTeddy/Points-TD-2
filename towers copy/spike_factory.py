@@ -21,7 +21,7 @@ class Spike_factory(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 3.0
-        self.shooting_speed: int = 63
+        self.shooting_speed: int = 65
         self.projectile_speed: float = 1
         self.projectile_damage: int = 0
         self.multi_hit_range = 1.0

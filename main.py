@@ -5,6 +5,8 @@ directory = os_path.dirname(os_path.abspath(__file__))
 os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't correct
 
 
+version: str = "0.5.1"
+
 
 if __name__ == "__main__":
     import logging
@@ -37,7 +39,7 @@ if __name__ == "__main__":
 
     # Import the main game data class
     import data_class
-    data: data_class.Data_class = data_class.Data_class()
+    data: data_class.Data_class = data_class.Data_class(version)
     logging.info("Data initialized")
 
     # Import all other classes

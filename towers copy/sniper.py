@@ -18,7 +18,7 @@ class Sniper(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 7.5
-        self.shooting_speed: int = 50
+        self.shooting_speed: int = 55
         self.projectile_speed: float = 3
         self.projectile_damage: int = 3
         self.multi_hit_range = 1.0

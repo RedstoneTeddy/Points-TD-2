@@ -18,7 +18,7 @@ class Magician(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 4.0
-        self.shooting_speed: int = 23
+        self.shooting_speed: int = 26
         self.projectile_speed: float = 0.7
         self.projectile_damage: int = 2
         self.multi_hit_range = 1.5
@@ -28,7 +28,7 @@ class Magician(towers.base_tower.Base_tower):
             {"name": "lead_pop", "cost": 400, "requirement": "", "y_pos": 0, "is_master": False,
              "description": ["Can damage", "lead points", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
             {"name": "flash_explosion", "cost": 600, "requirement": "", "y_pos": 1, "is_master": False,
-             "description": ["Flash Explosion", "2x Multi-Hit", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},
+             "description": ["Flash Explosion", "+1 Damage"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},
             {"name": "pushback", "cost": 800, "requirement": "slow_down", "y_pos": 2, "is_master": True,
              "description": ["Pushback"], "original_img": data.original_tower_images["upgrades"]["pushback+"], "img": pg.Surface((24,24))},
             {"name": "regeneration", "cost": 600, "requirement": "flash_explosion", "y_pos": 1, "is_master": True,

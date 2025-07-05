@@ -17,6 +17,11 @@ class Main_menu:
     def Render_main(self) -> None:
         self.data.Draw_text("Points TD 2", 10 * self.data.hud_zoom, (255, 255, 255), (self.data.screen_size[0]//2 - 35*self.data.hud_zoom, 30*self.data.hud_zoom))
 
+
+        # Credentials
+        self.data.Draw_text("Created by: Redstone_Teddy", 7* self.data.hud_zoom, (255, 150, 0), (self.data.hud_zoom ,self.data.screen_size[1] - 8*self.data.hud_zoom))
+        self.data.Draw_text(f"Version: {self.data.version}", 6* self.data.hud_zoom, (255, 255, 255), (self.data.hud_zoom ,self.data.screen_size[1] - 14*self.data.hud_zoom))
+
         # Easy Button
         easy_button = pg.Rect(self.data.screen_size[0]//2 - 25*self.data.hud_zoom, 50*self.data.hud_zoom, 50*self.data.hud_zoom, 20*self.data.hud_zoom)
         pg.draw.rect(self.data.screen, (100, 100, 100), easy_button)

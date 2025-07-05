@@ -18,7 +18,7 @@ class Ninja(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 4
-        self.shooting_speed: int = 22
+        self.shooting_speed: int = 23
         self.projectile_speed: float = 0.5
         self.projectile_damage: int = 1
         self.multi_hit_range = 1.0

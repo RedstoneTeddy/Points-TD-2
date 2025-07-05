@@ -18,7 +18,7 @@ class Bomber(towers.base_tower.Base_tower):
 
         # Tower stats
         self.range: float = 3.3
-        self.shooting_speed: int = 42
+        self.shooting_speed: int = 46
         self.projectile_speed: float = 0.4
         self.projectile_damage: int = 2
         self.multi_hit_range = 1.3
@@ -50,7 +50,7 @@ class Bomber(towers.base_tower.Base_tower):
                 self.multi_hit_range = 1.6
                 self.multi_hits_max = 5
             case "shorter_cooldown":
-                self.shooting_speed -= 7
+                self.shooting_speed -= 8
             case "bigger_range":
                 self.range += 1.6
                 self.shooting_speed -= 8

@@ -31,7 +31,7 @@ Buildable_tiles: List[int] = [1,2,3,4,5,6]
 Path_tiles: List[int] = [11,12,13,14,15]
 
 class Data_class:
-    def __init__(self):
+    def __init__(self, version: str = ""):
 
         self.screen: pg.Surface = pg.display.set_mode((1050, 600), pg.RESIZABLE|pg.SHOWN|pg.DOUBLEBUF)
         self.clock: pg.time.Clock = pg.time.Clock()
@@ -41,6 +41,7 @@ class Data_class:
         self.fullscreen: bool = False
         self.mouse_wheel: Literal["up", "down", ""] = ""
         self.__font_objects: dict[str, pg.font.Font] = {}
+        self.version: str = version
 
         self.performance_saving_setting: Literal["none", "default", "extreme"] = "default"
         #### Affected by this:
@@ -206,7 +207,8 @@ class Data_class:
                 "left": pg.transform.rotate(pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(), 90),
                 "down": pg.transform.rotate(pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(), 180),
                 "right": pg.transform.rotate(pg.image.load("images/towers/particle_accelerator/normal.png").convert_alpha(), 270),
-                "projectile": pg.image.load("images/towers/particle_accelerator/projectile.png").convert_alpha()
+                "projectile": pg.image.load("images/towers/particle_accelerator/projectile.png").convert_alpha(),
+                "shop_img": pg.image.load("images/towers/particle_accelerator/shop_img.png").convert_alpha()
             },
             "accelerator_animation": {
                 "1": pg.image.load("images/towers/particle_accelerator/animated1.png").convert_alpha(),

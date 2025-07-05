@@ -84,6 +84,7 @@ if __name__ == "__main__":
         "500": 7+8 +10*5,
         "1000": 7+8 +10*10,
         "lead": 7+8 -4,
+        "lead+": 7+8-4 +4,
         "anti_explosion": 7+8 -4,
         "stack": 4+ 7 + 11*2,
         "stack+": 10+8-6 + (7+8)*2 + 11*2 +7
@@ -104,9 +105,10 @@ if __name__ == "__main__":
         "500": 500,
         "1000": 1000,
         "lead": 20,
+        "lead+": 50,
         "anti_explosion": 20,
-        "stack": 10 + (20+10+10),
-        "stack+": 60 + (50*2+20+20+10)
+        "stack": 10 + (20+10+10), # 20 health in Health field
+        "stack+": 60 + (50*2+20+20+10) # 70 health in Health field
     }
 
 
@@ -311,9 +313,11 @@ if __name__ == "__main__":
             raise ValueError("No wave enemy commands found")
         for command in wave_enemy_commands:
             for _ in range(command["amount"]):
+                special: str = command["special"]
+                if special ==  "lead+": special = "lead" # Convert lead+ to lead special tag
                 new_enemy: data_class.Wave_enemy = {
                     "health": command["health"],
-                    "special": command["special"],
+                    "special": special,
                     "spawn_time": timer
                 }
                 timer += command["timer_difference"]

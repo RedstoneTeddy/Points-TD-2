@@ -475,7 +475,6 @@ class Base_tower:
         health_before: int = self.data.enemies[enemy_uuid]["health"]
         self.data.enemies[enemy_uuid]["health"] -= damage
         health_after: int = self.data.enemies[enemy_uuid]["health"]
-
         if self.data.enemies[enemy_uuid]["health"] <= 0:
             health_after = 0
             # Special enemies
@@ -500,8 +499,6 @@ class Base_tower:
         # Special enemies
         if health_after > 0:
             if self.data.enemies[enemy_uuid]["special"] == "lead":
-                if health_before > 20 and health_after <= 20: # Lead+ with 50 lives
-                    self.data.money += 4
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
                     self.data.money -= 4

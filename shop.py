@@ -23,7 +23,8 @@ class Shop:
             "shooter": 350,
             "bank": 1200,
             "spikes": 30,
-            "spike_factory": 800
+            "spike_factory": 800,
+            "particle_accelerator": 1100,
         }
 
         self.original_shop_images: dict[str, pg.Surface] = {
@@ -35,7 +36,8 @@ class Shop:
             "shooter": data.original_tower_images["shooter"]["shop_img"],
             "bank": data.original_tower_images["bank"]["up"],
             "spikes": data.original_tower_images["spikes"]["shop_img"],
-            "spike_factory": data.original_tower_images["spike_factory"]["up"]
+            "spike_factory": data.original_tower_images["spike_factory"]["up"],
+            "particle_accelerator": data.original_tower_images["particle_accelerator"]["shop_img"]
         }
 
         self.shop_images: dict[str, pg.Surface] = {}
@@ -75,7 +77,8 @@ class Shop:
                 "shooter": (29, 5),
                 "bank": (25, 8),
                 "spikes": (27, 8),
-                "spike_factory": (29, 8)
+                "spike_factory": (29, 8),
+                "particle_accelerator": (25, 11)
             }
 
             for key in tower_tile_pos.keys():

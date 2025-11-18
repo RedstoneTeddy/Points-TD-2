@@ -81,10 +81,19 @@ class Transition:
                 match self.transition_to:
                     case "main_menu":
                         self.data.is_in_main_menu = True
+                        self.data.is_in_map_select = False
+                        self.data.show_lose_screen = False
+                        self.data.show_win_screen = False
                     case "game":
                         self.data.is_in_game = True
                     case "map_select":
                         self.data.is_in_map_select = True
+                    case "lose_screen":
+                        self.data.show_lose_screen = True
+                        self.data.is_in_game = True
+                    case "win_screen":
+                        self.data.show_win_screen = True
+                        self.data.is_in_game = True
                     case "_":
                         logging.error(f"Unknown transition to {self.transition_to}")
 

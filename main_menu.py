@@ -1,6 +1,7 @@
 import data_class
 import pygame as pg
 import easygui
+import webbrowser
 
 
 
@@ -19,7 +20,23 @@ class Main_menu:
 
 
         # Credentials
-        self.data.Draw_text("Created by: Redstone_Teddy", 7* self.data.hud_zoom, (255, 150, 0), (self.data.hud_zoom ,self.data.screen_size[1] - 8*self.data.hud_zoom))
+        _creator_text = "Created by: Redstone_Teddy"
+        _font_size = int(7 * self.data.hud_zoom)
+        _pos = (self.data.hud_zoom, self.data.screen_size[1] - 8 * self.data.hud_zoom)
+        # approximate text rect for hover/click detection
+        _width = int(len(_creator_text) * _font_size * 0.6)
+        _height = int(_font_size + 4 * self.data.hud_zoom)
+        _text_rect = pg.Rect(_pos[0], _pos[1], _width, _height)
+
+        if _text_rect.collidepoint(pg.mouse.get_pos()):
+            _color = (0, 0, 255) 
+            if pg.mouse.get_pressed()[0] and not self.button_pressed and not self.data.ongoing_transition:
+                self.button_pressed = True
+                webbrowser.open("https://github.com/RedstoneTeddy/Points-TD-2")
+        else:
+            _color = (255, 150, 0)
+
+        self.data.Draw_text(_creator_text, _font_size, _color, _pos)
         self.data.Draw_text(f"Version: {self.data.version}", 6* self.data.hud_zoom, (255, 255, 255), (self.data.hud_zoom ,self.data.screen_size[1] - 14*self.data.hud_zoom))
 
         # Easy Button

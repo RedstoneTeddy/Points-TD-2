@@ -3,9 +3,9 @@ from os import path as os_path
 from os import chdir as os_chdir
 directory = os_path.dirname(os_path.abspath(__file__))
 os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't correct
+ 
 
-
-version: str = "0.5.1"
+version: str = "0.5.2"
 
 
 if __name__ == "__main__":
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     import enemy
     enemy_obj: enemy.Enemy = enemy.Enemy(data, tile_map_obj)
 
-    import hud
+    import overlays.hud as hud
     hud_obj: hud.Hud = hud.Hud(data, tile_map_obj)  
 
     import towers.base_tower
@@ -72,6 +72,9 @@ if __name__ == "__main__":
 
     import map_select
     map_select_obj: map_select.Map_select = map_select.Map_select(data)
+
+    import overlays.win_lose_screen as win_lose_screen
+    win_lose_screen_obj: win_lose_screen.Win_Lose_screen = win_lose_screen.Win_Lose_screen(data, tile_map_obj)
 
     performance_background_timer: int = 0
 
@@ -136,29 +139,56 @@ if __name__ == "__main__":
                     performance_background_timer = 0
                     data.screen.fill((100,180,255))
 
-                if data.load_game:
-                    tile_map_obj.Load_map_file(data.map_file_name)
-                    data.load_game = False
-                tile_map_obj.Show_map()
-                tile_map_obj.Show_hud_background()
 
-                # Tick Game
-                enemy_obj.Main()
-                tower_handler.Main()
-                # Fast forward game
-                if data.fast_forward:
-                    enemy_obj.Tick_only()   
-                    tower_handler.Tick_only()
+                if not data.show_win_screen and not data.show_lose_screen:
+                    if data.load_game:
+                        tile_map_obj.Load_map_file(data.map_file_name)
+                        data.load_game = False
+                    tile_map_obj.Show_map()
+                    tile_map_obj.Show_hud_background()
 
-                build_hologram_obj.Main()
-                shop_obj.Main()
+                    # Tick Game
+                    enemy_obj.Main()
+                    tower_handler.Main()
+                    # Fast forward game
+                    if data.fast_forward:
+                        enemy_obj.Tick_only()   
+                        tower_handler.Tick_only()
 
-                tile_map_obj.Render_empty_screen_overlay()
+                    build_hologram_obj.Main()
+                    shop_obj.Main()
 
+                    tile_map_obj.Render_empty_screen_overlay()
+
+                    
+                    if data.new_wave:
+                        data.new_wave = False
+                    hud_obj.Show_hud()
+
+                    # Check win / lose
+                    if win_lose_screen_obj.Check_win_condition():
+                        if data.transition_to == "":
+                            data.Transition_black_window("win_screen")
+                        data.running_wave = False
+                        data.auto_wave = False
+                        logging.info("Player won the game")
+                    if win_lose_screen_obj.Check_lose_condition():
+                        if data.transition_to == "":
+                            data.Transition_black_window("lose_screen")
+                        data.running_wave = False
+                        data.auto_wave = False
+                        logging.info("Player lost the game")
                 
-                if data.new_wave:
-                    data.new_wave = False
-                hud_obj.Show_hud()
+                elif data.show_win_screen:
+                    win_lose_screen_obj.Show_win_screen()
+                    tower_handler.spikes = []
+                    tower_handler.towers = []
+
+                elif data.show_lose_screen:
+                    win_lose_screen_obj.Show_lose_screen()
+                    tower_handler.spikes = []
+                    tower_handler.towers = []
+                    
 
 
 

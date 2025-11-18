@@ -133,7 +133,10 @@ class Enemy:
             self.data.health -= self.data.enemies[kill_enemy]["health"]
             if self.data.health <= 0:
                 logging.info("Game Over")
-                raise ValueError("Game Over")
+                self.data.running_wave = False
+                self.data.auto_wave = False      
+                if self.data.transition_to == "":          
+                    self.data.Transition_black_window("lose_screen")
             del self.data.enemies[kill_enemy]
         
         # Check for enemies that should be dead

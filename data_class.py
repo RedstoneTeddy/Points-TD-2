@@ -67,6 +67,9 @@ class Data_class:
         self.is_in_game: bool = False
         self.is_in_map_select: bool = False
 
+        self.show_win_screen: bool = False
+        self.show_lose_screen: bool = False
+
         # For (initially) loading the game
         self.load_game: bool = False
         self.map_file_name: str = ""
@@ -85,6 +88,8 @@ class Data_class:
         self.wave: int = 0
         self.money: int = 0
         self.regeneration: int = 0
+
+        self.win_wave: int = 0 # Determines the wave, when the player wins the game
 
         self.special_enemy_spawn_uuid_counter: int = 0
 
@@ -282,6 +287,9 @@ class Data_class:
             logging.info(f"Tile zoom changed to {self.tile_zoom}")
             
 
+
+
+
     def Start_new_game(self, map_file_name: str = "") -> None:
         if self.difficulty == "":
             logging.error("Difficulty not set")
@@ -293,28 +301,35 @@ class Data_class:
                 self.cost_multiplier = 0.85
                 self.health = 200
                 self.money = 800
+                self.win_wave = 40
             case "medium":
                 self.cost_multiplier = 1.0
                 self.health = 150
                 self.money = 700
+                self.win_wave = 70
             case "hard":
                 self.cost_multiplier = 1.15
                 self.health = 100
                 self.money = 600
+                self.win_wave = 100
             case "hacker":
                 self.cost_multiplier = 1.3
                 self.health = 1
                 self.money = 600
                 self.wave = 2
+                self.win_wave = 100
             case "inflation":
-                self.cost_multiplier = 1.0
+                self.cost_multiplier = 0.85
                 self.health = 100
-                self.money = 700
+                self.money = 800
+                self.win_wave = 70
             case "late_to_the_party":
                 self.cost_multiplier = 1.0
                 self.health = 150
                 self.money = 20_000
                 self.wave = 40
+                self.win_wave = 70
+
             case _:
                 logging.error("Difficulty setting invalid")
                 return
@@ -324,6 +339,17 @@ class Data_class:
         self.map_file_name = map_file_name
         self.load_game = True
         self.regeneration = 0
+        self.running_wave = False
+        self.show_win_screen = False
+        self.show_lose_screen = False
+        self.enemies = {}
+        self.fast_forward = False
+        self.auto_wave = False
+        self.regeneration = 0
+        self.currently_building = ""
+        self.tower_selected = -1    
+
+
 
         # Start the game
         self.Transition_black_window("game")

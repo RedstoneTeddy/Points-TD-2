@@ -276,4 +276,21 @@ class Tile_map:
             self.data.screen.blit(self.tile_images[108], (31*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
             self.data.screen.blit(self.tile_images[109], (24*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 17*self.data.tile_zoom*8))
 
-
+    def Show_win_lose_background(self) -> None:
+        """
+        Shows the win/lose screen background
+        """
+        self.Scale_tiles()
+        for y in range(18):
+            for x in range(32):
+                if y < 1 or x < 1 or y >= 17 or x >= 31:
+                    tile_num: int = ((x*2)+y)%6+1
+                    self.data.screen.blit(self.tile_images[tile_num], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+                else:
+                    self.data.screen.blit(self.tile_images[105], (x*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), y*self.data.tile_zoom*8))
+        
+        
+        self.data.screen.blit(self.tile_images[106], (1*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[109], (1*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 16*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[108], (30*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 1*self.data.tile_zoom*8))
+        self.data.screen.blit(self.tile_images[107], (30*self.data.tile_zoom*8 + self.Get_left_right_empty_screen(), 16*self.data.tile_zoom*8))

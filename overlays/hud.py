@@ -62,10 +62,10 @@ class Hud:
             if tile_pos[0] >= 26 and tile_pos[0] < 30 and tile_pos[1] >= 15 and tile_pos[1] < 17:
                 self.data.screen.blit(self.hud_images["wave_hover"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
 
-        if pg.mouse.get_pressed()[0]:
+        if pg.mouse.get_pressed()[0] or pg.key.get_pressed()[self.data.keybinds["wave_button"]]:
             mouse_pos: tuple[int, int] = pg.mouse.get_pos()
             tile_pos: tuple[int, int] = self.tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=False)
-            if tile_pos[0] >= 26 and tile_pos[0] < 30 and tile_pos[1] >= 15 and tile_pos[1] < 17 and not self.wave_button_pressed and self.data.currently_building == "":
+            if ((tile_pos[0] >= 26 and tile_pos[0] < 30 and tile_pos[1] >= 15 and tile_pos[1] < 17) or pg.key.get_pressed()[self.data.keybinds["wave_button"]] )and not self.wave_button_pressed and self.data.currently_building == "":
                 self.wave_button_pressed = True
                 if not self.data.running_wave:
                     self.data.Next_wave()
@@ -78,7 +78,7 @@ class Hud:
                     else:
                         self.data.auto_wave = True
                         self.data.fast_forward = True
-        else:
+        elif (not pg.mouse.get_pressed()[0]) and (not pg.key.get_pressed()[self.data.keybinds["wave_button"]]):
             self.wave_button_pressed = False
 
         # Health

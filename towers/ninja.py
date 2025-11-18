@@ -32,7 +32,7 @@ class Ninja(towers.base_tower.Base_tower):
             {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 2,  "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},
             {"name": "robot_assassin", "cost": 1000, "requirement": "shorter_cooldown", "y_pos": 1, "is_master": True,
-             "description": ["+2 Damage", "Speedy Cooldown", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
+             "description": ["+2 Damage", "Speedy Cooldown", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown++"], "img": pg.Surface((24,24))},
             {"name": "shorter_cooldown", "cost": 190, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))}
         ]

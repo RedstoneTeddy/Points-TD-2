@@ -116,6 +116,7 @@ class Data_class:
                 "sharper+": pg.image.load("images/towers/upgrades/sharper+.png").convert_alpha(),
                 "sharper_shuriken": pg.image.load("images/towers/upgrades/sharper_shuriken.png").convert_alpha(),
                 "shorter_cooldown": pg.image.load("images/towers/upgrades/shorter_cooldown.png").convert_alpha(),
+                "shorter_cooldown++": pg.image.load("images/towers/upgrades/shorter_cooldown++.png").convert_alpha(),
                 "bigger_bomb": pg.image.load("images/towers/upgrades/bigger_bomb.png").convert_alpha(),
                 "blast_radius": pg.image.load("images/towers/upgrades/blast_radius.png").convert_alpha(),
                 "lead_shots": pg.image.load("images/towers/upgrades/lead_shots.png").convert_alpha(),

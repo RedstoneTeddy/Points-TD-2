@@ -33,7 +33,7 @@ class Machine_gunner(towers.base_tower.Base_tower):
              "description": ["Sharper Shots"], "original_img": data.original_tower_images["upgrades"]["sharper"], "img": pg.Surface((24,24))},
             {"name": "ray_of_shots", "cost": 900, "requirement": "fast_machine", "y_pos": 0, "is_master": True,
              "description": ["Ray of Shots", "FAAAST", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["faster_shooting"], "img": pg.Surface((24,24))},
-            {"name": "hot_shots", "cost": 900, "requirement": "sharper", "y_pos": 2, "is_master": True,
+            {"name": "hot_shots", "cost": 1100, "requirement": "sharper", "y_pos": 2, "is_master": True,
              "description": ["Hot Shots", "Can damage lead points", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
 
             

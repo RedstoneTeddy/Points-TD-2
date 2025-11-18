@@ -467,6 +467,9 @@ class Base_tower:
             # If the tower can't pop anti-explosion, don't damage it
             return
         
+        if self.data.enemies[enemy_uuid]["health"] <= 0:
+            return
+        
 
         if custom_damage != -1:
             damage = custom_damage
@@ -570,7 +573,7 @@ class Base_tower:
             self.data.money += 10
         # Pop 1000
         if health_before > 501 and health_after <= 500:
-            self.data.money += 50
+            self.data.money += 20
 
     def Wave_finished(self) -> None:
         """

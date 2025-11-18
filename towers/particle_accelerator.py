@@ -71,6 +71,7 @@ class Particle_accelerator(towers.base_tower.Base_tower):
             case "double_kill":
                 self.multi_hit_range = 1.0
                 self.multi_hits_max = 2
+                self.projectile_damage -= 2
 
 
 

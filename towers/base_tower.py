@@ -488,6 +488,8 @@ class Base_tower:
                 health_after = 10
             elif self.data.enemies[enemy_uuid]["special"] == "stack+":
                 health_after = 50
+            elif self.data.enemies[enemy_uuid]["special"] == "regeneration":
+                health_after = 10
         else:
             # Pushback Effect of Magician
             if self.tower_name == "magician" and "pushback" in self.bought_upgrades:
@@ -538,6 +540,11 @@ class Base_tower:
                     self.Add_enemy(10, "", spawn_pos_i-8)
                     # Delete stack+ enemy
                     del self.data.enemies[enemy_uuid]
+            elif self.data.enemies[enemy_uuid]["special"] == "regeneration":
+                if health_after <= 10:
+                    self.data.enemies[enemy_uuid]["special"] = ""
+                    self.data.enemies[enemy_uuid]["health"] = 10
+                    return # Regeneration enemy gives no cash
             elif self.data.enemies[enemy_uuid]["special"] == "":
                 if health_before > 10 and health_after <= 10: # Too much money in early game
                     self.data.money -= 1    

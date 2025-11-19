@@ -87,7 +87,8 @@ if __name__ == "__main__":
         "lead+": 7+8-4 +4,
         "anti_explosion": 7+8 -4,
         "stack": 4+ 7 + 11*2,
-        "stack+": 10+8-6 + (7+8)*2 + 11*2 +7
+        "stack+": 10+8-6 + (7+8)*2 + 11*2 +7,
+        "regeneration": 10
     }
 
     health_per_type: dict[str, int] = {
@@ -108,7 +109,8 @@ if __name__ == "__main__":
         "lead+": 50,
         "anti_explosion": 20,
         "stack": 10 + (20+10+10), # 20 health in Health field
-        "stack+": 60 + (50*2+20+20+10) # 70 health in Health field
+        "stack+": 60 + (50*2+20+20+10), # 70 health in Health field
+        "regeneration": 100
     }
 
 

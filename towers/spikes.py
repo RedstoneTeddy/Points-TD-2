@@ -117,6 +117,8 @@ class Spikes:
                         health_after = 10
                     elif enemy["special"] == "stack+":
                         health_after = 20
+                    elif enemy["special"] == "regeneration":
+                        health_after = 10
 
                 # Special enemies
                 if health_after > 0:
@@ -154,6 +156,11 @@ class Spikes:
                             Add_enemy(self.data, self.tile_map_obj, 10, "", spawn_pos_i-8)
                             # Delete stack+ enemy
                             del self.data.enemies[uuid]
+                    elif enemy["special"] == "regeneration":
+                        if health_after <= 10:
+                            enemy["special"] = ""
+                            enemy["health"] = 10
+                            continue # Regeneration enemy gives no cash
                     elif enemy["special"] == "":
                         if health_before > 10 and health_after <= 10: # Too much money in early game
                             self.data.money -= 1    
@@ -187,7 +194,7 @@ class Spikes:
                     self.data.money += 10
                 # Pop 1000
                 if health_before > 501 and health_after <= 500:
-                    self.data.money += 50
+                    self.data.money += 20
 
 
 

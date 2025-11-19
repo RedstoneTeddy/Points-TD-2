@@ -37,7 +37,8 @@ class Enemy:
             "lead+": pg.image.load("images/enemies/lead+.png").convert_alpha(),
             "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha(),
             "stack": pg.image.load("images/enemies/stack.png").convert_alpha(),
-            "stack+": pg.image.load("images/enemies/stack+.png").convert_alpha()
+            "stack+": pg.image.load("images/enemies/stack+.png").convert_alpha(),
+            "regeneration": pg.image.load("images/enemies/regeneration.png").convert_alpha()
         }
 
         self.enemy_images: dict[str, pg.Surface] = {}
@@ -69,6 +70,8 @@ class Enemy:
                 enemy_type = "stack"
             elif enemy["special"] == "stack+":
                 enemy_type = "stack+"
+            elif enemy["special"] == "regeneration":
+                enemy_type = "regeneration"
             elif enemy["health"] == 1:
                 enemy_type = "1"
             elif enemy["health"] == 2:
@@ -128,6 +131,13 @@ class Enemy:
             else:
                 enemies_at_end.append(uuid)
 
+            # Regeneration special
+            if enemy["special"] == "regeneration":
+                if self.__enemy_spawn_clock % 30 == 0:
+                    enemy["health"] += 1
+                    if enemy["health"] > 100:
+                        enemy["health"] = 100
+
         # Remove enemies that reached the end
         for kill_enemy in enemies_at_end:
             self.data.health -= self.data.enemies[kill_enemy]["health"]
@@ -165,6 +175,9 @@ class Enemy:
             health = 20
         elif special == "stack+":
             health = 70
+        elif special == "regeneration":
+            health = 100
+
         
 
         enemy: data_class.Enemy_data = {

@@ -4,7 +4,7 @@ A fast, colorful (pixel-art) tower-defense experience with bite-sized waves, mul
 
 Play a polished single‑player experience with:
 - Tight, arcade-style wave gameplay and meaningful upgrades
-- Unique enemy specials (lead, anti_explosion, stack, stack+)
+- Unique enemy specials (lead, anti_explosion, stack, stack+, regeneration)
 - Variety of towers: sniper, bomber, ninja, magician, machine gunner, bank, spikes, particle accelerator and more
 - (Map editor and wave tool so you can create and share custom content)
 

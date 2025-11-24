@@ -5,7 +5,7 @@ directory = os_path.dirname(os_path.abspath(__file__))
 os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't correct
  
 
-version: str = "0.5.3"
+version: str = "0.5.4b"
 
 
 if __name__ == "__main__":
@@ -204,7 +204,7 @@ if __name__ == "__main__":
 
             
             # Update display
-            pg.display.update()
+            pg.display.flip()
             
             # Handle all Events
             data.mouse_wheel = ""

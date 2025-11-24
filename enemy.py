@@ -38,7 +38,9 @@ class Enemy:
             "anti_explosion": pg.image.load("images/enemies/anti_explosion.png").convert_alpha(),
             "stack": pg.image.load("images/enemies/stack.png").convert_alpha(),
             "stack+": pg.image.load("images/enemies/stack+.png").convert_alpha(),
-            "regeneration": pg.image.load("images/enemies/regeneration.png").convert_alpha()
+            "stack++": pg.image.load("images/enemies/stack++.png").convert_alpha(),
+            "regeneration": pg.image.load("images/enemies/regeneration.png").convert_alpha(),
+            "gold": pg.image.load("images/enemies/gold.png").convert_alpha(),
         }
 
         self.enemy_images: dict[str, pg.Surface] = {}
@@ -70,6 +72,10 @@ class Enemy:
                 enemy_type = "stack"
             elif enemy["special"] == "stack+":
                 enemy_type = "stack+"
+            elif enemy["special"] == "stack++":
+                enemy_type = "stack++"
+            elif enemy["special"] == "gold":
+                enemy_type = "gold"
             elif enemy["special"] == "regeneration":
                 enemy_type = "regeneration"
             elif enemy["health"] == 1:
@@ -133,7 +139,7 @@ class Enemy:
 
             # Regeneration special
             if enemy["special"] == "regeneration":
-                if self.__enemy_spawn_clock % 30 == 0:
+                if self.__enemy_spawn_clock % 30 == 0: # +1 every 0.5s (normal) or every 0.25s (fast forward)
                     enemy["health"] += 1
                     if enemy["health"] > 100:
                         enemy["health"] = 100
@@ -175,6 +181,11 @@ class Enemy:
             health = 20
         elif special == "stack+":
             health = 70
+        elif special == "stack++":
+            health = 600
+        elif special == "gold":
+            if health not in [5, 10]:
+                health = 5
         elif special == "regeneration":
             health = 100
 

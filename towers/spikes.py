@@ -102,7 +102,7 @@ class Spikes:
                 if self.health <= 0:
                     self.health = 0
                     
-
+                is_gold: bool = False
                     
                 # Damage enemy
                 health_before: int = enemy["health"]
@@ -110,13 +110,17 @@ class Spikes:
                 health_after: int = enemy["health"]
                 if health_after <= 0:
                     health_after = 0
+                    if enemy["special"] == "gold":
+                        is_gold = True
                     # Death of normal enemies and special enemies handling
-                    if enemy["special"] not in ["stack", "stack+"]:
+                    if enemy["special"] not in ["stack", "stack+", "stack++"]:
                         del self.data.enemies[uuid]
                     elif enemy["special"] == "stack":
                         health_after = 10
                     elif enemy["special"] == "stack+":
                         health_after = 20
+                    elif enemy["special"] == "stack++":
+                        health_after = 100
                     elif enemy["special"] == "regeneration":
                         health_after = 10
 
@@ -156,11 +160,25 @@ class Spikes:
                             Add_enemy(self.data, self.tile_map_obj, 10, "", spawn_pos_i-8)
                             # Delete stack+ enemy
                             del self.data.enemies[uuid]
+                    elif enemy["special"] == "stack++":
+                        if health_after <= 100:
+                            spawn_pos_i: int = enemy["pos_i"]
+                            if spawn_pos_i < 8:
+                                spawn_pos_i = 10
+                            # Spawn enemies from stack++
+                            Add_enemy(self.data, self.tile_map_obj, 500, "", spawn_pos_i)
+                            Add_enemy(self.data, self.tile_map_obj, 400, "", spawn_pos_i-2)
+                            Add_enemy(self.data, self.tile_map_obj, 300, "", spawn_pos_i-4)
+                            Add_enemy(self.data, self.tile_map_obj, 200, "", spawn_pos_i-6)
+                            Add_enemy(self.data, self.tile_map_obj, 100, "", spawn_pos_i-8)
+                            # Delete stack++ enemy
+                            del self.data.enemies[uuid]
+                        continue
                     elif enemy["special"] == "regeneration":
                         if health_after <= 10:
                             enemy["special"] = ""
                             enemy["health"] = 10
-                            continue # Regeneration enemy gives no cash
+                        continue # Regeneration enemy gives no cash
                     elif enemy["special"] == "":
                         if health_before > 10 and health_after <= 10: # Too much money in early game
                             self.data.money -= 1    
@@ -171,7 +189,10 @@ class Spikes:
 
                 # Rewarding Player
                 if health_before <= 10: 
-                    self.data.money += int(health_before - health_after) 
+                    if is_gold:
+                        self.data.money += int(health_before - health_after) * 4
+                    else:
+                        self.data.money += int(health_before - health_after) 
             
                 # Pop ceramic
                 if health_before > 10 and health_after <= 10:

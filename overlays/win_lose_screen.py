@@ -60,7 +60,7 @@ class Win_Lose_screen:
 
         # Menu Button
         menu_pos: tuple[int, int] = (12, 14)
-        if mouse_tile_pos[0] >= menu_pos[0] and mouse_tile_pos[0] < menu_pos[0]+8 and mouse_tile_pos[1] >= menu_pos[1] and mouse_tile_pos[1] < menu_pos[1]+2:
+        if mouse_tile_pos[0] >= menu_pos[0] and mouse_tile_pos[0] < menu_pos[0]+4 and mouse_tile_pos[1] >= menu_pos[1] and mouse_tile_pos[1] < menu_pos[1]+2:
             self.data.screen.blit(self.images["target_prio_hover"], (menu_pos[0]*self.data.tile_zoom*8 + left_right_offset, menu_pos[1]*self.data.tile_zoom*8))
             if pg.mouse.get_pressed()[0]:
                 # Reset some variables
@@ -73,7 +73,7 @@ class Win_Lose_screen:
 
         # Quit Button
         quit_pos: tuple[int, int] = (16, 14)
-        if mouse_tile_pos[0] >= quit_pos[0] and mouse_tile_pos[0] < quit_pos[0]+8 and mouse_tile_pos[1] >= quit_pos[1] and mouse_tile_pos[1] < quit_pos[1]+2:
+        if mouse_tile_pos[0] >= quit_pos[0] and mouse_tile_pos[0] < quit_pos[0]+4 and mouse_tile_pos[1] >= quit_pos[1] and mouse_tile_pos[1] < quit_pos[1]+2:
             self.data.screen.blit(self.images["target_prio_hover"], (quit_pos[0]*self.data.tile_zoom*8 + left_right_offset, quit_pos[1]*self.data.tile_zoom*8))
             if pg.mouse.get_pressed()[0]:
                 self.data.run = False
@@ -98,7 +98,7 @@ class Win_Lose_screen:
        
         # Menu Button
         menu_pos: tuple[int, int] = (12, 14)
-        if mouse_tile_pos[0] >= menu_pos[0] and mouse_tile_pos[0] < menu_pos[0]+8 and mouse_tile_pos[1] >= menu_pos[1] and mouse_tile_pos[1] < menu_pos[1]+2:
+        if mouse_tile_pos[0] >= menu_pos[0] and mouse_tile_pos[0] < menu_pos[0]+4 and mouse_tile_pos[1] >= menu_pos[1] and mouse_tile_pos[1] < menu_pos[1]+2:
             self.data.screen.blit(self.images["target_prio_hover"], (menu_pos[0]*self.data.tile_zoom*8 + left_right_offset, menu_pos[1]*self.data.tile_zoom*8))
             if pg.mouse.get_pressed()[0]:
                 # Reset some variables
@@ -111,7 +111,7 @@ class Win_Lose_screen:
 
         # Quit Button
         quit_pos: tuple[int, int] = (16, 14)
-        if mouse_tile_pos[0] >= quit_pos[0] and mouse_tile_pos[0] < quit_pos[0]+8 and mouse_tile_pos[1] >= quit_pos[1] and mouse_tile_pos[1] < quit_pos[1]+2:
+        if mouse_tile_pos[0] >= quit_pos[0] and mouse_tile_pos[0] < quit_pos[0]+4 and mouse_tile_pos[1] >= quit_pos[1] and mouse_tile_pos[1] < quit_pos[1]+2:
             self.data.screen.blit(self.images["target_prio_hover"], (quit_pos[0]*self.data.tile_zoom*8 + left_right_offset, quit_pos[1]*self.data.tile_zoom*8))
             if pg.mouse.get_pressed()[0]:
                 self.data.run = False

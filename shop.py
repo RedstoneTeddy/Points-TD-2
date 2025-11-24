@@ -21,10 +21,10 @@ class Shop:
             "sniper": 550,
             "magician": 800,
             "shooter": 350,
-            "bank": 1200,
+            "bank": 1100,
             "spikes": 30,
             "spike_factory": 800,
-            "particle_accelerator": 1100,
+            "particle_accelerator": 1500
         }
 
         self.original_shop_images: dict[str, pg.Surface] = {

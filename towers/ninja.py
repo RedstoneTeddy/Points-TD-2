@@ -27,11 +27,11 @@ class Ninja(towers.base_tower.Base_tower):
         self.possible_upgrades: list[data_class.Upgrade_data] = [
             {"name": "sharper_shuriken", "cost": 260, "requirement": "", "y_pos": 0,  "is_master": False,
              "description": ["Sharper Shurikens"], "original_img": data.original_tower_images["upgrades"]["sharper_shuriken"], "img": pg.Surface((24,24))},
-            {"name": "double_kill", "cost": 710, "requirement": "sharper_shuriken", "y_pos": 0,  "is_master": True,
+            {"name": "double_kill", "cost": 1000, "requirement": "sharper_shuriken", "y_pos": 0,  "is_master": True,
              "description": ["Double Kills", " +1 Damage", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
             {"name": "more_range", "cost": 100, "requirement": "", "y_pos": 2,  "is_master": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))},
-            {"name": "robot_assassin", "cost": 1000, "requirement": "shorter_cooldown", "y_pos": 1, "is_master": True,
+            {"name": "robot_assassin", "cost": 1100, "requirement": "shorter_cooldown", "y_pos": 1, "is_master": True,
              "description": ["+2 Damage", "Speedy Cooldown", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown++"], "img": pg.Surface((24,24))},
             {"name": "shorter_cooldown", "cost": 190, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))}

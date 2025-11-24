@@ -469,7 +469,8 @@ class Base_tower:
         
         if self.data.enemies[enemy_uuid]["health"] <= 0:
             return
-        
+
+        is_gold: bool = False        
 
         if custom_damage != -1:
             damage = custom_damage
@@ -482,12 +483,16 @@ class Base_tower:
         if self.data.enemies[enemy_uuid]["health"] <= 0:
             health_after = 0
             # Special enemies
-            if self.data.enemies[enemy_uuid]["special"] not in ["stack", "stack+"]:
+            if self.data.enemies[enemy_uuid]["special"] == "gold":
+                is_gold = True
+            if self.data.enemies[enemy_uuid]["special"] not in ["stack", "stack+", "stack++"]:
                 del self.data.enemies[enemy_uuid]
             elif self.data.enemies[enemy_uuid]["special"] == "stack":
                 health_after = 10
             elif self.data.enemies[enemy_uuid]["special"] == "stack+":
                 health_after = 50
+            elif self.data.enemies[enemy_uuid]["special"] == "stack++":
+                health_after = 100
             elif self.data.enemies[enemy_uuid]["special"] == "regeneration":
                 health_after = 10
         else:
@@ -540,11 +545,25 @@ class Base_tower:
                     self.Add_enemy(10, "", spawn_pos_i-8)
                     # Delete stack+ enemy
                     del self.data.enemies[enemy_uuid]
+            elif self.data.enemies[enemy_uuid]["special"] == "stack++":
+                if health_after <= 100:
+                    spawn_pos_i: int = self.data.enemies[enemy_uuid]["pos_i"]
+                    if spawn_pos_i < 8:
+                        spawn_pos_i = 10
+                    # Spawn enemies from stack+
+                    self.Add_enemy(500, "", spawn_pos_i)
+                    self.Add_enemy(400, "", spawn_pos_i-2)
+                    self.Add_enemy(300, "", spawn_pos_i-4)
+                    self.Add_enemy(200, "", spawn_pos_i-6)
+                    self.Add_enemy(100, "", spawn_pos_i-8)
+                    # Delete stack++ enemy
+                    del self.data.enemies[enemy_uuid]
+                return
             elif self.data.enemies[enemy_uuid]["special"] == "regeneration":
                 if health_after <= 10:
                     self.data.enemies[enemy_uuid]["special"] = ""
                     self.data.enemies[enemy_uuid]["health"] = 10
-                    return # Regeneration enemy gives no cash
+                return # Regeneration enemy gives no cash
             elif self.data.enemies[enemy_uuid]["special"] == "":
                 if health_before > 10 and health_after <= 10: # Too much money in early game
                     self.data.money -= 1    
@@ -557,7 +576,10 @@ class Base_tower:
             
 
         if health_before <= 10: 
-            self.data.money += int(health_before - health_after) 
+            if is_gold:
+                self.data.money += int(health_before - health_after) * 4
+            else:
+                self.data.money += int(health_before - health_after)
     
         # Pop ceramic
         if health_before > 10 and health_after <= 10:

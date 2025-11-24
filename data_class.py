@@ -97,8 +97,8 @@ class Data_class:
         self.tower_selected: int = -1
 
         # Easy, Medium, Hard are normal difficulties
-        # Hacker, Inflation are challenges
-        self.difficulty: Literal["", "easy", "medium", "hard", "hacker", "inflation", "late_to_the_party"] = ""
+        # Possible Challenges: impossible, inflation, late_to_the_party, long_medium_run
+        self.difficulty: Literal["", "easy", "medium", "hard", "impossible", "inflation", "late_to_the_party", "long_medium_run"] = ""
         self.cost_multiplier: float = 1.0 # Gets set, when the game starts, reads the data.difficulty variable
 
         # Tower images
@@ -296,6 +296,8 @@ class Data_class:
             logging.error("Difficulty not set")
             return
 
+        self.wave = 0
+
         # Difficulty settings
         match self.difficulty:
             case "easy":
@@ -307,13 +309,13 @@ class Data_class:
                 self.cost_multiplier = 1.0
                 self.health = 150
                 self.money = 700
-                self.win_wave = 70
+                self.win_wave = 60
             case "hard":
                 self.cost_multiplier = 1.15
                 self.health = 100
                 self.money = 600
-                self.win_wave = 100
-            case "hacker":
+                self.win_wave = 80
+            case "impossible":
                 self.cost_multiplier = 1.3
                 self.health = 1
                 self.money = 600
@@ -330,7 +332,12 @@ class Data_class:
                 self.money = 20_000
                 self.wave = 40
                 self.win_wave = 70
-
+            case "long_medium_run":
+                self.cost_multiplier = 1.0
+                self.health = 150
+                self.money = 700 + 1800
+                self.win_wave = 100
+                self.wave = 10
             case _:
                 logging.error("Difficulty setting invalid")
                 return

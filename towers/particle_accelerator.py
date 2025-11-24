@@ -32,18 +32,18 @@ class Particle_accelerator(towers.base_tower.Base_tower):
         self.range: float = 5.0
         self.shooting_speed: int = 60
         self.projectile_speed: float = 1.0
-        self.projectile_damage: int = 10
+        self.projectile_damage: int = 15
         self.multi_hit_range = 1.0
         self.multi_hits_max = 1
 
         self.animation_timer: int = 0
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "sharper", "cost": 800, "requirement": "", "y_pos": 0,  "is_master": False,
+            {"name": "sharper", "cost": 900, "requirement": "", "y_pos": 0,  "is_master": False,
              "description": ["Sharper Shots"], "original_img": data.original_tower_images["upgrades"]["sharper"], "img": pg.Surface((24,24))},
             {"name": "lightspeed", "cost": 450, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["Lightspeed", "Increase Range &", "small damage buff"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},
-            {"name": "double_kill", "cost": 900, "requirement": "", "y_pos": 2,  "is_master": False,
+            {"name": "double_kill", "cost": 1300, "requirement": "", "y_pos": 2, "is_master": False,
              "description": ["Double Kill", "Possibility"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
         ]
 
@@ -63,7 +63,7 @@ class Particle_accelerator(towers.base_tower.Base_tower):
     def Give_upgrade_effect(self, upgrade_name: str) -> None:
         match upgrade_name:
             case "sharper":
-                self.projectile_damage += 7
+                self.projectile_damage += 10
             case "lightspeed":
                 self.range += 1.0
                 self.projectile_speed += 0.3

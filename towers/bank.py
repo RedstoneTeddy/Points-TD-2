@@ -30,13 +30,13 @@ class Bank(towers.base_tower.Base_tower):
         # Bank possible master upgrade: +0.2% interest to your total amount of money at end of round
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "money1", "cost": 500, "requirement": "", "y_pos": 0,  "is_master": False,
+            {"name": "money1", "cost": 450, "requirement": "", "y_pos": 0,  "is_master": False,
              "description": ["More Money!", "+30$ per Round"], "original_img": data.original_tower_images["upgrades"]["money"], "img": pg.Surface((24,24))},
-            {"name": "money2", "cost": 500, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "money2", "cost": 450, "requirement": "", "y_pos": 1,  "is_master": False,
              "description": ["More Money!", "+30$ per Round"], "original_img": data.original_tower_images["upgrades"]["money"], "img": pg.Surface((24,24))},
-            {"name": "money3", "cost": 500, "requirement": "", "y_pos": 2,  "is_master": False,
+            {"name": "money3", "cost": 450, "requirement": "", "y_pos": 2,  "is_master": False,
              "description": ["More Money!", "+30$ per Round"], "original_img": data.original_tower_images["upgrades"]["money"], "img": pg.Surface((24,24))},
-            {"name": "money+", "cost": 1500, "requirement": "money1", "y_pos": 0,  "is_master": True,
+            {"name": "money+", "cost": 1300, "requirement": "money1", "y_pos": 0,  "is_master": True,
              "description": ["Money Overload", "+100$ per Round", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["money+"], "img": pg.Surface((24,24))},
             {"name": "interest", "cost": 1500, "requirement": "money2", "y_pos": 1,  "is_master": True,
              "description": ["+1% Interest on", "your money", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["percent"], "img": pg.Surface((24,24))},

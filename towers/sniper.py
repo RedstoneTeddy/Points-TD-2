@@ -51,7 +51,7 @@ class Sniper(towers.base_tower.Base_tower):
             case "sharper+":
                 self.projectile_damage += 5
             case "fast":
-                self.shooting_speed -= 15
+                self.shooting_speed -= 14
 
 
         

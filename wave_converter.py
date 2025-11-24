@@ -64,8 +64,8 @@ if __name__ == "__main__":
     # Wave converter #
     ##################
     wave_num: int = 0
-    wave_enemies: list[data_class.Wave_enemy] = []
-    timer: int = 5
+    
+    
     # 1 Spawn tick => 0.05 tiles
     # 20 Spawn ticks => 1 tile
 
@@ -88,7 +88,10 @@ if __name__ == "__main__":
         "anti_explosion": 7+8 -4,
         "stack": 4+ 7 + 11*2,
         "stack+": 10+8-6 + (7+8)*2 + 11*2 +7,
-        "regeneration": 10
+        "stack++": 5*(7+8) +10*(1+2+3+4+5),
+        "regeneration": 10,
+        "gold": 20,
+        "gold+": 40
     }
 
     health_per_type: dict[str, int] = {
@@ -110,25 +113,63 @@ if __name__ == "__main__":
         "anti_explosion": 20,
         "stack": 10 + (20+10+10), # 20 health in Health field
         "stack+": 60 + (50*2+20+20+10), # 70 health in Health field
-        "regeneration": 100
+        "stack++": 500 + (100+200+300+400+500), # 600 health in Health field
+        "regeneration": 100,
+        "gold": 5,
+        "gold+": 10
     }
 
 
 
+
+    def Load_wave(wave_num: int) -> list[Wave_enemy_command_type]:
+            # Load the wave file
+            try:
+                with open(f"waves/raw_normal{wave_num}.pkl", "rb") as f:
+                    wave_enemy_commands = pickle.load(f)
+            except FileNotFoundError:
+                create_answer: str = easygui.msgbox(f"Do you want to create the\nnew file for the wave {wave_num}", "Wave Converter", "Create New") # type: ignore
+                logging.info(f"Wave file not found: waves/raw_normal{wave_num}.pkl")
+                if create_answer != "Create New":
+                    raise FileNotFoundError(f"File not found: waves/raw_normal{wave_num}.pkl")
+                wave_enemy_commands = []
+            return wave_enemy_commands
+    
+
+
+    def Save_wave(wave_num: int, wave_enemy_commands: list[Wave_enemy_command_type]) -> None:
+        # Convert Wave Enemy Commands to Wave Enemies
+        if len(wave_enemy_commands) == 0:
+            raise ValueError("No wave enemy commands found")
+        timer: int = 5
+        wave_enemies: list[data_class.Wave_enemy] = []
+        for command in wave_enemy_commands:
+            for _ in range(command["amount"]):
+                special: str = command["special"]
+                if special ==  "lead+": special = "lead" # Convert lead+ to lead special tag
+                if special ==  "gold+": special = "gold" # Convert gold+ to gold special tag
+                new_enemy: data_class.Wave_enemy = {
+                    "health": command["health"],
+                    "special": special,
+                    "spawn_time": timer
+                }
+                timer += command["timer_difference"]
+                wave_enemies.append(new_enemy)
+
+        # Closed the window, saving...
+        with open(f"waves/raw_normal{wave_num}.pkl", "wb") as f:
+            pickle.dump(wave_enemy_commands, f)
+        with open(f"waves/normal{wave_num}.pkl", "wb") as f:
+            pickle.dump(wave_enemies, f)
+
+    
+
     import easygui # type: ignore
     try:
         wave_num = int(easygui.enterbox("Enter the wave number", "Wave Converter", ""))
-        # Load the wave file
-        try:
-            with open(f"waves/raw_normal{wave_num}.pkl", "rb") as f:
-                wave_enemy_commands = pickle.load(f)
-        except FileNotFoundError:
-            create_answer: str = easygui.msgbox(f"Do you want to create the\nnew file for the wave {wave_num}", "Wave Converter", "Create New") # type: ignore
-            logging.info(f"Wave file not found: waves/raw_normal{wave_num}.pkl")
-            if create_answer != "Create New":
-                raise FileNotFoundError(f"File not found: waves/raw_normal{wave_num}.pkl")
-            wave_enemy_commands = []
+        wave_enemy_commands = Load_wave(wave_num)
 
+        mouse_pressed: bool = False
 
         while data.run:
             # Resize the screen
@@ -200,7 +241,8 @@ if __name__ == "__main__":
             # Check for mouse click on the add button
             if pg.mouse.get_pressed()[0]:
                 mouse_pos = pg.mouse.get_pos()
-                if add_button_rect.collidepoint(mouse_pos):
+                if add_button_rect.collidepoint(mouse_pos) and mouse_pressed == False:
+                    mouse_pressed = True
                     # Open a dialog to add a new command
                     new_command: list[str] = easygui.multenterbox(
                         "Add command",
@@ -254,7 +296,8 @@ if __name__ == "__main__":
                 # Check for mouse click on the change button
                 if pg.mouse.get_pressed()[0]:
                     mouse_pos = pg.mouse.get_pos()
-                    if change_button_rect.collidepoint(mouse_pos):
+                    if change_button_rect.collidepoint(mouse_pos) and mouse_pressed == False:
+                        mouse_pressed = True
                         # Open a dialog to change the command
                         new_command: list[str] = easygui.multenterbox(
                             "Change command",
@@ -286,13 +329,49 @@ if __name__ == "__main__":
                 data.Draw_text(str(h_t), 7 * data.hud_zoom, (0, 0, 0), ((x_start + sum(col_widths) - col_widths[-1]+1)*data.hud_zoom, (y+1)*data.hud_zoom))
 
 
+            # Open other wave
+            before_button_rect: pg.Rect = pg.Rect(280*data.hud_zoom, 65*data.hud_zoom, 8*data.hud_zoom, 8*data.hud_zoom)
+            pg.draw.rect(data.screen, (100, 100, 100), before_button_rect)
+            data.Draw_text("<", 7 * data.hud_zoom, (255, 255, 255), (282*data.hud_zoom, 66*data.hud_zoom))
+            if pg.mouse.get_pressed()[0]:
+                mouse_pos = pg.mouse.get_pos()
+                if before_button_rect.collidepoint(mouse_pos) and mouse_pressed == False:
+                    mouse_pressed = True
+                    Save_wave(wave_num, wave_enemy_commands)    
+                    wave_num -= 1
+                    wave_enemy_commands = Load_wave(wave_num)
+
+            other_button_rect: pg.Rect = pg.Rect(290*data.hud_zoom, 65*data.hud_zoom, 28*data.hud_zoom, 8*data.hud_zoom)
+            pg.draw.rect(data.screen, (100, 100, 100), other_button_rect)
+            data.Draw_text("Other", 7 * data.hud_zoom, (255, 255, 255), (295*data.hud_zoom, 66*data.hud_zoom))
+            if pg.mouse.get_pressed()[0]:
+                mouse_pos = pg.mouse.get_pos()
+                if other_button_rect.collidepoint(mouse_pos) and mouse_pressed == False:
+                    mouse_pressed = True
+                    Save_wave(wave_num, wave_enemy_commands)    
+                    wave_num_input: str = easygui.enterbox("Enter the wave number", "Wave Converter", str(wave_num))
+                    if wave_num_input != None:
+                        wave_num = int(wave_num_input)
+                        wave_enemy_commands = Load_wave(wave_num)
+            
+            next_button_rect: pg.Rect = pg.Rect(320*data.hud_zoom, 65*data.hud_zoom, 8*data.hud_zoom, 8*data.hud_zoom)
+            pg.draw.rect(data.screen, (100, 100, 100), next_button_rect)
+            data.Draw_text(">", 7 * data.hud_zoom, (255, 255, 255), (322*data.hud_zoom, 66*data.hud_zoom))
+            if pg.mouse.get_pressed()[0]:
+                mouse_pos = pg.mouse.get_pos()
+                if next_button_rect.collidepoint(mouse_pos) and mouse_pressed == False:
+                    mouse_pressed = True
+                    Save_wave(wave_num, wave_enemy_commands)    
+                    wave_num += 1
+                    wave_enemy_commands = Load_wave(wave_num)
 
 
-
+            if not pg.mouse.get_pressed()[0]:
+                mouse_pressed = False
 
             
             # Update display
-            pg.display.update()
+            pg.display.flip()
             
             # Handle all Events
             data.mouse_wheel = ""
@@ -309,27 +388,10 @@ if __name__ == "__main__":
             # Update Clock
             data.clock.tick(60)
 
+        # User closed window, save wave enemies
+        Save_wave(wave_num, wave_enemy_commands)
 
-        # Convert Wave Enemy Commands to Wave Enemies
-        if len(wave_enemy_commands) == 0:
-            raise ValueError("No wave enemy commands found")
-        for command in wave_enemy_commands:
-            for _ in range(command["amount"]):
-                special: str = command["special"]
-                if special ==  "lead+": special = "lead" # Convert lead+ to lead special tag
-                new_enemy: data_class.Wave_enemy = {
-                    "health": command["health"],
-                    "special": special,
-                    "spawn_time": timer
-                }
-                timer += command["timer_difference"]
-                wave_enemies.append(new_enemy)
 
-        # Closed the window, saving...
-        with open(f"waves/raw_normal{wave_num}.pkl", "wb") as f:
-            pickle.dump(wave_enemy_commands, f)
-        with open(f"waves/normal{wave_num}.pkl", "wb") as f:
-            pickle.dump(wave_enemies, f)
     except Exception:
         easygui.exceptionbox("Error", "An error occurred while saving the wave enemies.")
 

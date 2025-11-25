@@ -26,9 +26,9 @@ class Shooter(towers.base_tower.Base_tower):
         self.can_pop_lead: bool = False
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "shorter_cooldown", "cost": 200, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "shorter_cooldown", "cost": 200, "requirement": "", "y_pos": 0, "is_master": False, "is_elite": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
-            {"name": "more_range", "cost": 120, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "more_range", "cost": 120, "requirement": "", "y_pos": 1,  "is_master": False, "is_elite": False,
              "description": ["Bigger Range"], "original_img": data.original_tower_images["upgrades"]["more_range"], "img": pg.Surface((24,24))}
         ]
 

@@ -25,15 +25,15 @@ class Sniper(towers.base_tower.Base_tower):
         self.multi_hits_max = 1
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "big_range", "cost": 300, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "big_range", "cost": 300, "requirement": "", "y_pos": 0, "is_master": False, "is_elite": False,
              "description": ["World Wide Shots"], "original_img": data.original_tower_images["upgrades"]["big_range"], "img": pg.Surface((24,24))},
-            {"name": "faster_cooldown", "cost": 380, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "faster_cooldown", "cost": 380, "requirement": "", "y_pos": 1,  "is_master": False, "is_elite": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
-            {"name": "sharper", "cost": 380, "requirement": "", "y_pos": 2, "is_master": False,
+            {"name": "sharper", "cost": 380, "requirement": "", "y_pos": 2, "is_master": False, "is_elite": False,
              "description": ["Sharper Shots"], "original_img": data.original_tower_images["upgrades"]["sharper"], "img": pg.Surface((24,24))},
-            {"name": "sharper+", "cost": 800, "requirement": "sharper", "y_pos": 2, "is_master": True,
+            {"name": "sharper+", "cost": 800, "requirement": "sharper", "y_pos": 2, "is_master": True, "is_elite": False,
              "description": ["Very sharp Shots", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["sharper+"], "img": pg.Surface((24,24))},
-            {"name": "fast", "cost": 700, "requirement": "faster_cooldown", "y_pos": 1, "is_master": True,
+            {"name": "fast", "cost": 700, "requirement": "faster_cooldown", "y_pos": 1, "is_master": True, "is_elite": False,
              "description": ["Semi-automatic rifle", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["faster_shooting"], "img": pg.Surface((24,24))}
         ]
 

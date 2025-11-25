@@ -17,6 +17,7 @@ class Base_tower:
         self.projectile_timer: int = 0
         self.bought_upgrades: list[str] = []
         self.master_upgrade_bought: bool = False
+        self.elite_upgrade_bought: bool = False
 
         self.turn_state: data_class.Literal["up", "right", "down", "left"] = "up"
 
@@ -56,6 +57,10 @@ class Base_tower:
         self.__master_upgrade_image: pg.Surface = pg.Surface((0, 0))
         self.__original_master_blocked_image: pg.Surface = self.data.original_tower_images["upgrades"]["master_blocked"]
         self.__master_blocked_image: pg.Surface = pg.Surface((0, 0))
+        self.__original_elite_upgrade_image: pg.Surface = self.data.original_tower_images["upgrades"]["elite_upgrade"]
+        self.__elite_upgrade_image: pg.Surface = pg.Surface((0, 0))
+        self.__original_elite_blocked_image: pg.Surface = self.data.original_tower_images["upgrades"]["elite_blocked"]
+        self.__elite_blocked_image: pg.Surface = pg.Surface((0, 0))
 
         self.__original_target_prio_image: pg.Surface = self.data.original_tower_images["tower_hud"]["target_prio"]
         self.__target_prio_image: pg.Surface = pg.Surface((0, 0))
@@ -89,6 +94,8 @@ class Base_tower:
             self.__upgrade_hover_image = pg.transform.scale(self.__original_upgrade_hover_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
             self.__master_upgrade_image = pg.transform.scale(self.__original_master_upgrade_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
             self.__master_blocked_image = pg.transform.scale(self.__original_master_blocked_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
+            self.__elite_upgrade_image = pg.transform.scale(self.__original_elite_upgrade_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
+            self.__elite_blocked_image = pg.transform.scale(self.__original_elite_blocked_image, (self.data.tile_zoom*8*3, self.data.tile_zoom*8*3))
 
             self.__target_prio_image = pg.transform.scale(self.__original_target_prio_image, (self.data.tile_zoom*8*2, self.data.tile_zoom*8*1))
             self.__target_prio_hover_image = pg.transform.scale(self.__original_target_prio_hover_image, (self.data.tile_zoom*8*2, self.data.tile_zoom*8*1))
@@ -154,12 +161,26 @@ class Base_tower:
                 tile_pos: tuple[int, int] = (25, 3 + upgrade["y_pos"]*3)
                 px_pos: tuple[int, int] = (int(tile_pos[0]*self.data.tile_zoom*8) + self.tile_map_obj.Get_left_right_empty_screen(), int((tile_pos[1])*self.data.tile_zoom*8))
                 self.data.screen.blit(upgrade["img"], px_pos)
+                # Master Upgrade
                 if upgrade["is_master"]:
                     if not self.master_upgrade_bought:
                         self.data.screen.blit(self.__master_upgrade_image, px_pos)
                     else:
                         self.data.screen.blit(self.__master_blocked_image, px_pos)
-                upgarde_cost: int = int(round((upgrade["cost"]*self.data.cost_multiplier)/10,0)*10)
+                # Elite Upgrade
+                if upgrade["is_elite"]:
+                    # Only allow elite if no elite bought yet AND all normal (non-master, non-elite) upgrades are already bought
+                    normal_upgrades_bought = True
+                    for other_upgrade in self.possible_upgrades:
+                        if not other_upgrade.get("is_master", False) and not other_upgrade.get("is_elite", False):
+                            if other_upgrade["name"] not in self.bought_upgrades:
+                                normal_upgrades_bought = False
+                                break
+                    if not self.elite_upgrade_bought and normal_upgrades_bought:
+                        self.data.screen.blit(self.__elite_upgrade_image, px_pos)
+                    else:
+                        self.data.screen.blit(self.__elite_blocked_image, px_pos)
+                upgrade_cost: int = int(round((upgrade["cost"]*self.data.cost_multiplier)/10,0)*10)
 
                 mouse_pos: tuple[int, int] = pg.mouse.get_pos()
                 mouse_tile_pos: tuple[int, int] = self.tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos)
@@ -169,24 +190,27 @@ class Base_tower:
                     for i, line in enumerate(upgrade["description"]):
                         self.data.Draw_text(line, 5*self.data.tile_zoom, (255, 255, 255), (title_pos[0] - self.data.tile_zoom*12, 12*self.data.tile_zoom*8 + i*self.data.tile_zoom*8))
 
-                    if self.data.money >= upgarde_cost and (not upgrade["is_master"] or not self.master_upgrade_bought):
-                        self.data.Draw_text(str(upgarde_cost) + "$", 6*self.data.tile_zoom, (255, 255, 50), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
+                    # Check player has enough money and click prevention to also instantly buy master and/or elite upgrades
+                    if self.data.money >= upgrade_cost and (not upgrade["is_master"] or not self.master_upgrade_bought)  and (not upgrade["is_elite"] or not self.elite_upgrade_bought):
+                        self.data.Draw_text(str(upgrade_cost) + "$", 6*self.data.tile_zoom, (255, 255, 50), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
 
                         if pg.mouse.get_pressed()[0]:
                             if not self.__upgrade_mouse_pressed:
                                 self.__upgrade_mouse_pressed = True
-                                self.data.money -= upgarde_cost
+                                self.data.money -= upgrade_cost
                                 self.bought_upgrades.append(upgrade["name"])
                                 self.Give_upgrade_effect(upgrade["name"])   
                                 if upgrade["is_master"]:
-                                    self.master_upgrade_bought = True                             
+                                    self.master_upgrade_bought = True    
+                                if upgrade["is_elite"]:
+                                    self.elite_upgrade_bought = True                           
                                 
                         else:
                             self.__upgrade_mouse_pressed = False
                     else: # Not enough money
-                        self.data.Draw_text(str(upgarde_cost) + "$", 6*self.data.tile_zoom, (255, 50, 50), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
+                        self.data.Draw_text(str(upgrade_cost) + "$", 6*self.data.tile_zoom, (255, 50, 50), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
                 else: # Not selected
-                    self.data.Draw_text(str(upgarde_cost) + "$", 6*self.data.tile_zoom, (255, 255, 255), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
+                    self.data.Draw_text(str(upgrade_cost) + "$", 6*self.data.tile_zoom, (255, 255, 255), (px_pos[0] + self.data.tile_zoom*26, px_pos[1] + self.data.tile_zoom*18))
         
         self.Show_target_priority()
 

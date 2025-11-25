@@ -35,15 +35,15 @@ class Spike_factory(towers.base_tower.Base_tower):
         self.spikes_list: list[towers.spikes.Spikes] = spikes_list
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "sharper", "cost": 780, "requirement": "", "y_pos": 0,  "is_master": False,
+            {"name": "sharper", "cost": 780, "requirement": "", "y_pos": 0,  "is_master": False, "is_elite": False,
              "description": ["Double Spikes", "per pile!"], "original_img": data.original_tower_images["upgrades"]["sharper"], "img": pg.Surface((24,24))},
-            {"name": "long_lasting", "cost": 400, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "long_lasting", "cost": 400, "requirement": "", "y_pos": 1,  "is_master": False, "is_elite": False,
              "description": ["Spikes last longer",  "on the ground."], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
-            {"name": "faster", "cost": 500, "requirement": "", "y_pos": 2,  "is_master": False,
+            {"name": "faster", "cost": 500, "requirement": "", "y_pos": 2,  "is_master": False, "is_elite": False,
              "description": ["Faster shooting"], "original_img": data.original_tower_images["upgrades"]["faster_shooting"], "img": pg.Surface((24,24))},
-            {"name": "hot", "cost": 500, "requirement": "sharper", "y_pos": 0,  "is_master": True,
+            {"name": "hot", "cost": 500, "requirement": "sharper", "y_pos": 0,  "is_master": True, "is_elite": False,
              "description": ["Hot Spikes!", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["lead_shots"], "img": pg.Surface((24,24))},
-            {"name": "persistent", "cost": 700, "requirement": "long_lasting", "y_pos": 1,  "is_master": True,
+            {"name": "persistent", "cost": 700, "requirement": "long_lasting", "y_pos": 1,  "is_master": True, "is_elite": False,
              "description": ["Long lasting", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))}
         ]
 

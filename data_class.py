@@ -25,6 +25,7 @@ class Upgrade_data(TypedDict):
     y_pos: Literal[0,1,2]
     requirement: str
     is_master: bool
+    is_elite: bool
 
 
 Buildable_tiles: List[int] = [1,2,3,4,5,6]
@@ -77,6 +78,8 @@ class Data_class:
         self.hud_zoom: int = 1
         self.tile_zoom: int = 2
 
+        self.paused: bool = False
+
         # Game Variables
         self.running_wave: bool = False
         self.tick_tower_wave_finished: bool = False
@@ -107,6 +110,8 @@ class Data_class:
                 "hover": pg.image.load("images/towers/upgrades/hover.png").convert_alpha(),
                 "master_upgrade": pg.image.load("images/towers/upgrades/master_upgrade.png").convert_alpha(),
                 "master_blocked": pg.image.load("images/towers/upgrades/master_blocked.png").convert_alpha(),
+                "elite_upgrade": pg.image.load("images/towers/upgrades/elite_upgrade.png").convert_alpha(),
+                "elite_blocked": pg.image.load("images/towers/upgrades/elite_blocked.png").convert_alpha(),
                 "big_range": pg.image.load("images/towers/upgrades/big_range.png").convert_alpha(),
                 "double_kill": pg.image.load("images/towers/upgrades/double_kill.png").convert_alpha(),
                 "fast_machine": pg.image.load("images/towers/upgrades/fast_machine.png").convert_alpha(),
@@ -297,6 +302,7 @@ class Data_class:
             return
 
         self.wave = 0
+        self.paused = False
 
         # Difficulty settings
         match self.difficulty:

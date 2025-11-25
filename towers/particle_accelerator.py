@@ -39,11 +39,11 @@ class Particle_accelerator(towers.base_tower.Base_tower):
         self.animation_timer: int = 0
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "sharper", "cost": 900, "requirement": "", "y_pos": 0,  "is_master": False,
+            {"name": "sharper", "cost": 900, "requirement": "", "y_pos": 0,  "is_master": False, "is_elite": False,
              "description": ["Sharper Shots"], "original_img": data.original_tower_images["upgrades"]["sharper"], "img": pg.Surface((24,24))},
-            {"name": "lightspeed", "cost": 450, "requirement": "", "y_pos": 1,  "is_master": False,
+            {"name": "lightspeed", "cost": 450, "requirement": "", "y_pos": 1,  "is_master": False, "is_elite": False,
              "description": ["Lightspeed", "Increase Range &", "small damage buff"], "original_img": data.original_tower_images["upgrades"]["flash_explosion"], "img": pg.Surface((24,24))},
-            {"name": "double_kill", "cost": 1300, "requirement": "", "y_pos": 2, "is_master": False,
+            {"name": "double_kill", "cost": 1300, "requirement": "", "y_pos": 2, "is_master": False, "is_elite": False,
              "description": ["Double Kill", "Possibility"], "original_img": data.original_tower_images["upgrades"]["double_kill"], "img": pg.Surface((24,24))},
         ]
 

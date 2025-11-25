@@ -27,15 +27,15 @@ class Bomber(towers.base_tower.Base_tower):
         self.can_pop_anti_explosion: bool = False
 
         self.possible_upgrades: list[data_class.Upgrade_data] = [
-            {"name": "bigger_bomb", "cost": 680, "requirement": "", "y_pos": 0, "is_master": False,
+            {"name": "bigger_bomb", "cost": 680, "requirement": "", "y_pos": 0, "is_master": False, "is_elite": False,
              "description": ["Bigger Bomb"], "original_img": data.original_tower_images["upgrades"]["bigger_bomb"], "img": pg.Surface((24,24))},
-            {"name": "blast_radius", "cost": 520, "requirement": "", "y_pos": 1, "is_master": False,
+            {"name": "blast_radius", "cost": 520, "requirement": "", "y_pos": 1, "is_master": False, "is_elite": False,
              "description": ["Bigger Blast Radius"], "original_img": data.original_tower_images["upgrades"]["blast_radius"], "img": pg.Surface((24,24))},
-            {"name": "shorter_cooldown", "cost": 270, "requirement": "", "y_pos": 2, "is_master": False,
+            {"name": "shorter_cooldown", "cost": 270, "requirement": "", "y_pos": 2, "is_master": False, "is_elite": False,
              "description": ["Shorter Cooldown"], "original_img": data.original_tower_images["upgrades"]["shorter_cooldown"], "img": pg.Surface((24,24))},
-            {"name": "bigger_range", "cost": 1000, "requirement": "blast_radius", "y_pos": 1, "is_master": True,
+            {"name": "bigger_range", "cost": 1000, "requirement": "blast_radius", "y_pos": 1, "is_master": True, "is_elite": False,
              "description": ["Fast Rockets", "+ bigger range", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["big_range"], "img": pg.Surface((24,24))},
-            {"name": "atomic_bomb", "cost": 1700, "requirement": "bigger_bomb", "y_pos": 0, "is_master": True,
+            {"name": "atomic_bomb", "cost": 1700, "requirement": "bigger_bomb", "y_pos": 0, "is_master": True, "is_elite": False,
              "description": ["Nuclear Bomb", "Master Upgrade"], "original_img": data.original_tower_images["upgrades"]["atomic_bomb"], "img": pg.Surface((24,24))},
         ]
 

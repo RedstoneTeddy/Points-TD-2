@@ -5,7 +5,7 @@ directory = os_path.dirname(os_path.abspath(__file__))
 os_chdir(directory) #Small Bugfix, that in some situations, the code_path isn't correct
  
 
-version: str = "0.5.4b"
+version: str = "0.6.0"
 
 
 if __name__ == "__main__":
@@ -76,6 +76,9 @@ if __name__ == "__main__":
     import overlays.win_lose_screen as win_lose_screen
     win_lose_screen_obj: win_lose_screen.Win_Lose_screen = win_lose_screen.Win_Lose_screen(data, tile_map_obj)
 
+    import overlays.pause_screen as pause_screen
+    pause_screen_obj: pause_screen.Pause_screen = pause_screen.Pause_screen(data, tile_map_obj)
+
     performance_background_timer: int = 0
 
 
@@ -139,8 +142,9 @@ if __name__ == "__main__":
                     performance_background_timer = 0
                     data.screen.fill((100,180,255))
 
+                pause_screen_obj.Check_pause_toggle()
 
-                if not data.show_win_screen and not data.show_lose_screen:
+                if not data.show_win_screen and not data.show_lose_screen and not data.paused:
                     if data.load_game:
                         tile_map_obj.Load_map_file(data.map_file_name)
                         data.load_game = False
@@ -188,6 +192,9 @@ if __name__ == "__main__":
                     win_lose_screen_obj.Show_lose_screen()
                     tower_handler.spikes = []
                     tower_handler.towers = []
+                
+                elif data.paused:
+                    pause_screen_obj.Show_pause_screen()
                     
 
 

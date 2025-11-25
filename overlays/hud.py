@@ -17,7 +17,9 @@ class Hud:
             "wave_button2": pg.image.load("images/hud/wave_button2.png").convert_alpha(),
             "wave_button3": pg.image.load("images/hud/wave_button3.png").convert_alpha(),
             "wave_hover": pg.image.load("images/hud/wave_hover.png").convert_alpha(),
-            "text_box": pg.image.load("images/hud/text_box.png").convert_alpha()
+            "text_box": pg.image.load("images/hud/text_box.png").convert_alpha(),
+            "target_prio": pg.image.load("images/hud/target_prio.png").convert_alpha(),
+            "target_prio_hover": pg.image.load("images/hud/target_prio_hover.png").convert_alpha()  
         }
 
         self.hud_images: dict[str, pg.Surface] = {}
@@ -36,8 +38,11 @@ class Hud:
 
     def Show_hud(self) -> None:
         self.Scale_hud_images()
+
         
         left_right_offset: int = (self.data.screen_size[0] - (32*8*self.data.tile_zoom)) // 2
+        mouse_pos: tuple[int, int] = pg.mouse.get_pos()
+        mouse_tile_pos: tuple[int, int] = self.tile_map_obj.Calculate_tile_pos_from_px_pos(mouse_pos, only_allow_map=False)
 
         # Wave button
         if not self.data.running_wave:
@@ -96,3 +101,20 @@ class Hud:
         pos: tuple[int, int] = (11, 0)
         self.data.screen.blit(self.hud_images["text_box"], (pos[0]*self.data.tile_zoom*8 + left_right_offset, pos[1]*self.data.tile_zoom*8))
         self.data.Draw_text(f"Wave {self.data.wave}", 6*self.data.tile_zoom, (0,0,0), (int((pos[0]+0.3)*self.data.tile_zoom*8) + left_right_offset, int((pos[1]+0.15)*self.data.tile_zoom*8)))
+
+
+
+        # Pause (Menu) Button
+        pause_rect: tuple[int, int] = (30, 0)
+        if mouse_tile_pos[0] >= pause_rect[0] and mouse_tile_pos[0] < pause_rect[0]+4 and mouse_tile_pos[1] >= pause_rect[1] and mouse_tile_pos[1] < pause_rect[1]+2:
+            self.data.screen.blit(self.hud_images["target_prio_hover"], (pause_rect[0]*self.data.tile_zoom*8 + left_right_offset, pause_rect[1]*self.data.tile_zoom*8))
+            if pg.mouse.get_pressed()[0]:
+                # Reset some variables
+                # self.data.Reset_game_variables()
+                logging.info("Pause Game from HUD")
+                self.data.paused = True
+        else:
+            self.data.screen.blit(self.hud_images["target_prio"], (pause_rect[0]*self.data.tile_zoom*8 + left_right_offset, pause_rect[1]*self.data.tile_zoom*8))
+        self.data.Draw_text("||", 5*self.data.tile_zoom, (255,255,255), (pause_rect[0]*self.data.tile_zoom*8 + left_right_offset + int(3.5*self.data.tile_zoom), pause_rect[1]*self.data.tile_zoom*8 + int(1.5*self.data.tile_zoom)))
+        self.data.Draw_text("||", 5*self.data.tile_zoom, (255,255,255), (pause_rect[0]*self.data.tile_zoom*8 + left_right_offset + int(4*self.data.tile_zoom), pause_rect[1]*self.data.tile_zoom*8 + int(1.5*self.data.tile_zoom)))
+        self.data.Draw_text("||", 5*self.data.tile_zoom, (255,255,255), (pause_rect[0]*self.data.tile_zoom*8 + left_right_offset + int(4.5*self.data.tile_zoom), pause_rect[1]*self.data.tile_zoom*8 + int(1.5*self.data.tile_zoom)))
